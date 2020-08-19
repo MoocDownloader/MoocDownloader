@@ -1,0 +1,40 @@
+POST https://www.icourse163.org/dwr/call/plaincall/CommonBean.obtain.dwr HTTP/1.1
+Host: www.icourse163.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: text/plain
+Content-Length: 205
+Origin: https://www.icourse163.org
+Connection: keep-alive
+Referer: https://www.icourse163.org/learn/ECNU-1002842004?tid=1450249442
+Cookie: NTESSTUDYSI=63250a55c748402f8acc06f5ce9734ba; EDUWEBDEVICE=31c602fd881f4587ac5d93194207966b; Hm_lvt_77dc9a9d49448cf5e629e5bebaa5500b=1597853512; Hm_lpvt_77dc9a9d49448cf5e629e5bebaa5500b=1597853754; WM_NI=OrbNrzdcdfBy0BNmS1AUjvS3LmbU8C%2BkbiUIrtAzg5hxRBPwbWz7wzhlGI%2FUhUlViMv1LuUjDh0cIm5qJyVadPtBALD5aTKkMvSYeAYREsLm8KMqLSKDkfJWuSroG6UGNVc%3D; WM_NIKE=9ca17ae2e6ffcda170e2e6ee92c639bca9a594ec48ab868fb3d15b869f8bbbf446878bbe82f46ba3bd9b83d42af0fea7c3b92a8daeaeaff172a8bdac87c173f49e828ed23b838ba697d23990b3aeb6bb49e9b5ae8ad843b2ac8f9be63faca89ea3d37da289b6d8f672acb489aaae5fac8ba4b7ec47b6ef8496d86288b80084cc67f7af869ad56ba890bca3c44888ebafb5ca618faa9dbae84b9b8e8b94cf67fc958392cf59899ca587c95db78dbe90c63e979982b7e237e2a3; WM_TID=0Y0C0ewT8zFFRFBABRIqZRBrK%2FeLNFaR; NTES_PASSPORT=wAmPAjBdquY5_NXwSAd3cXbdJr0S7fevwmkUwsI.bn1qG4J_vGfJ9ndk6pAkuES843LTmiYEk2sA9tJIDYDu.3ptxUxVgyGyYpfRyzlPhEZhJPHR_dHH5DfP10ODEehAbB9ghd75Z_MvSGpXL0ud2oUqYqXRW2.RhYe.Meo3xbUFNmXO4khOCA9Yl; NTES_SESS=MOvQjqUpkACO7eqhCLxdQLh69LUmvWXDnf7a7QBHSsynSrvakSKvOl1ZbQoZ_gBXr5Fn3E4gZDYLK5GUJd37GzKmzmN9BLMGWYlC6OUqIYS4g_w89I2aMc2.5nrAKNW7JWM34JXJ2Pl6xTzDob_ZY1lpyoQF36wIA0Og9dEqkdkivybDmkNTI6faXvHexk3kfPVii8FX3.PBX; S_INFO=1597853533|0|##|xiaofeng_tan@live.com; P_INFO=xiaofeng_tan@live.com|1597853533|1|imooc|00&99|hub&1597827592&imooc#hub&420100#10#0#0|&0|imooc|xiaofeng_tan@live.com; STUDY_INFO="xiaofeng_tan@live.com|-1|3507017|1597853533754"; STUDY_SESS="RHgl7Jx8h4zYnI1+8TVomkukNI1Xdx5d7AKxg5Q41EXf/JE7/8O9//5g+LtFdx9ebCvVfNMxER0UjTZWya3gmDT3fxVm7v4RQM3ew/hqus5JKRQstAznFwWaUQr8BYhdYtYuDRS8tV+cYJnl41J1D6qg7kiwUKi1PVp4EO+ybJYvhQFx7kzH+3GA01euhE5D"; STUDY_PERSIST="7do/C3BszxG5MQoa7WZmFTOfltUS5AXHJ6IbN7hBtAziyWiUDfbkevmY1vWIKrmUn7qsrxlz8Yg/9TaTFHlbfq5YbCKKD5JPLr6ggmxloOKZ9pz3mSXbSFCD9eUiTDChaxmXxTXRoZhSHHM23lqGlZLrv2TMkSl3FO8Fez2r/WewIYE3hUBAkl8ecKMudyb3TEAAOus/ufALk7hTYv83a88sKURY2AZzcTnQKMk43c237Weq4j/S2qU01oFrl7Ms8WQLi3xTJ45sq/acjsEWiA=="; NETEASE_WDA_UID=3507017#|#1416115274865; __yadk_uid=MWTvmjSm4DyRb33GCZWIdeIhKDTzarh4
+x-user-agent: Nga_Offical
+
+callCount=1
+scriptSessionId=${scriptSessionId}190
+httpSessionId=63250a55c748402f8acc06f5ce9734ba
+c0-scriptName=CommonBean
+c0-methodName=obtain
+c0-id=0
+c0-param0=string:ActivitySetting
+batchId=1597853754144
+HTTP/1.1 200
+Server: nginx
+Date: Wed, 19 Aug 2020 16:15:54 GMT
+Content-Type: text/javascript;charset=UTF-8
+Connection: keep-alive
+Vary: Accept-Encoding
+Server-Host: hzabj-mooc-online-new23
+Access-Control-Allow-Origin: https://www.icourse163.org
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Headers: *
+Access-Control-Expose-Header: Set-Cookie,Max-Age
+X-Application-Context: mooc:online:18382
+Content-Length: 1696
+
+//#DWR-INSERT
+//#DWR-REPLY
+dwr.engine._remoteHandleCallback('1597853754144','0',"{\"setTop\":1,\"topImage\":\"https://edu-image.nosdn.127.net/e597efe999b34d4ea12e6b8c382f2e0c.png?imageView&quality=100&thumbnail=1920y50\",\"topImageUrl\":\"https://kaoyan.icourse163.org/course/terms/1206719215.htm?courseId=1206388805\",\"topFilterKey\":\"\",\"setRight\":0,\"rightImage\":\"https://edu-image.nosdn.127.net/95817498234d4012ab9936574e486eea.png?imageView&quality=100&thumbnail=42y270\",\"rightImageUrl\":\"https://www.icourse163.org/topics/qiyuekaoyan_w/\",\"rightFilterKey\":\"\",\"setSignActivity\":0,\"setSignWords\":\"\u8BFB\u4E66\u4E4B\u6CD5\uFF0C\u5728\u5FAA\u5E8F\u800C\u6E10\u8FDB\uFF0C\u719F\u8BFB\u800C\u7CBE\u601D\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u6731\u71B9<p>,\u535A\u89C2\u800C\u7EA6\u53D6\uFF0C\u539A\u79EF\u800C\u8584\u53D1\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u82CF\u8F7C<p>,\u806A\u660E\u5728\u4E8E\u52E4\u594B\uFF0C\u5929\u624D\u5728\u4E8E\u79EF\u7D2F\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u534E\u7F57\u5E9A<p>,\u5B66\u4E60\u4E0E\u5750\u7985\u76F8\u4F3C\uFF0C\u987B\u6709\u4E00\u9897\u6052\u5FC3\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u8A79\u59C6\u58EB\u00B7\u96F7\u5FB7\u975E<p>,\u4EBA\u7684\u77E5\u8BC6\u6108\u5E7F\uFF0C\u4EBA\u7684\u672C\u8EAB\u4E5F\u6108\u81FB\u5B8C\u5584\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u9AD8\u5C14\u57FA <p>,\u5B66\u4E60\u662F\u82E6\u6839\u4E0A\u957F\u51FA\u6765\u7684\u751C\u679C\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u674E\u5609\u56FE<p>,\u7231\u5B66\u51FA\u52E4\u594B\uFF0C\u52E4\u594B\u51FA\u5929\u624D\u3002<br/><p class=\\\"f-fr\\\">\u2014\u2014\u90ED\u6CAB\u82E5\",\"signFilterKey\":\"learn\"}");
