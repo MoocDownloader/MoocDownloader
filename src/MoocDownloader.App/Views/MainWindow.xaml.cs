@@ -1,4 +1,4 @@
-﻿namespace MoocDownloader.App
+﻿namespace MoocDownloader.App.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
