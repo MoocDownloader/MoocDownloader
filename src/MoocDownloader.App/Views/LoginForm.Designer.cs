@@ -28,19 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.MoocWebBrowser = new Gecko.GeckoWebBrowser();
             this.SuspendLayout();
+            // 
+            // MoocWebBrowser
+            // 
+            this.MoocWebBrowser.ConsoleMessageEventReceivesConsoleLogCalls = true;
+            this.MoocWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MoocWebBrowser.FrameEventsPropagateToMainWindow = false;
+            this.MoocWebBrowser.Location = new System.Drawing.Point(0, 0);
+            this.MoocWebBrowser.Name = "MoocWebBrowser";
+            this.MoocWebBrowser.Size = new System.Drawing.Size(1334, 611);
+            this.MoocWebBrowser.TabIndex = 0;
+            this.MoocWebBrowser.UseHttpActivityObserver = false;
             // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(886, 618);
+            this.ClientSize = new System.Drawing.Size(1334, 611);
+            this.Controls.Add(this.MoocWebBrowser);
             this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "中国大学 MOOC - 登录";
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private Gecko.GeckoWebBrowser MoocWebBrowser;
     }
 }

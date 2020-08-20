@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Gecko;
+using System;
 using System.Windows.Forms;
+using MoocDownloader.App.Views;
 
 namespace MoocDownloader.App
 {
@@ -11,6 +13,7 @@ namespace MoocDownloader.App
         [STAThread]
         static void Main()
         {
+            Xpcom.Initialize("Firefox64");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

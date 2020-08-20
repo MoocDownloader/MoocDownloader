@@ -1,7 +1,6 @@
-﻿using MoocDownloader.App.Views;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace MoocDownloader.App
+namespace MoocDownloader.App.Views
 {
     public partial class MainForm : Form
     {
