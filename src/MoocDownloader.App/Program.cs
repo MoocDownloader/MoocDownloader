@@ -22,7 +22,7 @@ namespace MoocDownloader.App
             }
             else
             {
-               // DeleteFiles(profilePath);
+                // DeleteFiles(profilePath);
             }
 
             Xpcom.ProfileDirectory = profilePath;
@@ -47,17 +47,20 @@ namespace MoocDownloader.App
                 {
                     File.Delete(item.FullName);
                 }
-                if (dir.GetDirectories().Length != 0) 
+
+                if (dir.GetDirectories().Length != 0)
                 {
                     foreach (var item in dir.GetDirectories())
                     {
                         DeleteFiles(item.FullName);
                     }
                 }
+
                 if (Path.Combine(Application.StartupPath, "Temp") != path)
                 {
                     Directory.Delete(path);
                 }
+
                 return true;
             }
             catch (Exception)
