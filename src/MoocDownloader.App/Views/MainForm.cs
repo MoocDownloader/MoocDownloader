@@ -1,9 +1,18 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using MoocDownloader.App.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace MoocDownloader.App.Views
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Cookies of after logging in to icourse163.org
+        /// </summary>
+        private readonly List<CookieModel> _cookies = new List<CookieModel>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -14,9 +23,24 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void LoginMoocButton_Click(object sender, System.EventArgs e)
         {
-            var form = new LoginForm();
+            var form   = new LoginForm(_cookies);
+            var result = form.ShowDialog();
 
-            form.ShowDialog();
+            switch (result)
+            {
+                case DialogResult.OK:
+                {
+                    if (_cookies.Any())
+                    {
+                        Log($@"已收集到登录信息.");
+                    }
+
+                    break;
+                }
+                case DialogResult.Cancel:
+                    Log(@"已取消登录.");
+                    break;
+            }
         }
 
         /// <summary>
@@ -30,6 +54,7 @@ namespace MoocDownloader.App.Views
             if (result == DialogResult.OK)
             {
                 SavePathTextBox.Text = dialog.SelectedPath;
+                Log($@"已设置保存路径为 {SavePathTextBox.Text}.");
             }
         }
 

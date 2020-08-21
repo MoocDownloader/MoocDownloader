@@ -1,13 +1,25 @@
 ﻿using Gecko;
-using System;
+using MoocDownloader.App.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MoocDownloader.App.Views
 {
     public partial class LoginForm : Form
     {
-        public LoginForm()
+        /// <summary>
+        /// Login icourse163 cookies.
+        /// </summary>
+        public List<CookieModel> Cookies { get; set; }
+
+        private readonly string[] CookieKeys = {"S_INFO", "P_INFO", "STUDY_INFO", "STUDY_SESS", "STUDY_PERSIST"};
+
+
+        public LoginForm(List<CookieModel> cookieModels)
         {
+            Cookies = cookieModels;
+
             InitializeComponent();
 
             MoocWebBrowser.Navigate("https://www.icourse163.org/");
@@ -29,7 +41,33 @@ namespace MoocDownloader.App.Views
 
             while (cookies.MoveNext())
             {
-                Console.WriteLine($@"{cookies.Current?.Name}={cookies.Current?.Value}");
+                var cookie = new CookieModel
+                {
+                    CreationTime = cookies.Current?.CreationTime,
+                    Expiry       = cookies.Current?.Expiry,
+                    Host         = cookies.Current?.Host,
+                    IsDomain     = cookies.Current?.IsDomain,
+                    IsHttpOnly   = cookies.Current?.IsHttpOnly,
+                    IsSecure     = cookies.Current?.IsSecure,
+                    IsSession    = cookies.Current?.IsSession,
+                    LastAccessed = cookies.Current?.LastAccessed,
+                    Name         = cookies.Current?.Name,
+                    Path         = cookies.Current?.Path,
+                    RawHost      = cookies.Current?.RawHost,
+                    Value        = cookies.Current?.Value,
+                };
+
+                if (Cookies.All(c => c.Name != cookie.Name))
+                {
+                    Cookies.Add(cookie);
+                }
+            }
+
+            // Close the current window when the cookies is obtained.
+            if (CookieKeys.All(key => Cookies.Exists(c => c.Name == key)))
+            {
+                Close();
+                DialogResult = DialogResult.OK;
             }
         }
     }

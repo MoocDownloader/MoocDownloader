@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CookieModel.cs" />
     <Compile Include="Utilities\HttpConsumer.cs" />
     <Compile Include="Views\LoginForm.cs">
       <SubType>Form</SubType>
@@ -128,6 +129,7 @@
     <Content Include="Assets\Icons\app.ico" />
     <Content Include="Assets\Images\app.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets" Condition="Exists('..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
