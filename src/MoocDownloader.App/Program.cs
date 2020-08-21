@@ -33,6 +33,11 @@ namespace MoocDownloader.App
             Application.Run(new MainForm());
         }
 
+        /// <summary>
+        /// Delete ProfilePath Files
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool DeleteFiles(string path)
         {
             var dir = new DirectoryInfo(path);
@@ -49,7 +54,10 @@ namespace MoocDownloader.App
                         DeleteFiles(item.FullName);
                     }
                 }
-                Directory.Delete(path);
+                if (Path.Combine(Application.StartupPath, "Temp") != path)
+                {
+                    Directory.Delete(path);
+                }
                 return true;
             }
             catch (Exception)
