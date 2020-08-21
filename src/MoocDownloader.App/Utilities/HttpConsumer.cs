@@ -338,21 +338,21 @@ namespace MoocDownloader.App.Utilities
                 }
 
                 byte[] buffer = null;
-                if (request.PostDataType  == PostBodyType.Bytes
-                 && request.PostDataBytes != null && request.PostDataBytes.Length > 0)
+                if (request.PostBodyType  == PostBodyType.Bytes
+                 && request.PostBodyBytes != null && request.PostBodyBytes.Length > 0)
                 {
-                    buffer = request.PostDataBytes;
+                    buffer = request.PostBodyBytes;
                 }
-                else if (request.PostDataType == PostBodyType.FilePath &&
-                         !string.IsNullOrWhiteSpace(request.PostDataText))
+                else if (request.PostBodyType == PostBodyType.FilePath &&
+                         !string.IsNullOrWhiteSpace(request.PostBodyText))
                 {
-                    var r = new StreamReader(request.PostDataText, _postEncoding);
+                    var r = new StreamReader(request.PostBodyText, _postEncoding);
                     buffer = _postEncoding.GetBytes(r.ReadToEnd());
                     r.Close();
                 }
-                else if (!string.IsNullOrWhiteSpace(request.PostDataText))
+                else if (!string.IsNullOrWhiteSpace(request.PostBodyText))
                 {
-                    buffer = _postEncoding.GetBytes(request.PostDataText);
+                    buffer = _postEncoding.GetBytes(request.PostBodyText);
                 }
 
                 if (buffer != null)
@@ -487,22 +487,22 @@ namespace MoocDownloader.App.Utilities
         /// <summary>
         /// post data type.
         /// </summary>
-        public PostBodyType PostDataType { get; set; } = PostBodyType.String;
+        public PostBodyType PostBodyType { get; set; } = PostBodyType.String;
 
         /// <summary>
         /// Post body string.
         /// </summary>
-        public string PostDataText { get; set; }
+        public string PostBodyText { get; set; }
 
         /// <summary>
         /// Post body bytes.
         /// </summary>
-        public byte[] PostDataBytes { get; set; }
+        public byte[] PostBodyBytes { get; set; }
 
         /// <summary>
         /// Cookie collection
         /// </summary>
-        public CookieCollection CookieCollection { get; set; }
+        public CookieCollection CookieCollection { get; set; } = new CookieCollection();
 
         /// <summary>
         /// Cookie.

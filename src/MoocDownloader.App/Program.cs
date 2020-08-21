@@ -22,7 +22,7 @@ namespace MoocDownloader.App
             }
             else
             {
-                DeleteFiles(profilePath);
+               // DeleteFiles(profilePath);
             }
 
             Xpcom.ProfileDirectory = profilePath;
