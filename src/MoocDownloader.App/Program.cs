@@ -20,6 +20,10 @@ namespace MoocDownloader.App
             {
                 Directory.CreateDirectory(profilePath);
             }
+            else
+            {
+               // DeleteFiles(profilePath);
+            }
 
             Xpcom.ProfileDirectory = profilePath;
             Xpcom.Initialize("Firefox64");

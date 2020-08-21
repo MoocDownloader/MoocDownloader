@@ -1,8 +1,8 @@
-﻿using System;
-using MoocDownloader.App.Models;
+﻿using MoocDownloader.App.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using MoocDownloader.App.Requests;
 
 namespace MoocDownloader.App.Views
 {
@@ -65,6 +65,20 @@ namespace MoocDownloader.App.Views
         private void Log(string message)
         {
             RunningLogListBox.Items.Add(message);
+        }
+
+        /// <summary>
+        /// Start download.
+        /// </summary>
+        private void StartDownloadButton_Click(object sender, System.EventArgs e)
+        {
+            // 1. get `tid`.
+            var mooc = new MoocRequest();
+            var url  = "https://www.icourse163.org/course/ECNU-1002842004";
+
+            var termId = mooc.GetTermId(url);
+
+            mooc.GetMocTerm(termId, "ECNU-1002842004", _cookies);
         }
     }
 }

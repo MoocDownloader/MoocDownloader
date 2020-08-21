@@ -226,6 +226,7 @@
             this.StartDownloadButton.TabIndex = 7;
             this.StartDownloadButton.Text = "开始下载";
             this.StartDownloadButton.UseVisualStyleBackColor = true;
+            this.StartDownloadButton.Click += new System.EventHandler(this.StartDownloadButton_Click);
             // 
             // groupBox2
             // 

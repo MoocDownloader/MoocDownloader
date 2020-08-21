@@ -66,21 +66,19 @@
     <Reference Include="Geckofx-Winforms, Version=60.0.47.0, Culture=neutral, PublicKeyToken=3209ac31600d1857, processorArchitecture=MSIL">
       <HintPath>..\packages\Geckofx60.64.60.0.47\lib\net45\Geckofx-Winforms.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\CookieModel.cs" />
+    <Compile Include="Requests\MoocRequest.cs" />
     <Compile Include="Utilities\HttpConsumer.cs" />
     <Compile Include="Views\LoginForm.cs">
       <SubType>Form</SubType>
@@ -137,7 +135,5 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets'))" />
-    <Error Condition="!Exists('..\packages\Geckofx60.64.Windows.0.14.0\build\Geckofx60.64.Windows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Geckofx60.64.Windows.0.14.0\build\Geckofx60.64.Windows.targets'))" />
   </Target>
-  <Import Project="..\packages\Geckofx60.64.Windows.0.14.0\build\Geckofx60.64.Windows.targets" Condition="Exists('..\packages\Geckofx60.64.Windows.0.14.0\build\Geckofx60.64.Windows.targets')" />
 </Project>
