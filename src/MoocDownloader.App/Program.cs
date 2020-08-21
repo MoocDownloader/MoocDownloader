@@ -47,7 +47,7 @@ namespace MoocDownloader.App
                 {
                     File.Delete(item.FullName);
                 }
-                if (dir.GetDirectories().Length != 0)
+                if (dir.GetDirectories().Length != 0) 
                 {
                     foreach (var item in dir.GetDirectories())
                     {
