@@ -13,7 +13,7 @@ namespace MoocDownloader.App.Views
         /// </summary>
         public List<CookieModel> Cookies { get; set; }
 
-        private readonly string[] CookieKeys = {"S_INFO", "P_INFO", "STUDY_INFO", "STUDY_SESS", "STUDY_PERSIST"};
+        private readonly string[] _cookieKeys = {"S_INFO", "P_INFO", "STUDY_INFO", "STUDY_SESS", "STUDY_PERSIST"};
 
 
         public LoginForm(List<CookieModel> cookieModels)
@@ -24,13 +24,13 @@ namespace MoocDownloader.App.Views
 
             MoocWebBrowser.Navigate("https://www.icourse163.org/");
 
-            MoocWebBrowser.DocumentCompleted                        += MoocWebBrowser_DocumentCompleted;
-            Gecko.CertOverrideService.GetService().ValidityOverride += LoginForm_ValidityOverride;
+            MoocWebBrowser.DocumentCompleted                  += MoocWebBrowser_DocumentCompleted;
+            CertOverrideService.GetService().ValidityOverride += LoginForm_ValidityOverride;
         }
 
-        private void LoginForm_ValidityOverride(object sender, Gecko.Events.CertOverrideEventArgs e)
+        private static void LoginForm_ValidityOverride(object sender, Gecko.Events.CertOverrideEventArgs e)
         {
-            e.OverrideResult = Gecko.CertOverride.Mismatch | Gecko.CertOverride.Time | Gecko.CertOverride.Untrusted;
+            e.OverrideResult = CertOverride.Mismatch | CertOverride.Time | CertOverride.Untrusted;
             e.Temporary      = true;
             e.Handled        = true;
         }
@@ -64,7 +64,7 @@ namespace MoocDownloader.App.Views
             }
 
             // Close the current window when the cookies is obtained.
-            if (CookieKeys.All(key => Cookies.Exists(c => c.Name == key)))
+            if (_cookieKeys.Any(key => Cookies.Exists(c => c.Name == key)))
             {
                 Close();
                 DialogResult = DialogResult.OK;
