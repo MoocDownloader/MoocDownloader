@@ -60,9 +60,9 @@
             // 
             // LoginMoocButton
             // 
-            this.LoginMoocButton.Location = new System.Drawing.Point(70, 50);
+            this.LoginMoocButton.Location = new System.Drawing.Point(70, 46);
             this.LoginMoocButton.Name = "LoginMoocButton";
-            this.LoginMoocButton.Size = new System.Drawing.Size(178, 25);
+            this.LoginMoocButton.Size = new System.Drawing.Size(178, 23);
             this.LoginMoocButton.TabIndex = 0;
             this.LoginMoocButton.Text = "登录中国大学 MOOC";
             this.LoginMoocButton.UseVisualStyleBackColor = true;
@@ -70,77 +70,77 @@
             // 
             // CourseUrlTextBox
             // 
-            this.CourseUrlTextBox.Location = new System.Drawing.Point(70, 113);
+            this.CourseUrlTextBox.Location = new System.Drawing.Point(70, 104);
             this.CourseUrlTextBox.Name = "CourseUrlTextBox";
-            this.CourseUrlTextBox.Size = new System.Drawing.Size(178, 20);
+            this.CourseUrlTextBox.Size = new System.Drawing.Size(178, 21);
             this.CourseUrlTextBox.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 27);
+            this.label1.Location = new System.Drawing.Point(16, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.Size = new System.Drawing.Size(47, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "第一步:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 87);
+            this.label2.Location = new System.Drawing.Point(16, 80);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.Size = new System.Drawing.Size(47, 12);
             this.label2.TabIndex = 2;
             this.label2.Text = "第二步:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(70, 27);
+            this.label3.Location = new System.Drawing.Point(70, 25);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(138, 13);
+            this.label3.Size = new System.Drawing.Size(131, 12);
             this.label3.TabIndex = 2;
             this.label3.Text = "点击登录中国大学 MOOC";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(70, 87);
+            this.label4.Location = new System.Drawing.Point(70, 80);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 13);
+            this.label4.Size = new System.Drawing.Size(101, 12);
             this.label4.TabIndex = 2;
             this.label4.Text = "输入课程主页链接";
             // 
             // SavePathTextBox
             // 
-            this.SavePathTextBox.Location = new System.Drawing.Point(70, 171);
+            this.SavePathTextBox.Location = new System.Drawing.Point(70, 158);
             this.SavePathTextBox.Name = "SavePathTextBox";
-            this.SavePathTextBox.Size = new System.Drawing.Size(132, 20);
+            this.SavePathTextBox.Size = new System.Drawing.Size(132, 21);
             this.SavePathTextBox.TabIndex = 1;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(70, 145);
+            this.label5.Location = new System.Drawing.Point(70, 134);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(103, 13);
+            this.label5.Size = new System.Drawing.Size(101, 12);
             this.label5.TabIndex = 2;
             this.label5.Text = "设置课程保存目录";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 145);
+            this.label6.Location = new System.Drawing.Point(16, 134);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(46, 13);
+            this.label6.Size = new System.Drawing.Size(47, 12);
             this.label6.TabIndex = 2;
             this.label6.Text = "第三步:";
             // 
             // FindPathButton
             // 
-            this.FindPathButton.Location = new System.Drawing.Point(208, 170);
+            this.FindPathButton.Location = new System.Drawing.Point(208, 157);
             this.FindPathButton.Name = "FindPathButton";
-            this.FindPathButton.Size = new System.Drawing.Size(40, 25);
+            this.FindPathButton.Size = new System.Drawing.Size(40, 23);
             this.FindPathButton.TabIndex = 3;
             this.FindPathButton.Text = "浏览";
             this.FindPathButton.UseVisualStyleBackColor = true;
@@ -149,9 +149,9 @@
             // SDRadioButton
             // 
             this.SDRadioButton.AutoSize = true;
-            this.SDRadioButton.Location = new System.Drawing.Point(104, 21);
+            this.SDRadioButton.Location = new System.Drawing.Point(104, 19);
             this.SDRadioButton.Name = "SDRadioButton";
-            this.SDRadioButton.Size = new System.Drawing.Size(49, 17);
+            this.SDRadioButton.Size = new System.Drawing.Size(47, 16);
             this.SDRadioButton.TabIndex = 4;
             this.SDRadioButton.Text = "标清";
             this.SDRadioButton.UseVisualStyleBackColor = true;
@@ -160,9 +160,9 @@
             // 
             this.HDRadioButton.AutoSize = true;
             this.HDRadioButton.Checked = true;
-            this.HDRadioButton.Location = new System.Drawing.Point(163, 21);
+            this.HDRadioButton.Location = new System.Drawing.Point(163, 19);
             this.HDRadioButton.Name = "HDRadioButton";
-            this.HDRadioButton.Size = new System.Drawing.Size(49, 17);
+            this.HDRadioButton.Size = new System.Drawing.Size(47, 16);
             this.HDRadioButton.TabIndex = 4;
             this.HDRadioButton.TabStop = true;
             this.HDRadioButton.Text = "高清";
@@ -173,9 +173,9 @@
             this.DownloadSubtitleCheckBox.AutoSize = true;
             this.DownloadSubtitleCheckBox.Checked = true;
             this.DownloadSubtitleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DownloadSubtitleCheckBox.Location = new System.Drawing.Point(104, 51);
+            this.DownloadSubtitleCheckBox.Location = new System.Drawing.Point(104, 47);
             this.DownloadSubtitleCheckBox.Name = "DownloadSubtitleCheckBox";
-            this.DownloadSubtitleCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.DownloadSubtitleCheckBox.Size = new System.Drawing.Size(72, 16);
             this.DownloadSubtitleCheckBox.TabIndex = 5;
             this.DownloadSubtitleCheckBox.Text = "下载字幕";
             this.DownloadSubtitleCheckBox.UseVisualStyleBackColor = true;
@@ -185,9 +185,9 @@
             this.DownloadVideoCheckBox.AutoSize = true;
             this.DownloadVideoCheckBox.Checked = true;
             this.DownloadVideoCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DownloadVideoCheckBox.Location = new System.Drawing.Point(15, 22);
+            this.DownloadVideoCheckBox.Location = new System.Drawing.Point(15, 20);
             this.DownloadVideoCheckBox.Name = "DownloadVideoCheckBox";
-            this.DownloadVideoCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.DownloadVideoCheckBox.Size = new System.Drawing.Size(72, 16);
             this.DownloadVideoCheckBox.TabIndex = 5;
             this.DownloadVideoCheckBox.Text = "下载视频";
             this.DownloadVideoCheckBox.UseVisualStyleBackColor = true;
@@ -197,9 +197,9 @@
             this.DownloadDocumentCheckBox.AutoSize = true;
             this.DownloadDocumentCheckBox.Checked = true;
             this.DownloadDocumentCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DownloadDocumentCheckBox.Location = new System.Drawing.Point(15, 51);
+            this.DownloadDocumentCheckBox.Location = new System.Drawing.Point(15, 47);
             this.DownloadDocumentCheckBox.Name = "DownloadDocumentCheckBox";
-            this.DownloadDocumentCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.DownloadDocumentCheckBox.Size = new System.Drawing.Size(72, 16);
             this.DownloadDocumentCheckBox.TabIndex = 5;
             this.DownloadDocumentCheckBox.Text = "下载课件";
             this.DownloadDocumentCheckBox.UseVisualStyleBackColor = true;
@@ -211,18 +211,18 @@
             this.groupBox1.Controls.Add(this.SDRadioButton);
             this.groupBox1.Controls.Add(this.DownloadSubtitleCheckBox);
             this.groupBox1.Controls.Add(this.HDRadioButton);
-            this.groupBox1.Location = new System.Drawing.Point(285, 13);
+            this.groupBox1.Location = new System.Drawing.Point(285, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(230, 85);
+            this.groupBox1.Size = new System.Drawing.Size(230, 78);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "下载选项";
             // 
             // StartDownloadButton
             // 
-            this.StartDownloadButton.Location = new System.Drawing.Point(333, 182);
+            this.StartDownloadButton.Location = new System.Drawing.Point(333, 168);
             this.StartDownloadButton.Name = "StartDownloadButton";
-            this.StartDownloadButton.Size = new System.Drawing.Size(182, 40);
+            this.StartDownloadButton.Size = new System.Drawing.Size(182, 37);
             this.StartDownloadButton.TabIndex = 7;
             this.StartDownloadButton.Text = "开始下载";
             this.StartDownloadButton.UseVisualStyleBackColor = true;
@@ -230,44 +230,46 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.RunningLogListBox);
-            this.groupBox2.Location = new System.Drawing.Point(12, 229);
+            this.groupBox2.Location = new System.Drawing.Point(12, 211);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(503, 152);
+            this.groupBox2.Size = new System.Drawing.Size(503, 158);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "运行日志";
             // 
             // RunningLogListBox
             // 
+            this.RunningLogListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.RunningLogListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RunningLogListBox.FormattingEnabled = true;
-            this.RunningLogListBox.Location = new System.Drawing.Point(3, 16);
+            this.RunningLogListBox.ItemHeight = 12;
+            this.RunningLogListBox.Location = new System.Drawing.Point(3, 17);
             this.RunningLogListBox.Name = "RunningLogListBox";
-            this.RunningLogListBox.Size = new System.Drawing.Size(497, 133);
+            this.RunningLogListBox.Size = new System.Drawing.Size(497, 138);
             this.RunningLogListBox.TabIndex = 0;
             // 
             // TotalProgressBar
             // 
-            this.TotalProgressBar.Location = new System.Drawing.Point(333, 108);
+            this.TotalProgressBar.Location = new System.Drawing.Point(333, 100);
             this.TotalProgressBar.Name = "TotalProgressBar";
-            this.TotalProgressBar.Size = new System.Drawing.Size(182, 25);
+            this.TotalProgressBar.Size = new System.Drawing.Size(182, 23);
             this.TotalProgressBar.TabIndex = 10;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(292, 114);
+            this.label7.Location = new System.Drawing.Point(292, 105);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(34, 13);
+            this.label7.Size = new System.Drawing.Size(35, 12);
             this.label7.TabIndex = 2;
             this.label7.Text = "进度:";
             // 
             // CurrentTaskTextBox
             // 
-            this.CurrentTaskTextBox.Location = new System.Drawing.Point(333, 146);
+            this.CurrentTaskTextBox.Location = new System.Drawing.Point(333, 135);
             this.CurrentTaskTextBox.Name = "CurrentTaskTextBox";
             this.CurrentTaskTextBox.ReadOnly = true;
-            this.CurrentTaskTextBox.Size = new System.Drawing.Size(182, 20);
+            this.CurrentTaskTextBox.Size = new System.Drawing.Size(182, 21);
             this.CurrentTaskTextBox.TabIndex = 11;
             // 
             // groupBox3
@@ -282,9 +284,9 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(12, 13);
+            this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(261, 209);
+            this.groupBox3.Size = new System.Drawing.Size(261, 193);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "课程设置";
@@ -292,18 +294,18 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(292, 151);
+            this.label8.Location = new System.Drawing.Point(292, 139);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(34, 13);
+            this.label8.Size = new System.Drawing.Size(35, 12);
             this.label8.TabIndex = 2;
             this.label8.Text = "当前:";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(530, 397);
+            this.ClientSize = new System.Drawing.Size(527, 381);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.CurrentTaskTextBox);
             this.Controls.Add(this.TotalProgressBar);
