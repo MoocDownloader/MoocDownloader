@@ -1,4 +1,5 @@
-﻿using MoocDownloader.App.Models;
+﻿using System;
+using MoocDownloader.App.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -78,7 +79,11 @@ namespace MoocDownloader.App.Views
 
             var termId = mooc.GetTermId(url);
 
-            mooc.GetMocTerm(termId, "ECNU-1002842004", _cookies);
+            var dto = mooc.GetMocTerm(termId, "ECNU-1002842004", _cookies);
+
+            var index = dto.IndexOf("dwr.engine._remoteHandleCallback", StringComparison.Ordinal);
+
+            var code = dto.Substring(0, index);
         }
     }
 }
