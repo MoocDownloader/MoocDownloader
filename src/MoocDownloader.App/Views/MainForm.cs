@@ -79,7 +79,7 @@ namespace MoocDownloader.App.Views
 
             var termId = mooc.GetTermId(url);
 
-            var dto = mooc.GetMocTerm(termId, "ECNU-1002842004", _cookies);
+            var dto = mooc.GetMocTermJavaScriptCode(termId, "ECNU-1002842004", _cookies);
 
             var index = dto.IndexOf("dwr.engine._remoteHandleCallback", StringComparison.Ordinal);
 

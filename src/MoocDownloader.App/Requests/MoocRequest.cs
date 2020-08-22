@@ -215,8 +215,39 @@ namespace MoocDownloader.App.Requests
             return string.Empty;
         }
 
-        public string GetVideoJSON()
+        /// <summary>
+        /// Get ds/api/v1/vod/video
+        /// </summary>
+        /// <param name="courseId">Course id.</param>
+        /// <param name="videoId">Video id.</param>
+        /// <param name="signature">Signature</param>
+        /// <returns>Video JSON</returns>
+        public string GetVideoJSON(string courseId, string videoId, string signature, List<CookieModel> cookies)
         {
+            const string url = @"https://vod.study.163.com/eds/api/v1/vod/video";
+
+            var request = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.GET)
+                                     .SetQueryParameter("videoId", videoId)
+                                     .SetQueryParameter("signature", signature)
+                                     .SetQueryParameter("clientType", "1");
+
+            request.Referer     = $@"{LEARN_URL}{courseId}";
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            request.Header["Origin"] = "https://www.icourse163.org";
+
+            foreach (var cookie in cookies)
+            {
+                request.CookieCollection.Add(new Cookie(cookie.Name, cookie.Value));
+            }
+
+            var response = _consumer.Send(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return response.Content;
+            }
+
             return string.Empty;
         }
     }
