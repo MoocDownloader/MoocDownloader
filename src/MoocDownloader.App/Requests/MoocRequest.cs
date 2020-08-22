@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Microsoft.JScript.Vsa;
 using Cookie = System.Net.Cookie;
 
 namespace MoocDownloader.App.Requests
@@ -16,7 +15,6 @@ namespace MoocDownloader.App.Requests
     /// </summary>
     public class MoocRequest
     {
-        private static   VsaEngine    _engine = VsaEngine.CreateEngine();
         private readonly HttpConsumer _consumer;
 
         private const string COURSE_URL = "https://www.icourse163.org/course/";
@@ -121,23 +119,6 @@ namespace MoocDownloader.App.Requests
             }
 
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Eval JavaScript code.
-        /// </summary>
-        /// <param name="code">JavaScript code.</param>
-        /// <returns>JavaScript code return result.</returns>
-        private static object EvalJavaScript(string code)
-        {
-            try
-            {
-                return Microsoft.JScript.Eval.JScriptEvaluate(code, _engine);
-            }
-            catch (Exception exception)
-            {
-                return exception.Message;
-            }
         }
     }
 }
