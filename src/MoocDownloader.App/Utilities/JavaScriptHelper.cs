@@ -14,7 +14,7 @@ namespace MoocDownloader.App.Utilities
         /// <param name="code">JavaScript code.</param>
         /// <param name="variableName">Variable name.</param>
         /// <returns>JavaScript code return result.</returns>
-        public static object EvalJavaScript(string code, string variableName)
+        public static object EvaluateJavaScriptCode(string code, string variableName)
         {
             try
             {
