@@ -73,17 +73,18 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void StartDownloadButton_Click(object sender, System.EventArgs e)
         {
-            // 1. get `tid`.
-            var mooc = new MoocRequest();
-            var url  = "https://www.icourse163.org/course/ECNU-1002842004";
+            const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004";
 
-            var termId = mooc.GetTermId(url);
+            // 1. initializes a mooc request.
+            var mooc = new MoocRequest(_cookies, courseUrl);
 
-            var dto = mooc.GetMocTermJavaScriptCode(termId, "ECNU-1002842004", _cookies);
+            //var termId = mooc.GetTermId();
 
-            var index = dto.IndexOf("dwr.engine._remoteHandleCallback", StringComparison.Ordinal);
+            //var dto = mooc.GetMocTermJavaScriptCode(termId, "ECNU-1002842004", _cookies);
 
-            var code = dto.Substring(0, index);
+            //var index = dto.IndexOf("dwr.engine._remoteHandleCallback", StringComparison.Ordinal);
+
+            //var code = dto.Substring(0, index);
         }
     }
 }
