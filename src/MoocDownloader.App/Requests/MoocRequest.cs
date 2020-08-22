@@ -147,8 +147,8 @@ namespace MoocDownloader.App.Requests
             bodyBuilder.AppendLine(@"c0-methodName=getLessonUnitLearnVo");
             bodyBuilder.AppendLine(@"c0-id=0");
             bodyBuilder.AppendLine($@"c0-param0=number:{contentId}");
-            bodyBuilder.AppendLine($@"c0-param1=number:1");
-            bodyBuilder.AppendLine($@"c0-param2=number:0");
+            bodyBuilder.AppendLine(@"c0-param1=number:1");
+            bodyBuilder.AppendLine(@"c0-param2=number:0");
             bodyBuilder.AppendLine($@"c0-param3=number:{unitId}");
             bodyBuilder.AppendLine($@"batchId={new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds()}");
 
@@ -182,7 +182,9 @@ namespace MoocDownloader.App.Requests
         /// <param name="contentType">Content type.</param>
         /// <param name="cookies">Cookies</param>
         /// <returns>JSON of resource.</returns>
-        public string GetResourceTokenJSON(string            courseId, string unitId, string contentType,
+        public string GetResourceTokenJSON(string            courseId,
+                                           string            unitId,
+                                           string            contentType,
                                            List<CookieModel> cookies)
         {
             const string url = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
@@ -210,6 +212,11 @@ namespace MoocDownloader.App.Requests
                 return response.Content;
             }
 
+            return string.Empty;
+        }
+
+        public string GetVideoJSON()
+        {
             return string.Empty;
         }
     }

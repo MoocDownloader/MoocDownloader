@@ -89,7 +89,11 @@
     <Compile Include="Models\ChapterModel.cs" />
     <Compile Include="Models\CookieModel.cs" />
     <Compile Include="Models\LessonModel.cs" />
+    <Compile Include="Models\SrtCaptionModel.cs" />
     <Compile Include="Models\UnitModel.cs" />
+    <Compile Include="Models\VideoModel.cs" />
+    <Compile Include="Models\VideoResponeModel.cs" />
+    <Compile Include="Models\VideoResultModel.cs" />
     <Compile Include="Requests\MoocRequest.cs" />
     <Compile Include="Utilities\HttpConsumer.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
