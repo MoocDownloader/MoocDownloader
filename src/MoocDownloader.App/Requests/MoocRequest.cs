@@ -29,7 +29,7 @@ namespace MoocDownloader.App.Requests
         /// Get termId value.
         /// </summary>
         /// <param name="url">URL of the target course.</param>
-        /// <returns></returns>
+        /// <returns>Term id.</returns>
         public string GetTermId(string url)
         {
             /**
@@ -79,7 +79,7 @@ namespace MoocDownloader.App.Requests
         /// <param name="courseId">Course Id.</param>
         /// <param name="cookies">Cookies</param>
         /// <returns>The index of course JavaScript Code.</returns>
-        public string GetMocTerm(string termId, string courseId, List<CookieModel> cookies)
+        public string GetMocTermJavaScriptCode(string termId, string courseId, List<CookieModel> cookies)
         {
             const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getMocTermDto.dwr";
 
@@ -103,13 +103,105 @@ namespace MoocDownloader.App.Requests
             request.Referer      = $@"{LEARN_URL}{courseId}";
             request.ContentType  = "text/plain";
 
+            request.Header["DNT"]    = "1";
+            request.Header["Origin"] = "https://www.icourse163.org";
+
             foreach (var cookie in cookies)
             {
                 request.CookieCollection.Add(new Cookie(cookie.Name, cookie.Value));
             }
 
-            request.Header["DNT"]    = "1";
+            var response = _consumer.Send(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return response.Content;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Get /dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr
+        /// </summary>
+        /// <param name="courseId">Course Id.</param>
+        /// <param name="contentId">Content Id.</param>
+        /// <param name="unitId">Unit Id.</param>
+        /// <param name="cookies">Cookies.</param>
+        /// <returns>Lesson JavaScript code.</returns>
+        public string GetLessonJavaScriptCode(string            courseId,
+                                              string            contentId,
+                                              string            unitId,
+                                              List<CookieModel> cookies)
+        {
+            const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
+
+            var request     = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST);
+            var bodyBuilder = new StringBuilder();
+            var sessionId   = cookies.FirstOrDefault(c => c.Name == "NTESSTUDYSI")?.Value;
+
+            bodyBuilder.AppendLine(@"callCount=1");
+            bodyBuilder.AppendLine(@"scriptSessionId=${scriptSessionId}190");
+            bodyBuilder.AppendLine($@"httpSessionId={sessionId}");
+            bodyBuilder.AppendLine(@"c0-scriptName=CourseBean");
+            bodyBuilder.AppendLine(@"c0-methodName=getLessonUnitLearnVo");
+            bodyBuilder.AppendLine(@"c0-id=0");
+            bodyBuilder.AppendLine($@"c0-param0=number:{contentId}");
+            bodyBuilder.AppendLine($@"c0-param1=number:1");
+            bodyBuilder.AppendLine($@"c0-param2=number:0");
+            bodyBuilder.AppendLine($@"c0-param3=number:{unitId}");
+            bodyBuilder.AppendLine($@"batchId={new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds()}");
+
+            request.PostBodyType = PostBodyType.String;
+            request.PostBodyText = bodyBuilder.ToString();
+            request.Referer      = $@"{LEARN_URL}{courseId}";
+            request.ContentType  = "text/plain";
+
             request.Header["Origin"] = "https://www.icourse163.org";
+
+            foreach (var cookie in cookies)
+            {
+                request.CookieCollection.Add(new Cookie(cookie.Name, cookie.Value));
+            }
+
+            var response = _consumer.Send(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return response.Content;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Get /web/j/resourceRpcBean.getResourceToken.rpc
+        /// </summary>
+        /// <param name="courseId">Course Id.</param>
+        /// <param name="unitId">Unit Id.</param>
+        /// <param name="contentType">Content type.</param>
+        /// <param name="cookies">Cookies</param>
+        /// <returns>JSON of resource.</returns>
+        public string GetResourceTokenJSON(string            courseId, string unitId, string contentType,
+                                           List<CookieModel> cookies)
+        {
+            const string url = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
+
+            var sessionId = cookies.FirstOrDefault(c => c.Name == "NTESSTUDYSI")?.Value;
+            var request = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST)
+                                     .SetQueryParameter("csrfKey", sessionId);
+
+            request.PostBodyType = PostBodyType.String;
+            request.PostBodyText = $@"bizId={unitId}&bizType=1&contentType={contentType}";
+            request.Referer      = $@"{LEARN_URL}{courseId}";
+            request.ContentType  = "text/plain";
+
+            request.Header["Origin"] = "https://www.icourse163.org";
+
+            foreach (var cookie in cookies)
+            {
+                request.CookieCollection.Add(new Cookie(cookie.Name, cookie.Value));
+            }
 
             var response = _consumer.Send(request);
 
