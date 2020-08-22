@@ -75,6 +75,9 @@
     <Reference Include="MsieJavaScriptEngine, Version=3.0.7.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
       <HintPath>..\packages\MsieJavaScriptEngine.3.0.7\lib\net45\MsieJavaScriptEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -83,10 +86,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ChapterModel.cs" />
     <Compile Include="Models\CookieModel.cs" />
+    <Compile Include="Models\LessonModel.cs" />
+    <Compile Include="Models\UnitModel.cs" />
     <Compile Include="Requests\MoocRequest.cs" />
     <Compile Include="Utilities\HttpConsumer.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
+    <Compile Include="Utilities\M3U8Helper.cs" />
     <Compile Include="Views\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
