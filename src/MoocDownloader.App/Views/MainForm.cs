@@ -1,10 +1,13 @@
-﻿using MoocDownloader.App.Models;
+﻿using System;
+using MoocDownloader.App.Models;
 using MoocDownloader.App.Mooc;
-using MoocDownloader.App.Utilities;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
+using static MoocDownloader.App.Mooc.MoocCodeCorrector;
+using static MoocDownloader.App.Utilities.JavaScriptHelper;
+using static Newtonsoft.Json.JsonConvert;
 
 namespace MoocDownloader.App.Views
 {
@@ -81,7 +84,6 @@ namespace MoocDownloader.App.Views
         {
             const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004";
 
-
             // 1. initializes a mooc request.
             var mooc = new MoocRequest(_cookies, courseUrl);
 
@@ -92,11 +94,58 @@ namespace MoocDownloader.App.Views
             var moocTermCode = mooc.GetMocTermJavaScriptCode(termId);
 
             // 4. evaluate mooc term JavaScript code.
-            moocTermCode = MoocCodeCorrector.FixMoocTermCode(moocTermCode);
-            var moocTermJSON = JavaScriptHelper.EvaluateJavaScriptCode(moocTermCode, "lessonJSON") as string;
+            moocTermCode = FixCourseBeanCode(moocTermCode);
+            var moocTermJSON = EvaluateJavaScriptCode(moocTermCode, COURSE_BEAN_NAME) as string;
 
             // 5. deserialize moocTermJSON.
-            var course = JsonConvert.DeserializeObject<CourseModel>(moocTermJSON ?? string.Empty);
+            var course = DeserializeObject<CourseModel>(moocTermJSON ?? string.Empty);
+
+            foreach (var chapter in course.Chapters)
+            {
+                foreach (var lesson in chapter.Lessons)
+                {
+                    foreach (var unit in lesson.Units)
+                    {
+                        var unitCode = mooc.GetUnitJavaScriptCode($"{unit.ContentId}", $"{unit.Id}");
+
+                        unitCode = FixCourseBeanCode(unitCode);
+
+                        var unitJSON   = EvaluateJavaScriptCode(unitCode, COURSE_BEAN_NAME) as string;
+                        var unitResult = DeserializeObject<UnitResultModel>(unitJSON ?? string.Empty);
+
+                        // Parse video / document / attachment link.
+                        var unitType = (UnitType) (unit.ContentType ?? 0);
+
+                        switch (unitType)
+                        {
+                            case UnitType.Other: // type is null.
+                                break;
+                            case UnitType.Video: // video type.
+                            {
+                            }
+                                break;
+                            case UnitType.Document: // document type. E.g pdf.
+                            {
+                                var documentUrl = unitResult.TextOrigUrl;
+                                var fileName    = $@"{unit.Name}.pdf"
+                            }
+                                break;
+                            case UnitType.Attachment: // attachment type. E.g source code.
+                            {
+                                const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
+
+                                var content    = JObject.Parse(unit.JsonContent);
+                                var nosKey     = content["nosKey"]?.ToString();
+                                var fileName   = content["fileName"]?.ToString();
+                                var attachment = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+                            }
+                                break;
+                            default: // not recognized type
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }
+            }
         }
 
         #region UI controls properties binding.

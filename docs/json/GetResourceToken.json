@@ -1,0 +1,21 @@
+{
+    "code": 0,
+    "result": {
+        "videoSignDto": {
+            "status": 0,
+            "videoId": 1010556273,
+            "duration": 500,
+            "videoImgUrl": "http://jdvodrvfb210d.nosdn.127.net/c2d9a789-d038-4601-82ea-6f2078bf7c05.jpg",
+            "signature": "796a6c346f5731596462634b6a6d38344d677238563232526d385549516945784f46564558684e53376f50486361726a686659372f492b5634477068633945707939466248335a2f574c656e70786b446536716b6a68567436634858777843354552526b48346335735643624f594334646e615334657a77566b774a3067466a4255304a7a694d467155337537642b653645524759413d3d",
+            "name": "2018_MOOC_Java核心技术_01Java的概述_Java明天_陈良育_v03.mp4"
+        },
+        "learnVideoTime": 88,
+        "lessonUnitId": 1218035336,
+        "lessonUnitName": "第一节 Java明天 视频",
+        "code": 0,
+        "contentType": 1
+    },
+    "message": "",
+    "traceId": "",
+    "sampled": false
+}

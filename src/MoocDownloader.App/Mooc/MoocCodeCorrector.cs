@@ -8,14 +8,20 @@ namespace MoocDownloader.App.Mooc
     public class MoocCodeCorrector
     {
         /// <summary>
-        /// Fix code of `CourseBean.getMocTermDto.dwr` response.
+        /// Variable name of CourseBean.*.dwr.
+        /// </summary>
+        public const string COURSE_BEAN_NAME = "courseBeanJSON";
+
+        /// <summary>
+        /// Fix code of `CourseBean.*.dwr` response.
         /// </summary>
         /// <param name="code">JavaScript code.</param>
         /// <returns>JavaScript code.</returns>
-        public static string FixMoocTermCode(string code)
+        public static string FixCourseBeanCode(string code)
         {
             const string prefixRegex = @"dwr\.engine\._remoteHandleCallback\('[0-9]{13}','[0-9]',\{";
-            const string replacement = @"var lessonJSON=JSON.stringify({";
+
+            var replacement = $@"var {COURSE_BEAN_NAME}=JSON.stringify({{";
 
             return Regex.Replace(code, prefixRegex, replacement);
         }
