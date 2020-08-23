@@ -1,0 +1,75 @@
+{
+    "contentId": null,
+    "contentType": null,
+    "duration": null,
+    "hdMp4Url": null,
+    "htmlContent": null,
+    "id": null,
+    "learnedPosition": 0,
+    "origSrtUrl": null,
+    "paper": null,
+    "parsedSrtUrl": null,
+    "post": null,
+    "randomKey": null,
+    "sdMp4Url": null,
+    "shdMp4Url": null,
+    "srtKeys": null,
+    "textOrigUrl": "",
+    "textPageWhRatio": null,
+    "textPages": 0,
+    "textUrl": "",
+    "type": null,
+    "unitId": null,
+    "videoHDUrl": null,
+    "videoId": null,
+    "videoImgUrl": null,
+    "videoLearnTime": 88,
+    "videoSHDUrl": null,
+    "videoUrl": null,
+    "videoVo": {
+        "clientEncryptKeyVersion": null,
+        "duration": 500,
+        "encrypt": false,
+        "flvCaption": [
+            {
+                "name": "Chinese",
+                "url": "http://www.icourse163.org/video/downloadVideoSrt.htm?srcKey=2B329E9512C6A008EC04F9430F0059DE-1537952191898"
+            }
+        ],
+        "flvHdUrl": null,
+        "flvSdUrl": null,
+        "flvShdUrl": null,
+        "isEncrypt": false,
+        "key": "a1e0edd7eacc82536b59db99d56dc237d4c14b320aad7fd227746a244865883d5362ed24a82ee243130556935ddc9dc0a4102d7507dca81bf446f34bb70abd0649bcf4601738497b1e0eda0afd3bf1e1d946cc99125d5cf199a7eb88f34ab25df0837682774232610f0d4e39d8436cb9a153bdeea4a2bfbae357803dfb6768a742fe395e87eba0c3e30b7b64ef1be06585111bf60ea26d5dad1f891edd9e94a8e167e0b04144490499ffe31e0d97a0a1babcbd7d2e007d850cc3bf7aa697e8ff",
+        "m3u8HdSize": null,
+        "m3u8HdUrl": null,
+        "m3u8SdSize": null,
+        "m3u8SdUrl": null,
+        "m3u8ShdSize": null,
+        "m3u8ShdUrl": null,
+        "mp4Caption": [
+            {
+                "name": "Chinese",
+                "url": "http://www.icourse163.org/video/downloadVideoSrt.htm?srcKey=2B329E9512C6A008EC04F9430F0059DE-1537952191898"
+            }
+        ],
+        "mp4HdUrl": null,
+        "mp4SdUrl": null,
+        "mp4ShdUrl": null,
+        "needKeyTimeValidate": false,
+        "playerCollection": 3,
+        "signature": null,
+        "srtKeys": [
+            {
+                "lang": 0,
+                "nosKey": "2B329E9512C6A008EC04F9430F0059DE-1537952191898"
+            }
+        ],
+        "start": 88,
+        "status": null,
+        "videoDecryptData": null,
+        "videoId": 1010556273,
+        "videoImgUrl": "http://nos.netease.com/mooc-video/c2d9a789-d038-4601-82ea-6f2078bf7c05.jpg",
+        "videoProtectedDataDto": null
+    }
+}

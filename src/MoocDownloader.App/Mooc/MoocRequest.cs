@@ -15,10 +15,10 @@ namespace MoocDownloader.App.Mooc
     /// </summary>
     public class MoocRequest
     {
-        private readonly HttpConsumer     _consumer;  // HTTP consumer.
         private readonly string           _courseId;  // identifier of the course.
-        private readonly CookieCollection _cookies;   // cookies of icourse163.org.
         private readonly string           _sessionId; // Session id.
+        private readonly CookieCollection _cookies;   // cookies of icourse163.org.
+        private readonly HttpConsumer     _consumer;  // HTTP consumer.
 
         private const string COURSE_URL = "https://www.icourse163.org/course/";
         private const string LEARN_URL  = "https://www.icourse163.org/learn/";
@@ -145,8 +145,8 @@ namespace MoocDownloader.App.Mooc
         /// </summary>
         /// <param name="contentId">Content Id.</param>
         /// <param name="unitId">Unit Id.</param>
-        /// <returns>Lesson JavaScript code.</returns>
-        public string GetLessonJavaScriptCode(string contentId, string unitId)
+        /// <returns>Unit JavaScript code.</returns>
+        public string GetUnitJavaScriptCode(string contentId, string unitId)
         {
             const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
 
