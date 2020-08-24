@@ -106,7 +106,8 @@ namespace MoocDownloader.App.Views
                 {
                     foreach (var unit in lesson.Units)
                     {
-                        var unitCode = mooc.GetUnitJavaScriptCode(unit.ContentId, unit.Id, unit.ContentType);
+                        var unitCode =
+                            mooc.GetUnitJavaScriptCode(unit.Id, unit.ContentId, unit.TermId, unit.ContentType);
 
                         if (unitCode.Contains("dwr.engine._remoteHandleException"))
                         {
