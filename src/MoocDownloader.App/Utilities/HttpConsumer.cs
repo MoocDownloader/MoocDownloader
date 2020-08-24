@@ -309,7 +309,7 @@ namespace MoocDownloader.App.Utilities
         {
             if (!string.IsNullOrEmpty(request.Cookie)) _request.Headers[HttpRequestHeader.Cookie] = request.Cookie;
 
-            if (request.ResultCookieType == ResultCookieType.CookieCollection)
+            if (request.CookieType == CookieType.CookieCollection)
             {
                 _request.CookieContainer = new CookieContainer();
                 if (request.CookieCollection != null && request.CookieCollection.Count > 0)
@@ -477,7 +477,8 @@ namespace MoocDownloader.App.Utilities
         /// <summary>
         /// User-Agent
         /// </summary>
-        public string UserAgent { get; set; }
+        public string UserAgent { get; set; } =
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36";
 
         /// <summary>
         /// response encoding.
@@ -592,7 +593,7 @@ namespace MoocDownloader.App.Utilities
         /// <summary>
         /// Cookie type.
         /// </summary>
-        public ResultCookieType ResultCookieType { get; set; } = ResultCookieType.String;
+        public CookieType CookieType { get; set; } = CookieType.String;
 
         /// <summary>
         /// Get or set the requested authentication information.
@@ -648,7 +649,7 @@ namespace MoocDownloader.App.Utilities
             }
             else
             {
-                Url = $"{Url}&{key.Trim()}={HttpUtility.UrlEncode(value)}";
+                Url = $"{Url}?{key.Trim()}={HttpUtility.UrlEncode(value)}";
             }
 
             return this;
@@ -876,7 +877,7 @@ namespace MoocDownloader.App.Utilities
     /// <summary>
     /// Cookie return type.
     /// </summary>
-    public enum ResultCookieType
+    public enum CookieType
     {
         /// <summary>
         /// The string type.
