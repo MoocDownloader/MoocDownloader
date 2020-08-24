@@ -151,9 +151,10 @@ namespace MoocDownloader.App.Mooc
         /// </summary>
         /// <param name="unitId">Unit Id.</param>
         /// <param name="contentId">Content Id.</param>
+        /// <param name="termId">Term Id.</param>
         /// <param name="contentType">Content Type.</param>
         /// <returns>Unit JavaScript code.</returns>
-        public string GetUnitJavaScriptCode(long? unitId, long? contentId, long? contentType)
+        public string GetUnitJavaScriptCode(long? unitId, long? contentId, long? termId, long? contentType)
         {
             const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
 
@@ -174,7 +175,7 @@ namespace MoocDownloader.App.Mooc
 
             request.PostBodyType     = PostBodyType.String;
             request.PostBodyText     = bodyBuilder.ToString();
-            request.Referer          = $@"{LEARN_URL}{_courseId}";
+            request.Referer          = $@"{LEARN_URL}{_courseId}?tid={termId}";
             request.ContentType      = "text/plain";
             request.CookieType       = CookieType.CookieCollection;
             request.CookieCollection = _cookies;
