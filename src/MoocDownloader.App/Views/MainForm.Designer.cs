@@ -53,6 +53,7 @@
             this.CurrentTaskTextBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.DownloadAttachmentCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -151,7 +152,7 @@
             // SDRadioButton
             // 
             this.SDRadioButton.AutoSize = true;
-            this.SDRadioButton.Location = new System.Drawing.Point(104, 21);
+            this.SDRadioButton.Location = new System.Drawing.Point(183, 51);
             this.SDRadioButton.Name = "SDRadioButton";
             this.SDRadioButton.Size = new System.Drawing.Size(49, 17);
             this.SDRadioButton.TabIndex = 4;
@@ -163,7 +164,7 @@
             // 
             this.HDRadioButton.AutoSize = true;
             this.HDRadioButton.Checked = true;
-            this.HDRadioButton.Location = new System.Drawing.Point(163, 21);
+            this.HDRadioButton.Location = new System.Drawing.Point(183, 22);
             this.HDRadioButton.Name = "HDRadioButton";
             this.HDRadioButton.Size = new System.Drawing.Size(49, 17);
             this.HDRadioButton.TabIndex = 4;
@@ -177,7 +178,7 @@
             this.DownloadSubtitleCheckBox.AutoSize = true;
             this.DownloadSubtitleCheckBox.Checked = true;
             this.DownloadSubtitleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.DownloadSubtitleCheckBox.Location = new System.Drawing.Point(104, 51);
+            this.DownloadSubtitleCheckBox.Location = new System.Drawing.Point(99, 51);
             this.DownloadSubtitleCheckBox.Name = "DownloadSubtitleCheckBox";
             this.DownloadSubtitleCheckBox.Size = new System.Drawing.Size(74, 17);
             this.DownloadSubtitleCheckBox.TabIndex = 5;
@@ -216,11 +217,12 @@
             this.groupBox1.Controls.Add(this.DownloadVideoCheckBox);
             this.groupBox1.Controls.Add(this.DownloadDocumentCheckBox);
             this.groupBox1.Controls.Add(this.SDRadioButton);
+            this.groupBox1.Controls.Add(this.DownloadAttachmentCheckBox);
             this.groupBox1.Controls.Add(this.DownloadSubtitleCheckBox);
             this.groupBox1.Controls.Add(this.HDRadioButton);
             this.groupBox1.Location = new System.Drawing.Point(285, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(230, 85);
+            this.groupBox1.Size = new System.Drawing.Size(242, 85);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "下载选项";
@@ -229,7 +231,7 @@
             // 
             this.StartDownloadButton.Location = new System.Drawing.Point(333, 182);
             this.StartDownloadButton.Name = "StartDownloadButton";
-            this.StartDownloadButton.Size = new System.Drawing.Size(182, 40);
+            this.StartDownloadButton.Size = new System.Drawing.Size(194, 40);
             this.StartDownloadButton.TabIndex = 7;
             this.StartDownloadButton.Text = "开始下载";
             this.StartDownloadButton.UseVisualStyleBackColor = true;
@@ -240,7 +242,7 @@
             this.groupBox2.Controls.Add(this.RunningLogListBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 229);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(503, 171);
+            this.groupBox2.Size = new System.Drawing.Size(515, 171);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "运行日志";
@@ -250,16 +252,17 @@
             this.RunningLogListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.RunningLogListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RunningLogListBox.FormattingEnabled = true;
+            this.RunningLogListBox.HorizontalScrollbar = true;
             this.RunningLogListBox.Location = new System.Drawing.Point(3, 16);
             this.RunningLogListBox.Name = "RunningLogListBox";
-            this.RunningLogListBox.Size = new System.Drawing.Size(497, 152);
+            this.RunningLogListBox.Size = new System.Drawing.Size(509, 152);
             this.RunningLogListBox.TabIndex = 0;
             // 
             // TotalProgressBar
             // 
             this.TotalProgressBar.Location = new System.Drawing.Point(333, 108);
             this.TotalProgressBar.Name = "TotalProgressBar";
-            this.TotalProgressBar.Size = new System.Drawing.Size(182, 25);
+            this.TotalProgressBar.Size = new System.Drawing.Size(194, 25);
             this.TotalProgressBar.TabIndex = 10;
             // 
             // label7
@@ -276,7 +279,7 @@
             this.CurrentTaskTextBox.Location = new System.Drawing.Point(333, 146);
             this.CurrentTaskTextBox.Name = "CurrentTaskTextBox";
             this.CurrentTaskTextBox.ReadOnly = true;
-            this.CurrentTaskTextBox.Size = new System.Drawing.Size(182, 20);
+            this.CurrentTaskTextBox.Size = new System.Drawing.Size(194, 20);
             this.CurrentTaskTextBox.TabIndex = 11;
             // 
             // groupBox3
@@ -307,12 +310,25 @@
             this.label8.TabIndex = 2;
             this.label8.Text = "当前:";
             // 
+            // DownloadAttachmentCheckBox
+            // 
+            this.DownloadAttachmentCheckBox.AutoSize = true;
+            this.DownloadAttachmentCheckBox.Checked = true;
+            this.DownloadAttachmentCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.DownloadAttachmentCheckBox.Location = new System.Drawing.Point(99, 22);
+            this.DownloadAttachmentCheckBox.Name = "DownloadAttachmentCheckBox";
+            this.DownloadAttachmentCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.DownloadAttachmentCheckBox.TabIndex = 5;
+            this.DownloadAttachmentCheckBox.Text = "下载附件";
+            this.DownloadAttachmentCheckBox.UseVisualStyleBackColor = true;
+            this.DownloadAttachmentCheckBox.CheckedChanged += new System.EventHandler(this.DownloadAttachmentCheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(527, 413);
+            this.ClientSize = new System.Drawing.Size(541, 413);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.CurrentTaskTextBox);
             this.Controls.Add(this.TotalProgressBar);
@@ -328,6 +344,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "中国大学 MOOC 下载器";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -364,6 +381,7 @@
         private System.Windows.Forms.ListBox RunningLogListBox;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox DownloadAttachmentCheckBox;
     }
 }
 
