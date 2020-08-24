@@ -1,10 +1,11 @@
-﻿using System;
-using MoocDownloader.App.Models;
+﻿using MoocDownloader.App.Models;
 using MoocDownloader.App.Mooc;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
 using static Newtonsoft.Json.JsonConvert;
@@ -31,7 +32,7 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// Login icourse163.org.
         /// </summary>
-        private void LoginMoocButton_Click(object sender, System.EventArgs e)
+        private void LoginMoocButton_Click(object sender, EventArgs e)
         {
             var form   = new LoginForm(_cookies);
             var result = form.ShowDialog();
@@ -56,7 +57,7 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// Find save file path.
         /// </summary>
-        private void FindPathButton_Click(object sender, System.EventArgs e)
+        private void FindPathButton_Click(object sender, EventArgs e)
         {
             var dialog = new FolderBrowserDialog();
             var result = dialog.ShowDialog();
@@ -74,15 +75,42 @@ namespace MoocDownloader.App.Views
         /// <param name="message">log message.</param>
         private void Log(string message)
         {
-            RunningLogListBox.Items.Add(message);
+            RunningLogListBox.Items.Add($"{DateTime.Now:hh:mm:ss} {message}");
         }
 
         /// <summary>
         /// Start download.
         /// </summary>
-        private void StartDownloadButton_Click(object sender, System.EventArgs e)
+        private void StartDownloadButton_Click(object sender, EventArgs e)
         {
             const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004";
+
+            if (!_config.IsDownloadDocument
+             && !_config.IsDownloadVideo
+             && !_config.IsDownloadSubtitle
+             && !_config.IsDownloadAttachment) // checked at least one of them
+            {
+                MessageBox.Show(@"至少勾选下载视频, 文档, 字幕, 附件其中一种类型.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
+
+            if (!Directory.Exists(_config.CourseSavePath))
+            {
+                Log($@"路径: {_config.CourseSavePath} 不存在, 准备创建.");
+
+                try
+                {
+                    Directory.CreateDirectory(_config.CourseSavePath);
+                    Log($@"路径: {_config.CourseSavePath} 创建成功.");
+                }
+                catch (Exception exception)
+                {
+                    Log($@"路径: {_config.CourseSavePath} 创建失败, 原因: {exception.Message}.");
+                    return;
+                }
+            }
 
             // 1. initializes a mooc request.
             var mooc = new MoocRequest(_cookies, courseUrl);
@@ -100,12 +128,30 @@ namespace MoocDownloader.App.Views
             // 5. deserialize moocTermJSON.
             var course = DeserializeObject<CourseModel>(moocTermJSON ?? string.Empty);
 
-            foreach (var chapter in course.Chapters)
+            for (var chapterIndex = 0; chapterIndex < course.Chapters.Count; chapterIndex++)
             {
-                foreach (var lesson in chapter.Lessons)
+                var chapter = course.Chapters[chapterIndex];
+
+                for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count; lessonIndex++)
                 {
-                    foreach (var unit in lesson.Units)
+                    var lesson = chapter.Lessons[lessonIndex];
+
+                    for (var unitIndex = 0; unitIndex < lesson.Units.Count; unitIndex++)
                     {
+                        var unit = lesson.Units[unitIndex];
+
+                        // create unit save path.
+                        var chapterDir = $@"{chapterIndex + 1:00}-{chapter.Name}";
+                        var lessonDir  = $@"{lessonIndex  + 1:00}-{lesson.Name}";
+                        var unitPath   = Path.Combine(_config.CourseSavePath, chapterDir, lessonDir);
+
+                        var unitFileName = $@"{unitIndex + 1:00}-{unit.Name}";
+
+                        if (!Directory.Exists(unitPath))
+                        {
+                            Directory.CreateDirectory(unitPath);
+                        }
+
                         var unitCode =
                             mooc.GetUnitJavaScriptCode(unit.Id, unit.ContentId, unit.TermId, unit.ContentType);
 
@@ -129,19 +175,48 @@ namespace MoocDownloader.App.Views
                                 break;
                             case UnitType.Video: // video type.
                             {
-                                // 1. get access token.
+                                // get access token.
                                 var tokenJSON =
                                     mooc.GetResourceTokenJSON($"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
 
                                 var tokenObject = JObject.Parse(tokenJSON);
                                 var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
                                 var videoJSON   = mooc.GetVideoJSON($@"{unit.ContentId}", signature);
+                                var video       = DeserializeObject<VideoResponseModel>(videoJSON);
+
+                                // subtitles
+                                foreach (var caption in video.Result.SrtCaptions)
+                                {
+                                    // subtitle file. E.g:
+                                    //  01-第一节 Java明天 视频_zh.srt
+                                    //  01-第一节 Java明天 视频_en.srt
+                                    var srt = $@"{unitFileName}_{caption.Name}";
+                                }
+
+                                var videoUrl  = ""; // video url.
+                                var videoSize = 0L; // video size.
+
+                                foreach (var videoInfo in video.Result.Videos)
+                                {
+                                    if (videoInfo.Quality.HasValue &&
+                                        (VideoQuality) videoInfo.Quality == _config.VideoQuality)
+                                    {
+                                        videoUrl  = videoInfo.VideoUrl;
+                                        videoSize = videoInfo.Size ?? 0;
+
+                                        break;
+                                    }
+                                }
+
+                                // TODO download video.
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
                             {
                                 var documentUrl = unitResult.TextOrigUrl;
                                 var fileName    = $@"{unit.Name}.pdf";
+
+                                // TODO download document.
                             }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
@@ -152,6 +227,8 @@ namespace MoocDownloader.App.Views
                                 var nosKey     = content["nosKey"]?.ToString();
                                 var fileName   = content["fileName"]?.ToString();
                                 var attachment = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+
+                                // TODO download attachment.
                             }
                                 break;
                             default: // not recognized type
@@ -164,32 +241,37 @@ namespace MoocDownloader.App.Views
 
         #region UI controls properties binding.
 
-        private void CourseUrlTextBox_TextChanged(object sender, System.EventArgs e)
+        private void CourseUrlTextBox_TextChanged(object sender, EventArgs e)
         {
             _config.CourseUrl = CourseUrlTextBox.Text;
         }
 
-        private void SavePathTextBox_TextChanged(object sender, System.EventArgs e)
+        private void SavePathTextBox_TextChanged(object sender, EventArgs e)
         {
             _config.CourseSavePath = SavePathTextBox.Text;
         }
 
-        private void DownloadVideoCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        private void DownloadVideoCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _config.IsDownloadVideo = DownloadVideoCheckBox.Checked;
         }
 
-        private void DownloadDocumentCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        private void DownloadDocumentCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _config.IsDownloadDocument = DownloadDocumentCheckBox.Checked;
         }
 
-        private void DownloadSubtitleCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        private void DownloadSubtitleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _config.IsDownloadSubtitle = DownloadSubtitleCheckBox.Checked;
         }
 
-        private void SDRadioButton_CheckedChanged(object sender, System.EventArgs e)
+        private void DownloadAttachmentCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _config.IsDownloadAttachment = DownloadAttachmentCheckBox.Checked;
+        }
+
+        private void SDRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (SDRadioButton.Checked)
             {
@@ -197,7 +279,7 @@ namespace MoocDownloader.App.Views
             }
         }
 
-        private void HDRadioButton_CheckedChanged(object sender, System.EventArgs e)
+        private void HDRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (HDRadioButton.Checked)
             {
@@ -206,5 +288,14 @@ namespace MoocDownloader.App.Views
         }
 
         #endregion
+
+        /// <summary>
+        /// When the program is started
+        /// </summary>
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // set the course save path.
+            SavePathTextBox.Text = Path.Combine(Application.StartupPath, "课程下载");
+        }
     }
 }
