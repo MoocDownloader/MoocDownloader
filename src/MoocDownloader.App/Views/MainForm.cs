@@ -106,7 +106,13 @@ namespace MoocDownloader.App.Views
                 {
                     foreach (var unit in lesson.Units)
                     {
-                        var unitCode = mooc.GetUnitJavaScriptCode($"{unit.ContentId}", $"{unit.Id}");
+                        var unitCode = mooc.GetUnitJavaScriptCode(unit.ContentId, unit.Id, unit.ContentType);
+
+                        if (unitCode.Contains("dwr.engine._remoteHandleException"))
+                        {
+                            Console.WriteLine(@"Error: system error.");
+                            break;
+                        }
 
                         unitCode = FixCourseBeanCode(unitCode);
 
@@ -122,12 +128,19 @@ namespace MoocDownloader.App.Views
                                 break;
                             case UnitType.Video: // video type.
                             {
+                                // 1. get access token.
+                                var tokenJSON =
+                                    mooc.GetResourceTokenJSON($"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
+
+                                var tokenObject = JObject.Parse(tokenJSON);
+                                var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
+                                var videoJSON   = mooc.GetVideoJSON($@"{unit.ContentId}", signature);
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
                             {
                                 var documentUrl = unitResult.TextOrigUrl;
-                                var fileName    = $@"{unit.Name}.pdf"
+                                var fileName    = $@"{unit.Name}.pdf";
                             }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
