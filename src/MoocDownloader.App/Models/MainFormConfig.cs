@@ -31,6 +31,11 @@
         public bool IsDownloadSubtitle { get; set; } = true;
 
         /// <summary>
+        /// whether to download the attachment.
+        /// </summary>
+        public bool IsDownloadAttachment { get; set; } = true;
+
+        /// <summary>
         /// video quality.
         /// </summary>
         public VideoQuality VideoQuality { get; set; } = VideoQuality.HD;
