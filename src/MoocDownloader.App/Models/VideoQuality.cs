@@ -8,11 +8,11 @@
         /// <summary>
         /// Standard Definition.
         /// </summary>
-        SD,
+        SD = 1,
 
         /// <summary>
         /// High Definition.
         /// </summary>
-        HD
+        HD = 2
     }
 }
