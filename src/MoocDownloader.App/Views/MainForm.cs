@@ -194,7 +194,7 @@ namespace MoocDownloader.App.Views
                                     // subtitle file. E.g:
                                     //  01-第一节 Java明天 视频_zh.srt
                                     //  01-第一节 Java明天 视频_en.srt
-                                    var srt = $@"{unitFileName}_{caption.Name}";
+                                    var srt = $@"{unitFileName}_{caption.Name}.srt";
                                 }
 
                                 var videoUrl  = ""; // video url.
