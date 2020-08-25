@@ -145,7 +145,7 @@ namespace MoocDownloader.App.Utilities
         /// <param name="ResponseByte">byte[]</param>
         private void SetEncoding(HttpRequest request, HttpResponse response, byte[] ResponseByte)
         {
-            if (request.ResultType == ResultType.Byte) response.ResultByte = ResponseByte;
+            if (request.ResultType == ResultType.Byte) response.ResultBytes = ResponseByte;
 
             if (_encoding is null)
             {
@@ -781,7 +781,7 @@ namespace MoocDownloader.App.Utilities
         /// <summary>
         /// Response byte array. Only return byte data when the ResultType property is Byte, otherwise empty.
         /// </summary>
-        public byte[] ResultByte { get; set; }
+        public byte[] ResultBytes { get; set; }
 
         /// <summary>
         /// Headers.

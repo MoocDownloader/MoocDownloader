@@ -5,8 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using MoocDownloader.App.Utilities;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
+using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
 using static Newtonsoft.Json.JsonConvert;
 
@@ -141,11 +145,11 @@ namespace MoocDownloader.App.Views
                         var unit = lesson.Units[unitIndex];
 
                         // create unit save path.
-                        var chapterDir = $@"{chapterIndex + 1:00}-{chapter.Name}";
-                        var lessonDir  = $@"{lessonIndex  + 1:00}-{lesson.Name}";
+                        var chapterDir = $@"{chapterIndex + 1:00}-{FixPath(chapter.Name)}";
+                        var lessonDir  = $@"{lessonIndex  + 1:00}-{FixPath(lesson.Name)}";
                         var unitPath   = Path.Combine(_config.CourseSavePath, chapterDir, lessonDir);
 
-                        var unitFileName = $@"{unitIndex + 1:00}-{unit.Name}";
+                        var unitFileName = $@"{unitIndex + 1:00}-{FixPath(unit.Name)}";
 
                         if (!Directory.Exists(unitPath))
                         {
@@ -214,9 +218,25 @@ namespace MoocDownloader.App.Views
                             case UnitType.Document: // document type. E.g pdf.
                             {
                                 var documentUrl = unitResult.TextOrigUrl;
-                                var fileName    = $@"{unit.Name}.pdf";
+                                var fileName    = $@"{FixPath(unit.Name)}.pdf";
 
-                                // TODO download document.
+                                var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
+                                                         .SetUrl(documentUrl);
+
+                                var response = HttpConsumer.Create().Send(request);
+
+                                for (var i = 0; i < 5; i++)
+                                {
+                                    if (response.StatusCode == HttpStatusCode.OK && response.ResultBytes.Any())
+                                    {
+                                        File.WriteAllBytes(Path.Combine(unitPath, fileName), response.ResultBytes);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1))).Wait();
+                                    }
+                                }
                             }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
