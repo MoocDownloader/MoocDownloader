@@ -26,7 +26,12 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// configuration of main form.
         /// </summary>
-        private MainFormConfig _config = new MainFormConfig();
+        private readonly MainFormConfig _config = new MainFormConfig();
+
+        /// <summary>
+        /// the maximum number of retries when the download fails.
+        /// </summary>
+        private const int MAX_TIMES = 5;
 
         public MainForm()
         {
@@ -194,7 +199,7 @@ namespace MoocDownloader.App.Views
                                     // subtitle file. E.g:
                                     //  01-第一节 Java明天 视频_zh.srt
                                     //  01-第一节 Java明天 视频_en.srt
-                                    var srt = $@"{unitFileName}_{caption.Name}.srt";
+                                    var srt = $@"{unitFileName}_{caption.LanguageCode}.srt";
                                 }
 
                                 var videoUrl  = ""; // video url.
@@ -212,7 +217,15 @@ namespace MoocDownloader.App.Views
                                     }
                                 }
 
-                                // TODO download video.
+                                var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
+                                                         .SetUrl(videoUrl);
+
+                                var response = HttpConsumer.Create().Send(request);
+
+                                if (response.StatusCode == HttpStatusCode.OK)
+                                {
+                                    File.WriteAllText(Path.Combine(unitPath, unitFileName), response.Content);
+                                }
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
@@ -220,14 +233,16 @@ namespace MoocDownloader.App.Views
                                 var documentUrl = unitResult.TextOrigUrl;
                                 var fileName    = $@"{FixPath(unit.Name)}.pdf";
 
-                                var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
-                                                         .SetUrl(documentUrl);
-
-                                var response = HttpConsumer.Create().Send(request);
-
-                                for (var i = 0; i < 5; i++)
+                                for (var i = 0; i < MAX_TIMES; i++)
                                 {
-                                    if (response.StatusCode == HttpStatusCode.OK && response.ResultBytes.Any())
+                                    var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
+                                                             .SetUrl(documentUrl);
+
+                                    request.ContentType = null;
+
+                                    var response = HttpConsumer.Create().Send(request);
+
+                                    if (response.StatusCode == HttpStatusCode.OK)
                                     {
                                         File.WriteAllBytes(Path.Combine(unitPath, fileName), response.ResultBytes);
                                         break;
@@ -243,12 +258,30 @@ namespace MoocDownloader.App.Views
                             {
                                 const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
 
-                                var content    = JObject.Parse(unit.JsonContent);
-                                var nosKey     = content["nosKey"]?.ToString();
-                                var fileName   = content["fileName"]?.ToString();
-                                var attachment = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+                                var content       = JObject.Parse(unit.JsonContent);
+                                var nosKey        = content["nosKey"]?.ToString();
+                                var fileName      = content["fileName"]?.ToString();
+                                var attachmentUrl = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
 
-                                // TODO download attachment.
+                                for (var i = 0; i < MAX_TIMES; i++)
+                                {
+                                    var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
+                                                             .SetUrl(attachmentUrl);
+
+                                    var response = HttpConsumer.Create().Send(request);
+
+                                    if (response.StatusCode == HttpStatusCode.OK && response.ResultBytes != null)
+                                    {
+                                        File.WriteAllBytes(Path.Combine(unitPath, $@"{FixPath(fileName)}"),
+                                            response.ResultBytes);
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1))).Wait();
+                                    }
+                                }
                             }
                                 break;
                             default: // not recognized type
