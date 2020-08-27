@@ -153,7 +153,7 @@ namespace MoocDownloader.App.Views
                         // create unit save path.
                         var chapterDir = $@"{chapterIndex + 1:00}-{FixPath(chapter.Name)}";
                         var lessonDir  = $@"{lessonIndex  + 1:00}-{FixPath(lesson.Name)}";
-                        var unitPath   = Path.Combine(_config.CourseSavePath, chapterDir, lessonDir);
+                        var unitPath   = Path.Combine(_config.CourseSavePath, course.CourseName, chapterDir, lessonDir);
 
                         var unitFileName = $@"{unitIndex + 1:00}-{FixPath(unit.Name)}";
 
@@ -162,9 +162,9 @@ namespace MoocDownloader.App.Views
                             Directory.CreateDirectory(unitPath);
                         }
 
-                        var unitCode =
-                            await mooc.GetUnitJavaScriptCodeAsync(unit.Id, unit.ContentId, unit.TermId,
-                                unit.ContentType);
+                        var unitCode = await mooc.GetUnitJavaScriptCodeAsync(
+                            unit.Id, unit.ContentId, unit.TermId, unit.ContentType
+                        );
 
                         if (unitCode.Contains("dwr.engine._remoteHandleException"))
                         {
@@ -187,9 +187,9 @@ namespace MoocDownloader.App.Views
                             case UnitType.Video: // video type.
                             {
                                 // get access token.
-                                var tokenJSON =
-                                    await mooc.GetResourceTokenJsonAsync(
-                                        $"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
+                                var tokenJSON = await mooc.GetResourceTokenJsonAsync(
+                                    $"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}"
+                                );
 
                                 var tokenObject = JObject.Parse(tokenJSON);
                                 var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
@@ -222,13 +222,13 @@ namespace MoocDownloader.App.Views
 
                                 var m3u8 = await mooc.DownloadM3U8Async(videoUrl);
 
-                                File.WriteAllText(Path.Combine(unitPath, unitFileName), m3u8);
+                                File.WriteAllText(Path.Combine(unitPath, $@"{unitFileName}.m3u8"), m3u8);
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
                             {
                                 var documentUrl = unitResult.TextOrigUrl;
-                                var fileName    = $@"{FixPath(unit.Name)}.pdf";
+                                var fileName    = $@"{unitFileName}.pdf";
 
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
@@ -265,7 +265,8 @@ namespace MoocDownloader.App.Views
                                     }
                                     else
                                     {
-                                        File.WriteAllBytes(Path.Combine(unitPath, $@"{FixPath(fileName)}"), attachment);
+                                        File.WriteAllBytes(
+                                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"), attachment);
 
                                         break;
                                     }
