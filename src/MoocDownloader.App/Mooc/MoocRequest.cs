@@ -1,11 +1,13 @@
 ﻿using HtmlAgilityPack;
 using MoocDownloader.App.Models;
-using MoocDownloader.App.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using Cookie = System.Net.Cookie;
 
 namespace MoocDownloader.App.Mooc
@@ -15,13 +17,13 @@ namespace MoocDownloader.App.Mooc
     /// </summary>
     public class MoocRequest
     {
-        private readonly string           _courseId;  // identifier of the course.
-        private readonly string           _sessionId; // Session id.
-        private readonly CookieCollection _cookies;   // cookies of icourse163.org.
-        private readonly HttpConsumer     _consumer;  // HTTP consumer.
+        private readonly string     _courseId;  // identifier of the course.
+        private readonly string     _sessionId; // Session id.
+        private readonly HttpClient _client;    // HTTP Client.
 
         private const string COURSE_URL = "https://www.icourse163.org/course/";
         private const string LEARN_URL  = "https://www.icourse163.org/learn/";
+
 
         /// <summary>
         /// Initializes a new instance of the Mooc request class with cookies and the specified url.
@@ -30,13 +32,15 @@ namespace MoocDownloader.App.Mooc
         /// <param name="courseUrl">url of the course.</param>
         public MoocRequest(IReadOnlyCollection<CookieModel> cookies, string courseUrl)
         {
-            _consumer = HttpConsumer.Create();
             _courseId = GetCourseId(courseUrl);
-            _cookies  = new CookieCollection();
 
-            foreach (var cookie in cookies)
+            _sessionId = cookies.FirstOrDefault(c => c.Name == "NTESSTUDYSI")?.Value ?? string.Empty;
+
+            var cookieContainer = new CookieContainer(); // cookies of icourse163.org.
+
+            foreach (var cookie in cookies) // add cookies for httpclient.
             {
-                _cookies.Add(new Cookie(cookie.Name, cookie.Value)
+                cookieContainer.Add(new Cookie(cookie.Name, cookie.Value)
                 {
                     Domain   = cookie.Host,
                     HttpOnly = cookie.IsHttpOnly ?? false,
@@ -44,7 +48,23 @@ namespace MoocDownloader.App.Mooc
                 });
             }
 
-            _sessionId = cookies.FirstOrDefault(c => c.Name == "NTESSTUDYSI")?.Value ?? string.Empty;
+            var handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                AllowAutoRedirect      = false,
+                UseCookies             = true,
+                CookieContainer        = cookieContainer
+            };
+
+            _client = new HttpClient(handler)
+            {
+                MaxResponseContentBufferSize = 256000
+            };
+
+            _client.DefaultRequestHeaders.Add(
+                "user-agent",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"
+            );
         }
 
         /// <summary>
@@ -79,28 +99,18 @@ namespace MoocDownloader.App.Mooc
         /// Get termId value.
         /// </summary>
         /// <returns>Term id.</returns>
-        public string GetTermId()
+        public async Task<string> GetTermIdAsync()
         {
-            var request  = HttpRequest.Create().SetUrl($@"{COURSE_URL}{_courseId}").SetMethod(HttpMethod.GET);
-            var response = _consumer.Send(request);
+            var response     = await _client.GetStringAsync($@"{COURSE_URL}{_courseId}");
+            var htmlDocument = new HtmlDocument();
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var html = new HtmlDocument();
+            htmlDocument.LoadHtml(response);
 
-                html.LoadHtml(response.Content);
+            var node = htmlDocument.DocumentNode
+                                   .SelectNodes("//div")
+                                   .FirstOrDefault(n => n?.Attributes?["data-action"]?.Value == "点击详情tab");
 
-                var node = html.DocumentNode
-                               .SelectNodes("//div")
-                               .FirstOrDefault(n => n?.Attributes?["data-action"]?.Value == "点击详情tab");
-
-                if (node != null)
-                {
-                    return node.Attributes["data-label"].Value;
-                }
-            }
-
-            return string.Empty;
+            return node != null ? node.Attributes["data-label"].Value : string.Empty;
         }
 
         /// <summary>
@@ -108,11 +118,11 @@ namespace MoocDownloader.App.Mooc
         /// </summary>
         /// <param name="termId">Term Id.</param>
         /// <returns>The index of course JavaScript Code.</returns>
-        public string GetMocTermJavaScriptCode(string termId)
+        public async Task<string> GetMocTermJavaScriptCodeAsync(string termId)
         {
             const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getMocTermDto.dwr";
 
-            var request     = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST);
+            var request     = new HttpRequestMessage(HttpMethod.Post, url);
             var bodyBuilder = new StringBuilder();
 
             bodyBuilder.AppendLine(@"callCount=1");
@@ -126,21 +136,17 @@ namespace MoocDownloader.App.Mooc
             bodyBuilder.AppendLine(@"c0-param2=boolean:true");
             bodyBuilder.AppendLine($@"batchId={new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds()}");
 
-            request.PostBodyType     = PostBodyType.String;
-            request.PostBodyText     = bodyBuilder.ToString();
-            request.Referer          = $@"{LEARN_URL}{_courseId}";
-            request.ContentType      = "text/plain";
-            request.CookieType       = CookieType.CookieCollection;
-            request.CookieCollection = _cookies;
+            request.Content          = new StringContent(bodyBuilder.ToString());
+            request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}");
+            request.Headers.Add("DNT", "1");
+            request.Headers.Add("Origin", "https://www.icourse163.org");
+            request.Headers.Add("Content-Type", "text/plain");
 
-            request.Header["DNT"]    = "1";
-            request.Header["Origin"] = "https://www.icourse163.org";
+            var response = await _client.SendAsync(request);
 
-            var response = _consumer.Send(request);
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
-                return response.Content;
+                return await response.Content.ReadAsStringAsync();
             }
 
             return string.Empty;
@@ -154,11 +160,12 @@ namespace MoocDownloader.App.Mooc
         /// <param name="termId">Term Id.</param>
         /// <param name="contentType">Content Type.</param>
         /// <returns>Unit JavaScript code.</returns>
-        public string GetUnitJavaScriptCode(long? unitId, long? contentId, long? termId, long? contentType)
+        public async Task<string> GetUnitJavaScriptCodeAsync(long? unitId, long? contentId, long? termId,
+                                                             long? contentType)
         {
             const string url = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
 
-            var request     = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST);
+            var request     = new HttpRequestMessage(HttpMethod.Post, url);
             var bodyBuilder = new StringBuilder();
 
             bodyBuilder.AppendLine(@"callCount=1");
@@ -173,20 +180,16 @@ namespace MoocDownloader.App.Mooc
             bodyBuilder.AppendLine($@"c0-param3=number:{unitId}");
             bodyBuilder.AppendLine($@"batchId={new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds()}");
 
-            request.PostBodyType     = PostBodyType.String;
-            request.PostBodyText     = bodyBuilder.ToString();
-            request.Referer          = $@"{LEARN_URL}{_courseId}?tid={termId}";
-            request.ContentType      = "text/plain";
-            request.CookieType       = CookieType.CookieCollection;
-            request.CookieCollection = _cookies;
+            request.Content          = new StringContent(bodyBuilder.ToString());
+            request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}?tid={termId}");
+            request.Headers.Add("Origin", "https://www.icourse163.org");
+            request.Headers.Add("Content-Type", "text/plain");
 
-            request.Header["Origin"] = "https://www.icourse163.org";
+            var response = await _client.SendAsync(request);
 
-            var response = _consumer.Send(request);
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
-                return response.Content;
+                return await response.Content.ReadAsStringAsync();
             }
 
             return string.Empty;
@@ -199,30 +202,27 @@ namespace MoocDownloader.App.Mooc
         /// <param name="termId">Term Id.</param>
         /// <param name="contentType">Content type.</param>
         /// <returns>JSON of resource.</returns>
-        public string GetResourceTokenJSON(string unitId, string termId, string contentType)
+        public async Task<string> GetResourceTokenJSONAsync(string unitId, string termId, string contentType)
         {
             const string url = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
 
-            var request = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST)
-                                     .SetQueryParameter("csrfKey", _sessionId);
+            var request = new HttpRequestMessage(HttpMethod.Post, $@"{url}?csrfKey={_sessionId}");
+            //HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST)
+            //                     .SetQueryParameter("csrfKey", _sessionId);
 
-            request.PostBodyType = PostBodyType.String;
-            request.PostBodyText = $@"bizId={unitId}&bizType=1&contentType={contentType}";
-            request.Referer      = $@"{LEARN_URL}{_courseId}?tid={termId}";
-            request.ContentType  = "application/x-www-form-urlencoded";
-            request.Accept       = "*/*";
-            request.CookieType   = CookieType.CookieCollection;
+            request.Content          = new StringContent($@"bizId={unitId}&bizType=1&contentType={contentType}");
+            request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}?tid={termId}");
 
-            request.CookieCollection = _cookies;
+            request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            request.Headers.Add("Origin", "https://www.icourse163.org");
+            request.Headers.Add("DNT", "1");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
 
-            request.Header["Origin"] = "https://www.icourse163.org";
-            request.Header["DNT"]    = "1";
+            var response = await _client.SendAsync(request);
 
-            var response = _consumer.Send(request);
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
-                return response.Content;
+                return await response.Content.ReadAsStringAsync();
             }
 
             return string.Empty;
@@ -234,27 +234,24 @@ namespace MoocDownloader.App.Mooc
         /// <param name="videoId">Video id.</param>
         /// <param name="signature">Signature</param>
         /// <returns>Video JSON</returns>
-        public string GetVideoJSON(string videoId, string signature)
+        public async Task<string> GetVideoJSONAsync(string videoId, string signature)
         {
             const string url = @"https://vod.study.163.com/eds/api/v1/vod/video";
 
-            var request = HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.GET)
-                                     .SetQueryParameter("videoId", videoId)
-                                     .SetQueryParameter("signature", signature)
-                                     .SetQueryParameter("clientType", "1");
+            var request = new HttpRequestMessage(
+                HttpMethod.Get, $"{url}?videoId={videoId}&signature={signature}&clientType=1"
+            );
 
-            request.Referer          = $@"{LEARN_URL}{_courseId}";
-            request.ContentType      = "application/x-www-form-urlencoded";
-            request.CookieType       = CookieType.CookieCollection;
-            request.CookieCollection = _cookies;
+            request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}");
 
-            request.Header["Origin"] = "https://www.icourse163.org";
+            request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            request.Headers.Add("Origin", "https://www.icourse163.org");
 
-            var response = _consumer.Send(request);
+            var response = await _client.SendAsync(request);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
-                return response.Content;
+                return await response.Content.ReadAsStringAsync();
             }
 
             return string.Empty;

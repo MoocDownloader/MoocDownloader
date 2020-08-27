@@ -90,7 +90,7 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// Start download.
         /// </summary>
-        private void StartDownloadButton_Click(object sender, EventArgs e)
+        private async void StartDownloadButton_Click(object sender, EventArgs e)
         {
             const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004";
 
@@ -125,10 +125,10 @@ namespace MoocDownloader.App.Views
             var mooc = new MoocRequest(_cookies, courseUrl);
 
             // 2. get term id.
-            var termId = mooc.GetTermId();
+            var termId = await mooc.GetTermIdAsync();
 
             // 3. get Mooc term JavaScript code.
-            var moocTermCode = mooc.GetMocTermJavaScriptCode(termId);
+            var moocTermCode = await mooc.GetMocTermJavaScriptCodeAsync(termId);
 
             // 4. evaluate mooc term JavaScript code.
             moocTermCode = FixCourseBeanCode(moocTermCode);
@@ -162,7 +162,8 @@ namespace MoocDownloader.App.Views
                         }
 
                         var unitCode =
-                            mooc.GetUnitJavaScriptCode(unit.Id, unit.ContentId, unit.TermId, unit.ContentType);
+                            await mooc.GetUnitJavaScriptCodeAsync(unit.Id, unit.ContentId, unit.TermId,
+                                                                  unit.ContentType);
 
                         if (unitCode.Contains("dwr.engine._remoteHandleException"))
                         {
@@ -186,11 +187,12 @@ namespace MoocDownloader.App.Views
                             {
                                 // get access token.
                                 var tokenJSON =
-                                    mooc.GetResourceTokenJSON($"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
+                                    await mooc.GetResourceTokenJSONAsync(
+                                        $"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
 
                                 var tokenObject = JObject.Parse(tokenJSON);
                                 var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
-                                var videoJSON   = mooc.GetVideoJSON($@"{unit.ContentId}", signature);
+                                var videoJSON   = await mooc.GetVideoJSONAsync($@"{unit.ContentId}", signature);
                                 var video       = DeserializeObject<VideoResponseModel>(videoJSON);
 
                                 // subtitles
@@ -273,7 +275,7 @@ namespace MoocDownloader.App.Views
                                     if (response.StatusCode == HttpStatusCode.OK && response.ResultBytes != null)
                                     {
                                         File.WriteAllBytes(Path.Combine(unitPath, $@"{FixPath(fileName)}"),
-                                            response.ResultBytes);
+                                                           response.ResultBytes);
 
                                         break;
                                     }
