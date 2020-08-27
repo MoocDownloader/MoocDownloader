@@ -106,7 +106,6 @@
     <Compile Include="Models\VideoVoModel.cs" />
     <Compile Include="Mooc\MoocCodeCorrector.cs" />
     <Compile Include="Mooc\MoocRequest.cs" />
-    <Compile Include="Utilities\HttpConsumer.cs" />
     <Compile Include="Utilities\IOHelper.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
     <Compile Include="Utilities\M3U8Helper.cs" />
