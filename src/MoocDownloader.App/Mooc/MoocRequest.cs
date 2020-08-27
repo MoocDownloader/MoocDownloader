@@ -253,7 +253,7 @@ namespace MoocDownloader.App.Mooc
         }
 
         /// <summary>
-        /// Download m3u8 play list.
+        /// Download m3u8 play list from url.
         /// </summary>
         /// <param name="videoUrl">url of m3u8 file.</param>
         /// <returns>content of m3u8 play list.</returns>
@@ -271,7 +271,7 @@ namespace MoocDownloader.App.Mooc
         }
 
         /// <summary>
-        /// Download document.
+        /// Download the document from url.
         /// </summary>
         /// <param name="documentUrl">document's url.</param>
         /// <returns>bytes of document with url.</returns>
@@ -289,7 +289,7 @@ namespace MoocDownloader.App.Mooc
         }
 
         /// <summary>
-        /// Download attachment.
+        /// Download the attachment from given url.
         /// </summary>
         /// <param name="attachmentUrl">attachment's url.</param>
         /// <returns>bytes of attachment with url.</returns>
@@ -301,6 +301,24 @@ namespace MoocDownloader.App.Mooc
             if (response.StatusCode == HttpStatusCode.Redirect && response.Headers.Location != null)
             {
                 return await _client.GetByteArrayAsync(response.Headers.Location); // Redirect
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Download the subtitle from the given url.
+        /// </summary>
+        /// <param name="subtitleUrl">subtitle's url.</param>
+        /// <returns>bytes of subtitle with url.</returns>
+        public async Task<byte[]> DownloadSubtitleAsync(string subtitleUrl)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, subtitleUrl);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
             }
 
             return null;

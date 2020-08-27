@@ -87,7 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="M3U8\Parser.cs" />
+    <Compile Include="M3U8\M3U8Parser.cs" />
     <Compile Include="Models\CaptionModel.cs" />
     <Compile Include="Models\ChapterModel.cs" />
     <Compile Include="Models\CookieModel.cs" />
