@@ -5,11 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MoocDownloader.App.Utilities;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
@@ -202,27 +199,31 @@ namespace MoocDownloader.App.Views
                                     // subtitle file. E.g:
                                     //  01-第一节 Java明天 视频_zh.srt
                                     //  01-第一节 Java明天 视频_en.srt
-                                    var srt = $@"{unitFileName}_{caption.LanguageCode}.srt";
+                                    var srtName    = $@"{unitFileName}_{caption.LanguageCode}.srt";
+                                    var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
+
+                                    File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
                                 }
 
                                 var videoUrl  = ""; // video url.
                                 var videoSize = 0L; // video size.
 
-                                foreach (var videoInfo in video.Result.Videos)
+                                var videoInfo = video.Result.Videos.FirstOrDefault(
+                                    v => v.Quality.HasValue
+                                      && (VideoQuality) v.Quality == _config.VideoQuality
+                                );
+
+                                if (videoInfo != null)
                                 {
-                                    if (videoInfo.Quality.HasValue &&
-                                        (VideoQuality) videoInfo.Quality == _config.VideoQuality)
-                                    {
-                                        videoUrl  = videoInfo.VideoUrl;
-                                        videoSize = videoInfo.Size ?? 0;
+                                    videoUrl  = videoInfo.VideoUrl;
+                                    videoSize = videoInfo.Size ?? 0;
 
-                                        break;
-                                    }
+                                    //var m3u8   = await mooc.DownloadM3U8Async(videoUrl);
+                                    //var parser = M3U8Parser.Create(m3u8);
+                                    //var list   = parser.Parse();
+
+                                    // File.WriteAllText(Path.Combine(unitPath, $@"{unitFileName}.m3u8"), m3u8);
                                 }
-
-                                var m3u8 = await mooc.DownloadM3U8Async(videoUrl);
-
-                                File.WriteAllText(Path.Combine(unitPath, $@"{unitFileName}.m3u8"), m3u8);
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
