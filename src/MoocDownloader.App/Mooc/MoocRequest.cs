@@ -38,7 +38,7 @@ namespace MoocDownloader.App.Mooc
 
             var cookieContainer = new CookieContainer(); // cookies of icourse163.org.
 
-            foreach (var cookie in cookies) // add cookies for httpclient.
+            foreach (var cookie in cookies) // add cookies for HTTP client.
             {
                 cookieContainer.Add(new Cookie(cookie.Name, cookie.Value)
                 {
@@ -56,10 +56,7 @@ namespace MoocDownloader.App.Mooc
                 CookieContainer        = cookieContainer
             };
 
-            _client = new HttpClient(handler)
-            {
-                MaxResponseContentBufferSize = 256000
-            };
+            _client = new HttpClient(handler);
 
             _client.DefaultRequestHeaders.Add(
                 "user-agent",
@@ -140,7 +137,7 @@ namespace MoocDownloader.App.Mooc
             request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}");
             request.Headers.Add("DNT", "1");
             request.Headers.Add("Origin", "https://www.icourse163.org");
-            request.Headers.Add("Content-Type", "text/plain");
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
 
             var response = await _client.SendAsync(request);
 
@@ -183,7 +180,7 @@ namespace MoocDownloader.App.Mooc
             request.Content          = new StringContent(bodyBuilder.ToString());
             request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}?tid={termId}");
             request.Headers.Add("Origin", "https://www.icourse163.org");
-            request.Headers.Add("Content-Type", "text/plain");
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
 
             var response = await _client.SendAsync(request);
 
@@ -213,10 +210,10 @@ namespace MoocDownloader.App.Mooc
 
             request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}?tid={termId}");
 
-            request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             request.Headers.Add("Origin", "https://www.icourse163.org");
             request.Headers.Add("DNT", "1");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
             var response = await _client.SendAsync(request);
 
@@ -243,8 +240,6 @@ namespace MoocDownloader.App.Mooc
             );
 
             request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}");
-
-            request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             request.Headers.Add("Origin", "https://www.icourse163.org");
 
             var response = await _client.SendAsync(request);
@@ -293,14 +288,19 @@ namespace MoocDownloader.App.Mooc
             return null;
         }
 
+        /// <summary>
+        /// Download attachment.
+        /// </summary>
+        /// <param name="attachmentUrl">attachment's url.</param>
+        /// <returns>bytes of attachment with url.</returns>
         public async Task<byte[]> DownloadAttachmentAsync(string attachmentUrl)
         {
             var request  = new HttpRequestMessage(HttpMethod.Get, attachmentUrl);
             var response = await _client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == HttpStatusCode.Redirect && response.Headers.Location != null)
             {
-                return await response.Content.ReadAsByteArrayAsync();
+                return await _client.GetByteArrayAsync(response.Headers.Location); // Redirect
             }
 
             return null;
