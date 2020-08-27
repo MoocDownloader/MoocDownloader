@@ -202,15 +202,15 @@ namespace MoocDownloader.App.Mooc
         /// <param name="termId">Term Id.</param>
         /// <param name="contentType">Content type.</param>
         /// <returns>JSON of resource.</returns>
-        public async Task<string> GetResourceTokenJSONAsync(string unitId, string termId, string contentType)
+        public async Task<string> GetResourceTokenJsonAsync(string unitId, string termId, string contentType)
         {
             const string url = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $@"{url}?csrfKey={_sessionId}");
-            //HttpRequest.Create().SetUrl(url).SetMethod(HttpMethod.POST)
-            //                     .SetQueryParameter("csrfKey", _sessionId);
+            var request = new HttpRequestMessage(HttpMethod.Post, $@"{url}?csrfKey={_sessionId}")
+            {
+                Content = new StringContent($@"bizId={unitId}&bizType=1&contentType={contentType}")
+            };
 
-            request.Content          = new StringContent($@"bizId={unitId}&bizType=1&contentType={contentType}");
             request.Headers.Referrer = new Uri($@"{LEARN_URL}{_courseId}?tid={termId}");
 
             request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -234,7 +234,7 @@ namespace MoocDownloader.App.Mooc
         /// <param name="videoId">Video id.</param>
         /// <param name="signature">Signature</param>
         /// <returns>Video JSON</returns>
-        public async Task<string> GetVideoJSONAsync(string videoId, string signature)
+        public async Task<string> GetVideoJsonAsync(string videoId, string signature)
         {
             const string url = @"https://vod.study.163.com/eds/api/v1/vod/video";
 
@@ -255,6 +255,55 @@ namespace MoocDownloader.App.Mooc
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Download m3u8 play list.
+        /// </summary>
+        /// <param name="videoUrl">url of m3u8 file.</param>
+        /// <returns>content of m3u8 play list.</returns>
+        public async Task<string> DownloadM3U8Async(string videoUrl)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, videoUrl);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Download document.
+        /// </summary>
+        /// <param name="documentUrl">document's url.</param>
+        /// <returns>bytes of document with url.</returns>
+        public async Task<byte[]> DownloadDocumentAsync(string documentUrl)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, documentUrl);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+
+            return null;
+        }
+
+        public async Task<byte[]> DownloadAttachmentAsync(string attachmentUrl)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, attachmentUrl);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+
+            return null;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MoocDownloader.App.Utilities;
@@ -163,7 +164,7 @@ namespace MoocDownloader.App.Views
 
                         var unitCode =
                             await mooc.GetUnitJavaScriptCodeAsync(unit.Id, unit.ContentId, unit.TermId,
-                                                                  unit.ContentType);
+                                unit.ContentType);
 
                         if (unitCode.Contains("dwr.engine._remoteHandleException"))
                         {
@@ -187,12 +188,12 @@ namespace MoocDownloader.App.Views
                             {
                                 // get access token.
                                 var tokenJSON =
-                                    await mooc.GetResourceTokenJSONAsync(
+                                    await mooc.GetResourceTokenJsonAsync(
                                         $"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}");
 
                                 var tokenObject = JObject.Parse(tokenJSON);
                                 var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
-                                var videoJSON   = await mooc.GetVideoJSONAsync($@"{unit.ContentId}", signature);
+                                var videoJSON   = await mooc.GetVideoJsonAsync($@"{unit.ContentId}", signature);
                                 var video       = DeserializeObject<VideoResponseModel>(videoJSON);
 
                                 // subtitles
@@ -219,15 +220,9 @@ namespace MoocDownloader.App.Views
                                     }
                                 }
 
-                                var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
-                                                         .SetUrl(videoUrl);
+                                var m3u8 = await mooc.DownloadM3U8Async(videoUrl);
 
-                                var response = HttpConsumer.Create().Send(request);
-
-                                if (response.StatusCode == HttpStatusCode.OK)
-                                {
-                                    File.WriteAllText(Path.Combine(unitPath, unitFileName), response.Content);
-                                }
+                                File.WriteAllText(Path.Combine(unitPath, unitFileName), m3u8);
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
@@ -237,21 +232,16 @@ namespace MoocDownloader.App.Views
 
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
-                                    var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
-                                                             .SetUrl(documentUrl);
+                                    var document = await mooc.DownloadDocumentAsync(documentUrl);
 
-                                    request.ContentType = null;
-
-                                    var response = HttpConsumer.Create().Send(request);
-
-                                    if (response.StatusCode == HttpStatusCode.OK)
+                                    if (document is null)
                                     {
-                                        File.WriteAllBytes(Path.Combine(unitPath, fileName), response.ResultBytes);
-                                        break;
+                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1)));
                                     }
                                     else
                                     {
-                                        Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1))).Wait();
+                                        File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
+                                        break;
                                     }
                                 }
                             }
@@ -267,21 +257,17 @@ namespace MoocDownloader.App.Views
 
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
-                                    var request = HttpRequest.Create().SetMethod(HttpMethod.GET)
-                                                             .SetUrl(attachmentUrl);
+                                    var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
 
-                                    var response = HttpConsumer.Create().Send(request);
-
-                                    if (response.StatusCode == HttpStatusCode.OK && response.ResultBytes != null)
+                                    if (attachment is null)
                                     {
-                                        File.WriteAllBytes(Path.Combine(unitPath, $@"{FixPath(fileName)}"),
-                                                           response.ResultBytes);
-
-                                        break;
+                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1)));
                                     }
                                     else
                                     {
-                                        Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1))).Wait();
+                                        File.WriteAllBytes(Path.Combine(unitPath, $@"{FixPath(fileName)}"), attachment);
+
+                                        break;
                                     }
                                 }
                             }
