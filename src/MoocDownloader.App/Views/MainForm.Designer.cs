@@ -55,7 +55,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.CancelDownloadButton = new System.Windows.Forms.Button();
-            this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.MainFormMenuStrip = new System.Windows.Forms.MenuStrip();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartDownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CancelDownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +82,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.MainMenuStrip.SuspendLayout();
+            this.MainFormMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // LoginMoocButton
@@ -357,19 +357,18 @@
             this.CancelDownloadButton.TabIndex = 7;
             this.CancelDownloadButton.Text = "取消";
             this.CancelDownloadButton.UseVisualStyleBackColor = true;
-            this.CancelDownloadButton.Click += new System.EventHandler(this.StartDownloadButton_Click);
             // 
-            // MainMenuStrip
+            // MainFormMenuStrip
             // 
-            this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MainFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileToolStripMenuItem,
             this.SettingToolStripMenuItem,
             this.HelpToolStripMenuItem});
-            this.MainMenuStrip.Location = new System.Drawing.Point(0, 0);
-            this.MainMenuStrip.Name = "MainMenuStrip";
-            this.MainMenuStrip.Size = new System.Drawing.Size(539, 24);
-            this.MainMenuStrip.TabIndex = 13;
-            this.MainMenuStrip.Text = "menuStrip1";
+            this.MainFormMenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MainFormMenuStrip.Name = "MainFormMenuStrip";
+            this.MainFormMenuStrip.Size = new System.Drawing.Size(539, 24);
+            this.MainFormMenuStrip.TabIndex = 13;
+            this.MainFormMenuStrip.Text = "menuStrip1";
             // 
             // FileToolStripMenuItem
             // 
@@ -450,30 +449,30 @@
             // ViewHelpToolStripMenuItem
             // 
             this.ViewHelpToolStripMenuItem.Name = "ViewHelpToolStripMenuItem";
-            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ViewHelpToolStripMenuItem.Text = "查看帮助";
             // 
             // UpdateToolStripMenuItem
             // 
             this.UpdateToolStripMenuItem.Name = "UpdateToolStripMenuItem";
-            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.UpdateToolStripMenuItem.Text = "更新程序";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // FeedbackToolStripMenuItem
             // 
             this.FeedbackToolStripMenuItem.Name = "FeedbackToolStripMenuItem";
-            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.FeedbackToolStripMenuItem.Text = "反馈";
             // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.AboutToolStripMenuItem.Text = "关于";
             // 
             // DownloadOptionToolStripMenuItem
@@ -563,7 +562,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.MainMenuStrip);
+            this.Controls.Add(this.MainFormMenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -577,8 +576,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.MainMenuStrip.ResumeLayout(false);
-            this.MainMenuStrip.PerformLayout();
+            this.MainFormMenuStrip.ResumeLayout(false);
+            this.MainFormMenuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -612,7 +611,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox DownloadAttachmentCheckBox;
         private System.Windows.Forms.Button CancelDownloadButton;
-        private System.Windows.Forms.MenuStrip MainMenuStrip;
+        private System.Windows.Forms.MenuStrip MainFormMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SettingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;

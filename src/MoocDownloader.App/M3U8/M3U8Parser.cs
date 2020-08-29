@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace MoocDownloader.App.M3U8
 {
@@ -10,143 +9,138 @@ namespace MoocDownloader.App.M3U8
     /// </summary>
     public class M3U8Parser
     {
-        private readonly string _m3u8;
+        private const string FILE_HEADER           = "#EXTM3U";
+        private const string TAG_VERSION           = "#EXT-X-VERSION:";
+        private const string TAG_STREAM_INFO       = "#EXT-X-STREAM-INF:";
+        private const string STREAM_INF_BANDWIDTH  = "BANDWIDTH";
+        private const string STREAM_INF_NAME       = "NAME";
+        private const string STREAM_INF_CODECS     = "CODECS";
+        private const string STREAM_INF_RESOLUTION = "RESOLUTION";
 
-        /// <summary>
-        /// Construct a m3u8 parser.
-        /// </summary>
-        /// <param name="m3u8">m3u8 text.</param>
-        /// <returns>m3u8 parser.</returns>
-        public M3U8Parser(string m3u8)
+        private static readonly string[] Tags =
         {
-            _m3u8 = m3u8;
+            TAG_VERSION,
+            TAG_STREAM_INFO
+        };
+
+        public static M3U8File Parse(string data)
+        {
+            using var reader = new StringReader(data);
+
+            var line = reader.ReadLine();
+
+            if (line == null)
+                throw new ArgumentException("Unable to read lines from data.", nameof(data));
+            if (!FILE_HEADER.Equals(line))
+                throw new ArgumentException("Incorrectly formatted data.", nameof(data));
+
+            var result = new M3U8File();
+
+            string previousLine = null;
+            while ((line = reader.ReadLine()) != null)
+            {
+                var tag = GetTag(line);
+                if (tag != null)
+                {
+                    SetTagValue(result, tag, line);
+                }
+                else if (previousLine != null && previousLine.StartsWith(TAG_STREAM_INFO))
+                {
+                    result.Streams[result.Streams.Count - 1].Path = line;
+                }
+
+                previousLine = line;
+            }
+
+            return result;
         }
 
-        /// <summary>
-        /// Parse the m3u8 text as m3u8 info.
-        /// </summary>
-        /// <returns>m3u8 info.</returns>
-        public List<M3U8Media> Parse()
+        private static void ParseStreamInfo(M3U8File file, string tag, string line)
         {
-            if (string.IsNullOrEmpty(_m3u8)) // m3u8 is nothing.
+            var    stream           = new StreamInfo();
+            var    builder          = new StringBuilder();
+            var    quoteCount       = 0;
+            string currentStreamTag = null;
+
+            var data = line.Substring(tag.Length);
+            for (var i = 0; i <= data.Length; i++)
             {
-                return null;
-            }
+                var c = i < data.Length ? data[i] : (char?) null;
 
-            var lines = _m3u8.Replace("\r", "").Split('\n');
-
-            if (!lines.Any()) // incorrect m3u8 format
-            {
-                return null;
-            }
-
-            if (lines.FirstOrDefault() != "#EXTM3U")
-            {
-                throw new InvalidOperationException("M3U8 playlist format is incorrect");
-            }
-
-            var mediaList     = new List<M3U8Media>();
-            var mediaDetected = false;
-
-            for (var i = 1; i < lines.Length; i++)
-            {
-                var media = new M3U8Media();
-                var line  = lines[i];
-                if (line.StartsWith("#"))
+                if (c == '"')
                 {
-                    var lineData = line.Substring(1);
+                    quoteCount++;
+                }
+                else if (c == '=' && quoteCount % 2 == 0)
+                {
+                    currentStreamTag = builder.ToString();
+                    builder.Clear();
+                }
+                else if ((c == ',' && quoteCount % 2 == 0) || c == null)
+                {
+                    var value = builder.ToString();
+                    builder.Clear();
 
-                    var split = lineData.Split(':');
-
-                    var name   = split[0];
-                    var suffix = split[1];
-
-                    if (name == "EXT-X-MEDIA")
+                    if (STREAM_INF_BANDWIDTH.Equals(currentStreamTag))
                     {
-                        mediaDetected = true;
-                        media         = new M3U8Media();
+                        stream.Bandwidth = long.Parse(value);
                     }
-
-                    var attributes = suffix.Split(',');
-                    foreach (var item in attributes)
+                    else if (STREAM_INF_NAME.Equals(currentStreamTag))
                     {
-                        var keyvalue = item.Split('=');
-                        if (keyvalue.Any())
-                            switch (keyvalue[0])
-                            {
-                                case "TYPE":
-                                    media.Type = keyvalue[1].Trim('"');
-                                    break;
-                                case "NAME":
-                                    media.Name = keyvalue[1].Trim('"');
-                                    break;
-                                case "BANDWIDTH":
-                                    media.Bandwidth = long.Parse(keyvalue[1], CultureInfo.InvariantCulture);
-                                    break;
-                                case "RESOLUTION":
-                                    media.Resolution = new Resolution();
-
-                                    var size = keyvalue[1].Split('x');
-
-                                    if (int.TryParse(size[0], out var width))
-                                    {
-                                        media.Resolution.Width = width;
-                                    }
-
-                                    if (int.TryParse(size[1], out var height))
-                                    {
-                                        media.Resolution.Height = height;
-                                    }
-
-                                    break;
-                                case "CODECS":
-                                    media.Codecs = keyvalue[1].Trim('"');
-                                    break;
-                                case "VIDEO":
-                                    media.Video = keyvalue[1].Trim('"');
-                                    break;
-                            }
+                        stream.Name = value;
+                    }
+                    else if (STREAM_INF_CODECS.Equals(currentStreamTag))
+                    {
+                        stream.Codecs = value;
+                    }
+                    else if (STREAM_INF_RESOLUTION.Equals(currentStreamTag))
+                    {
+                        string[] split = value.Split('x');
+                        stream.ResolutionWidth  = int.Parse(split[0]);
+                        stream.ResolutionHeight = int.Parse(split[1]);
                     }
                 }
                 else
                 {
-                    if (mediaDetected)
-                    {
-                        media.Url     = line;
-                        mediaDetected = false;
-                        mediaList.Add(media);
-                    }
+                    builder.Append(c);
                 }
             }
 
-            return mediaList;
+            file.AddStream(stream);
         }
 
         /// <summary>
-        /// Create a m3u8 parser.
+        /// Extracts the value of the given tag from the given line and sets the corresponding property of the file to the
+        /// extracted value.
         /// </summary>
-        /// <param name="m3u8">m3u8 text.</param>
-        /// <returns>m3u8 parser.</returns>
-        public static M3U8Parser Create(string m3u8)
+        private static void SetTagValue(M3U8File file, string tag, string line)
         {
-            return new M3U8Parser(m3u8);
+            var value = line.Substring(tag.Length);
+            switch (tag)
+            {
+                case TAG_VERSION:
+                    file.Version = value;
+                    break;
+                case TAG_STREAM_INFO:
+                    ParseStreamInfo(file, tag, line);
+                    break;
+            }
         }
-    }
 
-    public class M3U8Media
-    {
-        public string     Type       { get; set; }
-        public string     Name       { get; set; }
-        public long       Bandwidth  { get; set; }
-        public Resolution Resolution { get; set; }
-        public string     Codecs     { get; set; }
-        public string     Video      { get; set; }
-        public string     Url        { get; set; }
-    }
+        /// <summary>
+        /// Checks if the given string starts with one of the supported tags and returns the tag. Otherwise, returns null.
+        /// </summary>
+        private static string GetTag(string line)
+        {
+            foreach (var tag in Tags)
+            {
+                if (line.StartsWith(tag))
+                {
+                    return tag;
+                }
+            }
 
-    public class Resolution
-    {
-        public int Width  { get; set; }
-        public int Height { get; set; }
+            return null;
+        }
     }
 }
