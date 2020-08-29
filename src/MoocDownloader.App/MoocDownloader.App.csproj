@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Assets\Icons\app.ico</ApplicationIcon>
@@ -43,7 +45,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -54,7 +56,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -88,7 +90,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="M3U8\M3U8File.cs" />
     <Compile Include="M3U8\M3U8Parser.cs" />
+    <Compile Include="M3U8\StreamInfo.cs" />
     <Compile Include="Models\CaptionModel.cs" />
     <Compile Include="Models\ChapterModel.cs" />
     <Compile Include="Models\CookieModel.cs" />
@@ -148,6 +152,45 @@
     <EmbeddedResource Include="Views\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="FFMPEG\bin\presets\ffprobe.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="FFMPEG\bin\presets\libvpx-1080p.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libvpx-1080p50_60.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libvpx-360p.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libvpx-720p.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libvpx-720p50_60.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libvpx-ultrafast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-baseline.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-fast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-faster.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-faster_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-fast_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-ipod320.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-ipod640.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_fast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_max.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_medium.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_slow.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_slower.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-lossless_ultrafast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-main.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-medium.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-medium_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-placebo.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-placebo_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-slow.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-slower.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-slower_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-slow_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-superfast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-superfast_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-ultrafast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-ultrafast_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-veryfast.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-veryfast_firstpass.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-veryslow.ffpreset" />
+    <None Include="FFMPEG\bin\presets\libx264-veryslow_firstpass.ffpreset" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
