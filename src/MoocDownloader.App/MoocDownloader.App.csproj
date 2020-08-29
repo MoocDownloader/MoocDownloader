@@ -80,6 +80,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Drawing" />
@@ -109,6 +110,12 @@
     <Compile Include="Utilities\IOHelper.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
     <Compile Include="Utilities\M3U8Helper.cs" />
+    <Compile Include="Views\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +139,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
