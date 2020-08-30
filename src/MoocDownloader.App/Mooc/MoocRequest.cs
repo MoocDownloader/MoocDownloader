@@ -253,11 +253,29 @@ namespace MoocDownloader.App.Mooc
         }
 
         /// <summary>
+        /// Download ts file of m3u8 play list from url.
+        /// </summary>
+        /// <param name="videoUrl">url of ts file in m3u8 play list.</param>
+        /// <returns>content of m3u8 play list.</returns>
+        public async Task<byte[]> DownloadM3U8TSAsync(Uri tsUrl)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, tsUrl);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Download m3u8 play list from url.
         /// </summary>
         /// <param name="videoUrl">url of m3u8 file.</param>
         /// <returns>content of m3u8 play list.</returns>
-        public async Task<string> DownloadM3U8Async(string videoUrl)
+        public async Task<string> DownloadM3U8ListAsync(Uri videoUrl)
         {
             var request  = new HttpRequestMessage(HttpMethod.Get, videoUrl);
             var response = await _client.SendAsync(request);
