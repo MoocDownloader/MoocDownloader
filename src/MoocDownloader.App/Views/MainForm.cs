@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MoocDownloader.App.M3U8;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
@@ -205,8 +206,6 @@ namespace MoocDownloader.App.Views
                                     File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
                                 }
 
-                                var videoUrl  = ""; // video url.
-                                var videoSize = 0L; // video size.
 
                                 var videoInfo = video.Result.Videos.FirstOrDefault(
                                     v => v.Quality.HasValue
@@ -215,14 +214,37 @@ namespace MoocDownloader.App.Views
 
                                 if (videoInfo != null)
                                 {
-                                    videoUrl  = videoInfo.VideoUrl;
-                                    videoSize = videoInfo.Size ?? 0;
+                                    var videoUrl  = new Uri(videoInfo.VideoUrl); // video url.
+                                    var videoSize = videoInfo.Size ?? 0;         // video size.
 
-                                    //var m3u8   = await mooc.DownloadM3U8Async(videoUrl);
-                                    //var parser = M3U8Parser.Create(m3u8);
-                                    //var list   = parser.Parse();
+                                    Configuration.Default.BaseUri = new Uri(
+                                        $@"{videoUrl.Scheme}://{videoUrl.Host}{string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1))}",
+                                        UriKind.Absolute
+                                    );
 
-                                    // File.WriteAllText(Path.Combine(unitPath, $@"{unitFileName}.m3u8"), m3u8);
+                                    var       m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
+                                    using var reader   = new M3UFileReader(m3u8List);
+                                    var       m3u8Info = reader.Read();
+
+                                    for (var i = 0; i < m3u8Info.MediaFiles.Count; i++)
+                                    {
+                                        for (var j = 0; j < MAX_TIMES; j++)
+                                        {
+                                            var tsBytes = await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+
+                                            if (tsBytes is null)
+                                            {
+                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j + 1)));
+                                            }
+                                            else
+                                            {
+                                                File.WriteAllBytes(
+                                                    Path.Combine(unitPath, $@"{unitFileName}-{i:00}.ts"), tsBytes
+                                                );
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                                 break;
