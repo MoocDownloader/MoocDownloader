@@ -90,9 +90,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="M3U8\M3U8File.cs" />
-    <Compile Include="M3U8\M3U8Parser.cs" />
-    <Compile Include="M3U8\StreamInfo.cs" />
+    <Compile Include="M3U8\Adapters\Adapter.cs" />
+    <Compile Include="M3U8\Adapters\FileAdapter.cs" />
+    <Compile Include="M3U8\Adapters\IAdapter.cs" />
+    <Compile Include="M3U8\Adapters\NetworkAdapter.cs" />
+    <Compile Include="M3U8\Adapters\StreamAdapter.cs" />
+    <Compile Include="M3U8\Adapters\TextAdapter.cs" />
+    <Compile Include="M3U8\AttributeReaders\AllowCacheAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\AttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\DurationAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\EndListAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\IAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\KeyAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\MediaAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\PlaylistTypeAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\ProgramDateTimeAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\SequenceAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\StreamAttributeReader.cs" />
+    <Compile Include="M3U8\AttributeReaders\VersionAttributeReader.cs" />
+    <Compile Include="M3U8\Configuration.cs" />
+    <Compile Include="M3U8\Core\LineReader.cs" />
+    <Compile Include="M3U8\Core\M3UAttributes.cs" />
+    <Compile Include="M3U8\M3UFileInfo.cs" />
+    <Compile Include="M3U8\M3UFileReader.cs" />
+    <Compile Include="M3U8\M3UKeyInfo.cs" />
+    <Compile Include="M3U8\M3UMediaInfo.cs" />
+    <Compile Include="M3U8\M3UStreamInfo.cs" />
+    <Compile Include="M3U8\Utilities\KV.cs" />
+    <Compile Include="M3U8\Utilities\To.cs" />
     <Compile Include="Models\CaptionModel.cs" />
     <Compile Include="Models\ChapterModel.cs" />
     <Compile Include="Models\CookieModel.cs" />
