@@ -100,7 +100,7 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private async void StartDownloadButton_Click(object sender, EventArgs e)
         {
-            const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004";
+            const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004?tid=1450249442";
 
             if (!_config.IsDownloadDocument
              && !_config.IsDownloadVideo

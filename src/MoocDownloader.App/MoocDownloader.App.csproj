@@ -207,4 +207,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)packages\Geckofx60.64.60.0.47\content\ $(TargetDir) /E /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

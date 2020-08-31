@@ -9,12 +9,22 @@ namespace MoocDownloader.App
     internal static class Program
     {
         /// <summary>
+        /// gecko kernel.
+        /// </summary>
+        public const string FIREFOX_PATH = "Firefox";
+
+        /// <summary>
+        /// gecko kernel temp path.
+        /// </summary>
+        public const string FIREFOX_TEMP = "temp";
+
+        /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         private static void Main()
         {
-            var profilePath = Path.Combine(Application.StartupPath, "Temp");
+            var profilePath = Path.Combine(Application.StartupPath, FIREFOX_TEMP);
 
             if (!Directory.Exists(profilePath))
             {
@@ -26,7 +36,7 @@ namespace MoocDownloader.App
             }
 
             Xpcom.ProfileDirectory = profilePath;
-            Xpcom.Initialize("Firefox64");
+            Xpcom.Initialize(FIREFOX_PATH);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -56,7 +66,7 @@ namespace MoocDownloader.App
                     }
                 }
 
-                if (Path.Combine(Application.StartupPath, "Temp") != path)
+                if (Path.Combine(Application.StartupPath, FIREFOX_TEMP) != path)
                 {
                     Directory.Delete(path);
                 }
