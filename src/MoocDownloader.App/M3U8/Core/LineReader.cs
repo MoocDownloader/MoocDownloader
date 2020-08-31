@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿using MoocDownloader.App.M3U8.Adapters;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using MoocDownloader.App.M3U8.Adapters;
 
 namespace MoocDownloader.App.M3U8.Core
 {
@@ -27,7 +27,7 @@ namespace MoocDownloader.App.M3U8.Core
 
         public bool MoveNext()
         {
-            var reader      = this.reader;
+            var reader = this.reader;
             var endOfStream = reader.EndOfStream;
             Current = endOfStream ? null : reader.ReadLine();
             return !endOfStream;
@@ -35,7 +35,7 @@ namespace MoocDownloader.App.M3U8.Core
 
         public void Reset()
         {
-            var reader     = this.reader;
+            var reader = this.reader;
             var baseStream = reader.BaseStream;
             if (baseStream.CanSeek)
                 baseStream.Seek(0L, SeekOrigin.Begin);

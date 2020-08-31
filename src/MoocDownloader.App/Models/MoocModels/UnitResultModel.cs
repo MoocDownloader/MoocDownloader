@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MoocDownloader.App.Models
+namespace MoocDownloader.App.Models.MoocModels
 {
     /// <summary>
     /// unit result model in lessons.

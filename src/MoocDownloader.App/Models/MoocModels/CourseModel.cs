@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace MoocDownloader.App.Models
+namespace MoocDownloader.App.Models.MoocModels
 {
     /// <summary>
     /// Course model.

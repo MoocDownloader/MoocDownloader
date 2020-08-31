@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using MoocDownloader.App.M3U8.Adapters;
+﻿using MoocDownloader.App.M3U8.Adapters;
 using MoocDownloader.App.M3U8.Core;
 using MoocDownloader.App.M3U8.Utilities;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace MoocDownloader.App.M3U8.AttributeReaders
 {

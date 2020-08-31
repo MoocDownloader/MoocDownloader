@@ -16,5 +16,5 @@ namespace MoocDownloader.App.M3U8.Adapters
         {
             return Stream;
         }
-	}
+    }
 }

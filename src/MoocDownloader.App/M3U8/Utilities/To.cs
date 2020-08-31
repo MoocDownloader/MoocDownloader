@@ -22,12 +22,12 @@ namespace MoocDownloader.App.M3U8.Utilities
             var conversionType = typeof(T);
             if (conversionType == typeof(bool))
             {
-                return (ValueType) Bool(text) as T?;
+                return (ValueType)Bool(text) as T?;
             }
 
             try
             {
-                return (T) Convert.ChangeType(text, conversionType);
+                return (T)Convert.ChangeType(text, conversionType);
             }
             catch
             {
