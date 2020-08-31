@@ -136,6 +136,7 @@
     <Compile Include="Models\MoocModels\VideoResponseModel.cs" />
     <Compile Include="Models\MoocModels\VideoResultModel.cs" />
     <Compile Include="Models\MoocModels\VideoVoModel.cs" />
+    <Compile Include="Mooc\FFmpegWorker.cs" />
     <Compile Include="Mooc\MoocCodeCorrector.cs" />
     <Compile Include="Mooc\MoocRequest.cs" />
     <Compile Include="Utilities\IOHelper.cs" />
