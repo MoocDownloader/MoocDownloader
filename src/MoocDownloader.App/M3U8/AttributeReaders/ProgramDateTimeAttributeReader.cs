@@ -1,6 +1,6 @@
-﻿using System;
-using MoocDownloader.App.M3U8.Core;
+﻿using MoocDownloader.App.M3U8.Core;
 using MoocDownloader.App.M3U8.Utilities;
+using System;
 
 namespace MoocDownloader.App.M3U8.AttributeReaders
 {

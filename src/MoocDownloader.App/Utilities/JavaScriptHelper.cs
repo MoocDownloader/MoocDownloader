@@ -18,12 +18,10 @@ namespace MoocDownloader.App.Utilities
         {
             try
             {
-                using (var engine = new MsieJsEngine())
-                {
-                    engine.Execute(code);
+                using var engine = new MsieJsEngine();
+                engine.Execute(code);
 
-                    return engine.GetVariableValue(variableName);
-                }
+                return engine.GetVariableValue(variableName);
             }
             catch (Exception exception)
             {

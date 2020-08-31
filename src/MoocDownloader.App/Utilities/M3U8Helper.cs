@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MoocDownloader.App.Utilities
 {
     /// <summary>
-    /// m3u8 format file hepler class.
+    /// m3u8 format file helper class.
     /// </summary>
     public class M3U8Helper
     {
