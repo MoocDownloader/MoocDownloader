@@ -20,10 +20,10 @@ namespace MoocDownloader.App.Mooc
         private readonly string     _courseId;  // identifier of the course.
         private readonly string     _sessionId; // Session id.
         private readonly HttpClient _client;    // HTTP Client.
+        private readonly string     _tid;       // ?tid=xxxx
 
         private const string COURSE_URL = "https://www.icourse163.org/course/";
         private const string LEARN_URL  = "https://www.icourse163.org/learn/";
-
 
         /// <summary>
         /// Initializes a new instance of the Mooc request class with cookies and the specified url.
@@ -32,6 +32,29 @@ namespace MoocDownloader.App.Mooc
         /// <param name="courseUrl">url of the course.</param>
         public MoocRequest(IReadOnlyCollection<CookieModel> cookies, string courseUrl)
         {
+            if (courseUrl.Contains("tid="))
+            {
+                var urlWithQuery = courseUrl;
+
+                if (courseUrl.Contains("#"))
+                {
+                    urlWithQuery = courseUrl.Substring(0, courseUrl.IndexOf('#'));
+                }
+
+                var questionIndex = urlWithQuery.IndexOf('?');
+                var query         = urlWithQuery.Substring(questionIndex + 1, urlWithQuery.Length - questionIndex - 1);
+                var tidQuery      = query.Split('&').FirstOrDefault(s => s.Contains("tid"));
+
+                if (tidQuery != null)
+                {
+                    _tid = tidQuery.Remove(0, tidQuery.IndexOf('=') + 1);
+                }
+            }
+            else
+            {
+                _tid = string.Empty;
+            }
+
             _courseId = GetCourseId(courseUrl);
 
             _sessionId = cookies.FirstOrDefault(c => c.Name == "NTESSTUDYSI")?.Value ?? string.Empty;
@@ -98,16 +121,21 @@ namespace MoocDownloader.App.Mooc
         /// <returns>Term id.</returns>
         public async Task<string> GetTermIdAsync()
         {
-            var response     = await _client.GetStringAsync($@"{COURSE_URL}{_courseId}");
-            var htmlDocument = new HtmlDocument();
+            if (string.IsNullOrEmpty(_tid))
+            {
+                var response     = await _client.GetStringAsync($@"{COURSE_URL}{_courseId}");
+                var htmlDocument = new HtmlDocument();
 
-            htmlDocument.LoadHtml(response);
+                htmlDocument.LoadHtml(response);
 
-            var node = htmlDocument.DocumentNode
-                                   .SelectNodes("//div")
-                                   .FirstOrDefault(n => n?.Attributes?["data-action"]?.Value == "点击详情tab");
+                var node = htmlDocument.DocumentNode
+                                       .SelectNodes("//div")
+                                       .FirstOrDefault(n => n?.Attributes?["data-action"]?.Value == "点击详情tab");
 
-            return node != null ? node.Attributes["data-label"].Value : string.Empty;
+                return node != null ? node.Attributes["data-label"].Value : string.Empty;
+            }
+
+            return _tid;
         }
 
         /// <summary>
