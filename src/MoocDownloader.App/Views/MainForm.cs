@@ -1,15 +1,15 @@
-﻿using MoocDownloader.App.Models;
+﻿using MoocDownloader.App.M3U8;
+using MoocDownloader.App.Models;
 using MoocDownloader.App.Models.MoocModels;
 using MoocDownloader.App.Mooc;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MoocDownloader.App.M3U8;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
@@ -30,11 +30,6 @@ namespace MoocDownloader.App.Views
         private readonly MainFormConfig _config = new MainFormConfig();
 
         /// <summary>
-        /// thread safe collection for course video info.
-        /// </summary>
-        private readonly ConcurrentQueue<CourseVideoInfo> _videoQueue;
-
-        /// <summary>
         /// the maximum number of retries when the download fails.
         /// </summary>
         private const int MAX_TIMES = 5;
@@ -42,9 +37,6 @@ namespace MoocDownloader.App.Views
         public MainForm()
         {
             InitializeComponent();
-
-            // contains m3u8.
-            _videoQueue = new ConcurrentQueue<CourseVideoInfo>();
         }
 
         /// <summary>
@@ -61,7 +53,7 @@ namespace MoocDownloader.App.Views
                 {
                     if (_cookies.Any())
                     {
-                        Log($@"已收集到登录信息.");
+                        Log(@"已收集到登录信息.");
                     }
 
                     break;
@@ -146,6 +138,8 @@ namespace MoocDownloader.App.Views
             // 5. deserialize moocTermJSON.
             var course = DeserializeObject<CourseModel>(moocTermJSON ?? string.Empty);
 
+            FFmpegWorker.Instance.Start();
+
             for (var chapterIndex = 0; chapterIndex < course.Chapters.Count; chapterIndex++)
             {
                 var chapter = course.Chapters[chapterIndex];
@@ -203,6 +197,12 @@ namespace MoocDownloader.App.Views
                                 var signature   = tokenObject["result"]?["videoSignDto"]?["signature"]?.ToString();
                                 var videoJSON   = await mooc.GetVideoJsonAsync($@"{unit.ContentId}", signature);
                                 var video       = DeserializeObject<VideoResponseModel>(videoJSON);
+                                var courseVideo = new CourseVideoInfo
+                                {
+                                    SavePath      = unitPath,
+                                    VideoFileName = $@"{unitFileName}.mp4",
+                                    MergeListFile = $@"{unitFileName}.text"
+                                };
 
                                 // subtitles
                                 foreach (var caption in video.Result.SrtCaptions)
@@ -224,14 +224,7 @@ namespace MoocDownloader.App.Views
 
                                 if (videoInfo != null)
                                 {
-                                    //_videoQueue.Enqueue(new CourseVideoInfo
-                                    //{
-                                    //    SavePath = unitPath,
-                                    //    FileName = $@"{unitFileName}.mp4",
-                                    //    M3U8Link = videoInfo.VideoUrl
-                                    //});
-
-                                    var videoUrl  = new Uri(videoInfo.VideoUrl); // video url.
+                                    var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
 
                                     Configuration.Default.BaseUri = new Uri(
                                         $@"{videoUrl.Scheme}://{videoUrl.Host}{string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1))}",
@@ -241,9 +234,13 @@ namespace MoocDownloader.App.Views
                                     var       m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
                                     using var reader   = new M3UFileReader(m3u8List);
                                     var       m3u8Info = reader.Read();
+                                    var       merger   = new StringBuilder();
 
                                     for (var i = 0; i < m3u8Info.MediaFiles.Count; i++)
                                     {
+                                        var tsSavedName = $@"{unitFileName}-{i:00}.ts";
+                                        merger.AppendLine($@"file '{tsSavedName}'");
+
                                         for (var j = 0; j < MAX_TIMES; j++)
                                         {
                                             var tsBytes = await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
@@ -254,13 +251,17 @@ namespace MoocDownloader.App.Views
                                             }
                                             else
                                             {
-                                                File.WriteAllBytes(
-                                                    Path.Combine(unitPath, $@"{unitFileName}-{i:00}.ts"), tsBytes
-                                                );
+                                                File.WriteAllBytes(Path.Combine(unitPath, tsSavedName), tsBytes);
                                                 break;
                                             }
                                         }
                                     }
+
+                                    File.WriteAllText(
+                                        Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"), merger.ToString()
+                                    );
+
+                                    FFmpegWorker.Instance.Enqueue(courseVideo);
                                 }
                             }
                                 break;

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using MoocDownloader.App.Models;
+using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using MoocDownloader.App.Models;
 
 namespace MoocDownloader.App.Mooc
 {
@@ -11,13 +12,19 @@ namespace MoocDownloader.App.Mooc
     /// </summary>
     public class FFmpegWorker
     {
+        private const string FFMPEG_EXE = "";
+
         private readonly ConcurrentQueue<CourseVideoInfo> _videoQueue;
         private readonly EventWaitHandle                  _handle;
 
-        private bool _running = false;
+        private bool _running;
 
         private static readonly Lazy<FFmpegWorker> _lazy = new Lazy<FFmpegWorker>(() => new FFmpegWorker());
 
+        /// <summary>
+        /// FFmpegWorker instance.
+        /// </summary>
+        public static FFmpegWorker Instance { get; } = _lazy.Value;
 
         private FFmpegWorker()
         {
@@ -42,16 +49,40 @@ namespace MoocDownloader.App.Mooc
                     _handle.WaitOne();
                 }
 
-                if (_videoQueue.TryDequeue(out var courseVideoInfo))
+                if (_videoQueue.TryDequeue(out var info))
                 {
                     Task.Factory.StartNew(() =>
                     {
                         try
                         {
+                            // merge ts files.
+                            var args = $@"-f concat -safe 0 -i {info.MergeListFile} -c copy -y {info.VideoFileName}";
 
+                            var cmdWaiter = new AutoResetEvent(false);
+
+                            var process = new Process
+                            {
+                                StartInfo =
+                                {
+                                    FileName               = FFMPEG_EXE, // command  
+                                    Arguments              = args,       // arguments  
+                                    CreateNoWindow         = true,
+                                    UseShellExecute        = false, // do not create a window.  
+                                    RedirectStandardInput  = true,  // redirect input.  
+                                    RedirectStandardOutput = true,  // redirect output.  
+                                    RedirectStandardError  = true   // redirect error.  
+                                },
+                                EnableRaisingEvents = true
+                            };
+
+                            process.Exited += (sender, eventArgs) => { cmdWaiter.Set(); };
+
+                            process.Start();
+                            cmdWaiter.WaitOne();
                         }
                         catch
                         {
+                            _videoQueue.Enqueue(info); // enqueue video info when merge occur exception.
                         }
                     }, TaskCreationOptions.LongRunning);
                 }
@@ -73,7 +104,7 @@ namespace MoocDownloader.App.Mooc
         /// </summary>
         public void Start()
         {
-            Work();
+            Task.Factory.StartNew(Work, TaskCreationOptions.LongRunning);
         }
     }
 }

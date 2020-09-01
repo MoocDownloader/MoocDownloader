@@ -13,16 +13,16 @@
         /// <summary>
         /// Video file name.
         /// </summary>
-        public string FileName { get; set; }
+        public string VideoFileName { get; set; }
 
         /// <summary>
-        /// m3u8 playlist download link.
+        /// list of downloaded ts files.
         /// </summary>
-        public string M3U8Link { get; set; }
+        public string MergeListFile { get; set; }
 
         /// <summary>
-        /// Whether or not to download.
+        /// Whether or not to concat.
         /// </summary>
-        public bool IsDownload { get; set; } = false;
+        public bool IsConcat { get; set; } = false;
     }
 }
