@@ -371,6 +371,8 @@ namespace MoocDownloader.App.Views
 
         #endregion
 
+        #region HELP MENU
+
         /// <summary>
         /// When the program is started
         /// </summary>
@@ -379,5 +381,139 @@ namespace MoocDownloader.App.Views
             // set the course save path.
             SavePathTextBox.Text = Path.Combine(Application.StartupPath, "课程下载");
         }
+
+        /// <summary>
+        /// About
+        /// </summary>
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var aboutWindow = new AboutForm();
+
+            aboutWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Feedback.
+        /// </summary>
+        private void FeedbackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            const string ISSUES_URL = "https://github.com/xixixixixiao/mooc-downloader/issues";
+
+            System.Diagnostics.Process.Start(ISSUES_URL);
+        }
+
+        /// <summary>
+        /// Update.
+        /// </summary>
+        private void UpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            const string RELEASES_URL = "https://github.com/xixixixixiao/mooc-downloader/releases";
+
+            System.Diagnostics.Process.Start(RELEASES_URL);
+        }
+
+        /// <summary>
+        /// Help.
+        /// </summary>
+        private void ViewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            const string INDEX_URL = "https://github.com/xixixixixiao/mooc-downloader";
+
+            System.Diagnostics.Process.Start(INDEX_URL);
+        }
+
+        #endregion
+
+        #region START MENU
+
+        /// <summary>
+        /// Start.
+        /// </summary>
+        private void StartDownloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Cancel.
+        /// </summary>
+        private void CancelDownloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Exit app.
+        /// </summary>
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        #endregion
+
+        #region SETTING MENU
+
+        /// <summary>
+        /// Login.
+        /// </summary>
+        private void LoginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Paste course link.
+        /// </summary>
+        private void PasteCourseLinkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Set course saved path.
+        /// </summary>
+        private void SetCourseSavePathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Whether to download videos.
+        /// </summary>
+        private void DownloadVideoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Whether to download attachments.
+        /// </summary>
+        private void DownloadAttachmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Whether to download documents.
+        /// </summary>
+        private void DownloadDocumentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Whether to download subtitles.
+        /// </summary>
+        private void DownloadSubtitlesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Set video quality to HD.
+        /// </summary>
+        private void HDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Set video quality to SD.
+        /// </summary>
+        private void SDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        #endregion
     }
 }
