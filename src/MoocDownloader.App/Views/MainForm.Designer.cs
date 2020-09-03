@@ -65,12 +65,6 @@
             this.LoginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PasteCourseLinkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetCourseSavePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ViewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.UpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.FeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DownloadOptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DownloadVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DownloadAttachmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,6 +73,12 @@
             this.CourseQualityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ViewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.FeedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -386,12 +386,14 @@
             this.StartDownloadToolStripMenuItem.Name = "StartDownloadToolStripMenuItem";
             this.StartDownloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.StartDownloadToolStripMenuItem.Text = "开始下载";
+            this.StartDownloadToolStripMenuItem.Click += new System.EventHandler(this.StartDownloadToolStripMenuItem_Click);
             // 
             // CancelDownloadToolStripMenuItem
             // 
             this.CancelDownloadToolStripMenuItem.Name = "CancelDownloadToolStripMenuItem";
             this.CancelDownloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.CancelDownloadToolStripMenuItem.Text = "取消下载";
+            this.CancelDownloadToolStripMenuItem.Click += new System.EventHandler(this.CancelDownloadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -403,6 +405,7 @@
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
             this.ExitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ExitToolStripMenuItem.Text = "退出";
+            this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // SettingToolStripMenuItem
             // 
@@ -421,59 +424,21 @@
             this.LoginToolStripMenuItem.Name = "LoginToolStripMenuItem";
             this.LoginToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.LoginToolStripMenuItem.Text = "登录中国大学 MOOC";
+            this.LoginToolStripMenuItem.Click += new System.EventHandler(this.LoginToolStripMenuItem_Click);
             // 
             // PasteCourseLinkToolStripMenuItem
             // 
             this.PasteCourseLinkToolStripMenuItem.Name = "PasteCourseLinkToolStripMenuItem";
             this.PasteCourseLinkToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.PasteCourseLinkToolStripMenuItem.Text = "粘贴课程链接";
+            this.PasteCourseLinkToolStripMenuItem.Click += new System.EventHandler(this.PasteCourseLinkToolStripMenuItem_Click);
             // 
             // SetCourseSavePathToolStripMenuItem
             // 
             this.SetCourseSavePathToolStripMenuItem.Name = "SetCourseSavePathToolStripMenuItem";
             this.SetCourseSavePathToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.SetCourseSavePathToolStripMenuItem.Text = "设置课程下载保存路径";
-            // 
-            // HelpToolStripMenuItem
-            // 
-            this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ViewHelpToolStripMenuItem,
-            this.UpdateToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.FeedbackToolStripMenuItem,
-            this.AboutToolStripMenuItem});
-            this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
-            this.HelpToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
-            this.HelpToolStripMenuItem.Text = "帮助";
-            // 
-            // ViewHelpToolStripMenuItem
-            // 
-            this.ViewHelpToolStripMenuItem.Name = "ViewHelpToolStripMenuItem";
-            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.ViewHelpToolStripMenuItem.Text = "查看帮助";
-            // 
-            // UpdateToolStripMenuItem
-            // 
-            this.UpdateToolStripMenuItem.Name = "UpdateToolStripMenuItem";
-            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.UpdateToolStripMenuItem.Text = "更新程序";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // FeedbackToolStripMenuItem
-            // 
-            this.FeedbackToolStripMenuItem.Name = "FeedbackToolStripMenuItem";
-            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.FeedbackToolStripMenuItem.Text = "反馈";
-            // 
-            // AboutToolStripMenuItem
-            // 
-            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.AboutToolStripMenuItem.Text = "关于";
+            this.SetCourseSavePathToolStripMenuItem.Click += new System.EventHandler(this.SetCourseSavePathToolStripMenuItem_Click);
             // 
             // DownloadOptionToolStripMenuItem
             // 
@@ -494,6 +459,7 @@
             this.DownloadVideoToolStripMenuItem.Name = "DownloadVideoToolStripMenuItem";
             this.DownloadVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.DownloadVideoToolStripMenuItem.Text = "下载视频";
+            this.DownloadVideoToolStripMenuItem.Click += new System.EventHandler(this.DownloadVideoToolStripMenuItem_Click);
             // 
             // DownloadAttachmentToolStripMenuItem
             // 
@@ -503,6 +469,7 @@
             this.DownloadAttachmentToolStripMenuItem.Name = "DownloadAttachmentToolStripMenuItem";
             this.DownloadAttachmentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.DownloadAttachmentToolStripMenuItem.Text = "下载附件";
+            this.DownloadAttachmentToolStripMenuItem.Click += new System.EventHandler(this.DownloadAttachmentToolStripMenuItem_Click);
             // 
             // DownloadDocumentToolStripMenuItem
             // 
@@ -512,6 +479,7 @@
             this.DownloadDocumentToolStripMenuItem.Name = "DownloadDocumentToolStripMenuItem";
             this.DownloadDocumentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.DownloadDocumentToolStripMenuItem.Text = "下载课件";
+            this.DownloadDocumentToolStripMenuItem.Click += new System.EventHandler(this.DownloadDocumentToolStripMenuItem_Click);
             // 
             // DownloadSubtitlesToolStripMenuItem
             // 
@@ -521,6 +489,7 @@
             this.DownloadSubtitlesToolStripMenuItem.Name = "DownloadSubtitlesToolStripMenuItem";
             this.DownloadSubtitlesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.DownloadSubtitlesToolStripMenuItem.Text = "下载字幕";
+            this.DownloadSubtitlesToolStripMenuItem.Click += new System.EventHandler(this.DownloadSubtitlesToolStripMenuItem_Click);
             // 
             // CourseQualityToolStripMenuItem
             // 
@@ -539,6 +508,7 @@
             this.HDToolStripMenuItem.Name = "HDToolStripMenuItem";
             this.HDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.HDToolStripMenuItem.Text = "高清";
+            this.HDToolStripMenuItem.Click += new System.EventHandler(this.HDToolStripMenuItem_Click);
             // 
             // SDToolStripMenuItem
             // 
@@ -546,6 +516,52 @@
             this.SDToolStripMenuItem.Name = "SDToolStripMenuItem";
             this.SDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.SDToolStripMenuItem.Text = "标清";
+            this.SDToolStripMenuItem.Click += new System.EventHandler(this.SDToolStripMenuItem_Click);
+            // 
+            // HelpToolStripMenuItem
+            // 
+            this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ViewHelpToolStripMenuItem,
+            this.UpdateToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.FeedbackToolStripMenuItem,
+            this.AboutToolStripMenuItem});
+            this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
+            this.HelpToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.HelpToolStripMenuItem.Text = "帮助";
+            // 
+            // ViewHelpToolStripMenuItem
+            // 
+            this.ViewHelpToolStripMenuItem.Name = "ViewHelpToolStripMenuItem";
+            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ViewHelpToolStripMenuItem.Text = "查看帮助";
+            this.ViewHelpToolStripMenuItem.Click += new System.EventHandler(this.ViewHelpToolStripMenuItem_Click);
+            // 
+            // UpdateToolStripMenuItem
+            // 
+            this.UpdateToolStripMenuItem.Name = "UpdateToolStripMenuItem";
+            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.UpdateToolStripMenuItem.Text = "更新程序";
+            this.UpdateToolStripMenuItem.Click += new System.EventHandler(this.UpdateToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // FeedbackToolStripMenuItem
+            // 
+            this.FeedbackToolStripMenuItem.Name = "FeedbackToolStripMenuItem";
+            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeedbackToolStripMenuItem.Text = "反馈";
+            this.FeedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
+            // 
+            // AboutToolStripMenuItem
+            // 
+            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AboutToolStripMenuItem.Text = "关于";
+            this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // MainForm
             // 
