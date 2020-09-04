@@ -477,6 +477,20 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void DownloadVideoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (DownloadVideoToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Checked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
+            else
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Checked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
         }
 
         /// <summary>
@@ -484,6 +498,20 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void DownloadAttachmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (DownloadAttachmentToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Checked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
+            else
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Checked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
         }
 
         /// <summary>
@@ -491,6 +519,20 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void DownloadDocumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (DownloadDocumentToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Checked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
+            else
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Checked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            }
         }
 
         /// <summary>
@@ -498,6 +540,20 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void DownloadSubtitlesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (DownloadSubtitlesToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Checked;
+            }
+            else
+            {
+                DownloadVideoToolStripMenuItem.CheckState      = CheckState.Unchecked;
+                DownloadAttachmentToolStripMenuItem.CheckState = CheckState.Unchecked;
+                DownloadDocumentToolStripMenuItem.CheckState   = CheckState.Unchecked;
+                DownloadSubtitlesToolStripMenuItem.CheckState  = CheckState.Checked;
+            }
         }
 
         /// <summary>
@@ -505,6 +561,16 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void HDToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (HDToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                HDToolStripMenuItem.CheckState = CheckState.Checked;
+                SDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                HDToolStripMenuItem.CheckState = CheckState.Checked;
+                SDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            }
         }
 
         /// <summary>
@@ -512,6 +578,16 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void SDToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (SDToolStripMenuItem.CheckState == CheckState.Checked)
+            {
+                SDToolStripMenuItem.CheckState = CheckState.Checked;
+                HDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                SDToolStripMenuItem.CheckState = CheckState.Checked;
+                HDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            }
         }
 
         #endregion
