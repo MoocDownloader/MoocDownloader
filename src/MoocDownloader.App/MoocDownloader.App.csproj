@@ -121,6 +121,7 @@
     <Compile Include="Utilities\IOHelper.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
     <Compile Include="Utilities\M3U8Helper.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
