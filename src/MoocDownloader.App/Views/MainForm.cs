@@ -8,8 +8,12 @@ namespace MoocDownloader.App.Views
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// View model.
+        /// </summary>
         private readonly MainViewModel _viewModel;
 
+        private bool _disabled = false;
 
         public MainForm()
         {
@@ -55,7 +59,44 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void StartDownloadButton_Click(object sender, EventArgs e)
         {
+            _disabled = true;
+            SetUIStatus(_disabled);
+            StatusToolStripStatusLabel.Text = "正在下载";
+
             _viewModel.StartDownload();
+        }
+
+        /// <summary>
+        /// Cancel download.
+        /// </summary>
+        private void CancelDownloadButton_Click(object sender, EventArgs e)
+        {
+            _disabled = false;
+            SetUIStatus(_disabled);
+        }
+
+        /// <summary>
+        /// Set whether interface controls are disabled.
+        /// </summary>
+        /// <param name="isDisable">Is disabled.</param>
+        private void SetUIStatus(bool isDisable)
+        {
+            LoginMoocButton.Enabled  = isDisable;
+            CourseUrlTextBox.Enabled = isDisable;
+            SavePathTextBox.Enabled  = isDisable;
+            FindPathButton.Enabled   = isDisable;
+
+            DownloadVideoCheckBox.Enabled      = isDisable;
+            DownloadAttachmentCheckBox.Enabled = isDisable;
+            DownloadDocumentCheckBox.Enabled   = isDisable;
+            DownloadSubtitleCheckBox.Enabled   = isDisable;
+
+            SDRadioButton.Enabled  = isDisable;
+            HDRadioButton.Enabled  = isDisable;
+            UHDRadioButton.Enabled = isDisable;
+
+            StartDownloadButton.Enabled  = isDisable;
+            CancelDownloadButton.Enabled = !isDisable;
         }
 
         #region UI controls properties binding.

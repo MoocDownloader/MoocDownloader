@@ -73,9 +73,15 @@ namespace MoocDownloader.App.ViewModels
         /// </summary>
         public async void StartDownload()
         {
+            if (!_cookies.Any())
+            {
+                MessageBox.Show(@"未登录中国大学 MOOC.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrEmpty(_config.CourseUrl))
             {
-                MessageBox.Show(@"课程链接尚未输入.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"课程链接未输入.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -113,6 +119,8 @@ namespace MoocDownloader.App.ViewModels
 
             // 2. get term id.
             var termId = await mooc.GetTermIdAsync();
+
+            Log($@"提取到课程 ID 是 {termId}");
 
             // 3. get Mooc term JavaScript code.
             var moocTermCode = await mooc.GetMocTermJavaScriptCodeAsync(termId);
@@ -190,18 +198,19 @@ namespace MoocDownloader.App.ViewModels
                                     MergeListFile = $@"{unitFileName}.text"
                                 };
 
+                                Log($@"准备下载视频: {unitFileName}");
+
                                 // subtitles
                                 foreach (var caption in video.Result.SrtCaptions)
                                 {
                                     // subtitle file. E.g:
-                                    //  01-第一节 Java明天 视频_zh.srt
-                                    //  01-第一节 Java明天 视频_en.srt
-                                    var srtName    = $@"{unitFileName}_{caption.LanguageCode}.srt";
+                                    //  01-第一节 Java明天 视频.zh.srt
+                                    //  01-第一节 Java明天 视频.en.srt
+                                    var srtName    = $@"{unitFileName}.{caption.LanguageCode}.srt";
                                     var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
 
                                     File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
                                 }
-
 
                                 var videoInfo = video.Result.Videos.FirstOrDefault(
                                     v => v.Quality.HasValue
@@ -212,10 +221,10 @@ namespace MoocDownloader.App.ViewModels
                                 {
                                     var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
 
-                                    Configuration.Default.BaseUri = new Uri(
-                                        $@"{videoUrl.Scheme}://{videoUrl.Host}{string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1))}",
-                                        UriKind.Absolute
-                                    );
+                                    var baseUrl = $@"{videoUrl.Scheme}://{videoUrl.Host}" +
+                                                  string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1));
+
+                                    Configuration.Default.BaseUri = new Uri(baseUrl, UriKind.Absolute);
 
                                     var       m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
                                     using var reader   = new M3UFileReader(m3u8List);
@@ -225,7 +234,6 @@ namespace MoocDownloader.App.ViewModels
                                     for (var i = 0; i < m3u8Info.MediaFiles.Count; i++)
                                     {
                                         var tsSavedName = $@"{unitFileName}-{i:00}.ts";
-                                        merger.AppendLine($@"file '{tsSavedName}'");
 
                                         for (var j = 0; j < MAX_TIMES; j++)
                                         {
@@ -241,7 +249,15 @@ namespace MoocDownloader.App.ViewModels
                                                 break;
                                             }
                                         }
+
+                                        merger.AppendLine(
+                                            $@"file '{Path.Combine(unitPath, tsSavedName)}'"
+                                        ); // combine ts file path and add to list.
+
+                                        courseVideo.TSFiles.Add(tsSavedName);
                                     }
+
+                                    Log($@"课程 {unitFileName} 已下载完成.");
 
                                     File.WriteAllText(
                                         Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"), merger.ToString()
@@ -256,6 +272,8 @@ namespace MoocDownloader.App.ViewModels
                                 var documentUrl = unitResult.TextOrigUrl;
                                 var fileName    = $@"{unitFileName}.pdf";
 
+                                Log($@"准备下载文档: {fileName}");
+
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
                                     var document = await mooc.DownloadDocumentAsync(documentUrl);
@@ -267,6 +285,8 @@ namespace MoocDownloader.App.ViewModels
                                     else
                                     {
                                         File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
+
+                                        Log($@"文档 {fileName} 已下载完成.");
                                         break;
                                     }
                                 }
@@ -281,6 +301,8 @@ namespace MoocDownloader.App.ViewModels
                                 var fileName      = content["fileName"]?.ToString();
                                 var attachmentUrl = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
 
+                                Log($@"准备下载附件: {fileName}");
+
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
                                     var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
@@ -292,8 +314,10 @@ namespace MoocDownloader.App.ViewModels
                                     else
                                     {
                                         File.WriteAllBytes(
-                                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"), attachment);
+                                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"), attachment
+                                        );
 
+                                        Log($@"附件 {fileName} 已下载完成.");
                                         break;
                                     }
                                 }

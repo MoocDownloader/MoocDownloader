@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace MoocDownloader.App.Mooc
     /// </summary>
     public class FFmpegWorker
     {
-        private const string FFMPEG_EXE = "";
+        private const string FFMPEG_EXE = @".\FFMPEG\ffmpeg.exe";
 
         private readonly ConcurrentQueue<CourseVideoInfo> _videoQueue;
         private readonly EventWaitHandle                  _handle;
@@ -56,7 +57,9 @@ namespace MoocDownloader.App.Mooc
                         try
                         {
                             // merge ts files.
-                            var args = $@"-f concat -safe 0 -i {info.MergeListFile} -c copy -y {info.VideoFileName}";
+                            var mergeList = Path.Combine(info.SavePath, info.MergeListFile);
+                            var videoFile = Path.Combine(info.SavePath, info.VideoFileName);
+                            var args      = $@"-f concat -safe 0 -i ""{mergeList}"" -c copy -y ""{videoFile}""";
 
                             var cmdWaiter = new AutoResetEvent(false);
 
@@ -75,10 +78,30 @@ namespace MoocDownloader.App.Mooc
                                 EnableRaisingEvents = true
                             };
 
+                            process.OutputDataReceived += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
+                            process.ErrorDataReceived  += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
+
                             process.Exited += (sender, eventArgs) => { cmdWaiter.Set(); };
 
                             process.Start();
                             cmdWaiter.WaitOne();
+
+                            // delete ts files.
+                            foreach (var file in info.TSFiles)
+                            {
+                                var path = Path.Combine(info.SavePath, file);
+
+                                if (File.Exists(path))
+                                {
+                                    File.Delete(path);
+                                }
+                            }
+
+                            // delete merge list file.
+                            if (File.Exists(mergeList))
+                            {
+                                File.Delete(mergeList);
+                            }
                         }
                         catch
                         {
