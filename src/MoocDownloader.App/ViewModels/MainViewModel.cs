@@ -67,7 +67,7 @@ namespace MoocDownloader.App.ViewModels
 
         public async void StartDownload()
         {
-            const string courseUrl = "https://www.icourse163.org/course/ECNU-1002842004?tid=1450249442";
+            var courseUrl = _config.CourseUrl;
 
             if (!_config.IsDownloadDocument
              && !_config.IsDownloadVideo
