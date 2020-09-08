@@ -16,10 +16,9 @@ namespace MoocDownloader.App.M3U8.AttributeReaders
 
         protected override void Write(M3UFileInfo fileInfo, string value, LineReader reader)
         {
-            if (fileInfo.MediaFiles == null)
-                fileInfo.MediaFiles = new List<M3UMediaInfo>();
+            fileInfo.MediaFiles ??= new List<M3UMediaInfo>();
             var m3UmediaInfo = new M3UMediaInfo();
-            var strArray     = value.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var strArray     = value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
             if (strArray.Length != 0)
             {
                 m3UmediaInfo.Duration = To.Value<float>(strArray[0]);
@@ -29,24 +28,28 @@ namespace MoocDownloader.App.M3U8.AttributeReaders
             if (!reader.MoveNext())
                 throw new InvalidDataException("Invalid M3U file. Missing a media URI.");
 
-            var relativeUri = new Uri(reader.Current.Trim(), UriKind.RelativeOrAbsolute);
-            if (!relativeUri.IsAbsoluteUri && !relativeUri.IsWellFormedOriginalString())
-                throw new InvalidDataException("Invalid M3U file. Include a invalid media URI.",
-                    new UriFormatException(reader.Current));
-
-            if (!relativeUri.IsAbsoluteUri)
+            if (reader.Current != null)
             {
-                var baseUri = Configuration.Default.BaseUri;
-                if (baseUri == null && reader.Adapter is NetworkAdapter adapter)
-                    baseUri = new Uri(
-                        adapter.Uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo,
-                            UriFormat.SafeUnescaped), UriKind.Absolute);
-                if (baseUri != null)
-                    m3UmediaInfo.Uri = new Uri(baseUri, relativeUri);
+                var relativeUri = new Uri(reader.Current.Trim(), UriKind.RelativeOrAbsolute);
+                if (!relativeUri.IsAbsoluteUri && !relativeUri.IsWellFormedOriginalString())
+                    throw new InvalidDataException("Invalid M3U file. Include a invalid media URI.",
+                        new UriFormatException(reader.Current));
+
+                if (!relativeUri.IsAbsoluteUri)
+                {
+                    var baseUri = Configuration.Default.BaseUri;
+                    if (baseUri == null && reader.Adapter is NetworkAdapter adapter)
+                        baseUri = new Uri(
+                            adapter.Uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo,
+                                UriFormat.SafeUnescaped), UriKind.Absolute);
+                    if (baseUri != null)
+                        m3UmediaInfo.Uri = new Uri(baseUri, relativeUri);
+                }
+
+                if (m3UmediaInfo.Uri == null)
+                    m3UmediaInfo.Uri = relativeUri;
             }
 
-            if (m3UmediaInfo.Uri == null)
-                m3UmediaInfo.Uri = relativeUri;
             fileInfo.MediaFiles.Add(m3UmediaInfo);
         }
     }

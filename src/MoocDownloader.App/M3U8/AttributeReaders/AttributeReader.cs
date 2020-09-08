@@ -20,7 +20,7 @@ namespace MoocDownloader.App.M3U8.AttributeReaders
             if (string.IsNullOrEmpty(text) || '#' != text[0])
                 return false;
 
-            var keyValuePair = KV.Parse(text, ':').Value;
+            var keyValuePair = KV.Parse(text);
             if (!CanRead(keyValuePair.Key))
                 return false;
             if (ShouldTerminate())
