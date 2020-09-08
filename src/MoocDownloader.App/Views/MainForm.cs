@@ -99,8 +99,9 @@ namespace MoocDownloader.App.Views
             if (SDRadioButton.Checked)
             {
                 _viewModel.SetVideoQuality(VideoQuality.SD);
-                HDToolStripMenuItem.CheckState = CheckState.Unchecked;
-                SDToolStripMenuItem.CheckState = CheckState.Checked;
+                HDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+                SDToolStripMenuItem.CheckState  = CheckState.Checked;
+                UHDToolStripMenuItem.CheckState = CheckState.Unchecked;
             }
         }
 
@@ -109,8 +110,20 @@ namespace MoocDownloader.App.Views
             if (HDRadioButton.Checked)
             {
                 _viewModel.SetVideoQuality(VideoQuality.HD);
-                HDToolStripMenuItem.CheckState = CheckState.Checked;
-                SDToolStripMenuItem.CheckState = CheckState.Unchecked;
+                HDToolStripMenuItem.CheckState  = CheckState.Checked;
+                SDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+                UHDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void UHDRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (UHDRadioButton.Checked)
+            {
+                _viewModel.SetVideoQuality(VideoQuality.UHD);
+                HDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+                SDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+                UHDToolStripMenuItem.CheckState = CheckState.Checked;
             }
         }
 
@@ -252,26 +265,35 @@ namespace MoocDownloader.App.Views
         }
 
         /// <summary>
+        /// Set video quality to UHD.
+        /// </summary>
+        private void UHDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UHDToolStripMenuItem.CheckState = CheckState.Checked;
+            HDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            SDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+
+            UHDRadioButton.Checked = true;
+            HDRadioButton.Checked  = false;
+            SDRadioButton.Checked  = false;
+
+            _viewModel.SetVideoQuality(VideoQuality.UHD);
+        }
+
+        /// <summary>
         /// Set video quality to HD.
         /// </summary>
         private void HDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (HDToolStripMenuItem.CheckState == CheckState.Checked)
-            {
-                SDToolStripMenuItem.CheckState = CheckState.Unchecked;
-                HDRadioButton.Checked          = true;
-                SDRadioButton.Checked          = false;
+            UHDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            HDToolStripMenuItem.CheckState  = CheckState.Checked;
+            SDToolStripMenuItem.CheckState  = CheckState.Unchecked;
 
-                _viewModel.SetVideoQuality(VideoQuality.HD);
-            }
-            else
-            {
-                SDToolStripMenuItem.CheckState = CheckState.Checked;
-                HDRadioButton.Checked          = false;
-                SDRadioButton.Checked          = true;
+            UHDRadioButton.Checked = false;
+            HDRadioButton.Checked  = true;
+            SDRadioButton.Checked  = false;
 
-                _viewModel.SetVideoQuality(VideoQuality.SD);
-            }
+            _viewModel.SetVideoQuality(VideoQuality.UHD);
         }
 
         /// <summary>
@@ -279,22 +301,15 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void SDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (SDToolStripMenuItem.CheckState == CheckState.Checked)
-            {
-                HDToolStripMenuItem.CheckState = CheckState.Unchecked;
-                HDRadioButton.Checked          = false;
-                SDRadioButton.Checked          = true;
+            UHDToolStripMenuItem.CheckState = CheckState.Unchecked;
+            HDToolStripMenuItem.CheckState  = CheckState.Unchecked;
+            SDToolStripMenuItem.CheckState  = CheckState.Checked;
 
-                _viewModel.SetVideoQuality(VideoQuality.SD);
-            }
-            else
-            {
-                HDToolStripMenuItem.CheckState = CheckState.Checked;
-                HDRadioButton.Checked          = true;
-                SDRadioButton.Checked          = false;
+            UHDRadioButton.Checked = false;
+            HDRadioButton.Checked  = false;
+            SDRadioButton.Checked  = true;
 
-                _viewModel.SetVideoQuality(VideoQuality.HD);
-            }
+            _viewModel.SetVideoQuality(VideoQuality.UHD);
         }
 
         #endregion

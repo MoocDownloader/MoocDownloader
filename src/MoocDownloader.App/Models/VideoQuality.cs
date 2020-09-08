@@ -13,6 +13,11 @@
         /// <summary>
         /// High Definition.
         /// </summary>
-        HD = 2
+        HD = 2,
+
+        /// <summary>
+        /// Ultra HD.
+        /// </summary>
+        UHD = 3
     }
 }
