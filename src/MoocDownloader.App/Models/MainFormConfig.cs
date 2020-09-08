@@ -38,6 +38,6 @@
         /// <summary>
         /// video quality.
         /// </summary>
-        public VideoQuality VideoQuality { get; set; } = VideoQuality.HD;
+        public VideoQuality VideoQuality { get; set; } = VideoQuality.UHD;
     }
 }

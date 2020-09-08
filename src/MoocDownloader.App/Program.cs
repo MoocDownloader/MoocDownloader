@@ -32,11 +32,20 @@ namespace MoocDownloader.App
             }
             else
             {
-                // DeleteFiles(profilePath);
+                DeleteFiles(profilePath);
             }
 
             Xpcom.ProfileDirectory = profilePath;
-            Xpcom.Initialize(FIREFOX_PATH);
+
+            try // Check if the Firefox component exists.
+            {
+                Xpcom.Initialize(FIREFOX_PATH);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("程序文件缺失, 请重新下载.", "警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -48,9 +57,10 @@ namespace MoocDownloader.App
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static bool DeleteFiles(string path)
+        public static void DeleteFiles(string path)
         {
             var dir = new DirectoryInfo(path);
+
             try
             {
                 foreach (var item in dir.GetFiles())
@@ -70,12 +80,10 @@ namespace MoocDownloader.App
                 {
                     Directory.Delete(path);
                 }
-
-                return true;
             }
-            catch (Exception)
+            catch
             {
-                return false;
+                // ignored
             }
         }
     }

@@ -67,9 +67,9 @@
             this.DownloadDocumentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DownloadSubtitlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CourseQualityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UHDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.UHDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,10 +81,10 @@
             this.MainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.TotalStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.CurrentToolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -278,7 +278,7 @@
             this.StartDownloadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StartDownloadButton.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.StartDownloadButton.ForeColor = System.Drawing.Color.White;
-            this.StartDownloadButton.Location = new System.Drawing.Point(285, 182);
+            this.StartDownloadButton.Location = new System.Drawing.Point(282, 182);
             this.StartDownloadButton.Name = "StartDownloadButton";
             this.StartDownloadButton.Size = new System.Drawing.Size(116, 54);
             this.StartDownloadButton.TabIndex = 7;
@@ -330,6 +330,7 @@
             // 
             this.CancelDownloadButton.BackColor = System.Drawing.Color.DarkOrange;
             this.CancelDownloadButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CancelDownloadButton.Enabled = false;
             this.CancelDownloadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelDownloadButton.Font = new System.Drawing.Font("Microsoft YaHei", 12F);
             this.CancelDownloadButton.ForeColor = System.Drawing.Color.White;
@@ -339,6 +340,7 @@
             this.CancelDownloadButton.TabIndex = 7;
             this.CancelDownloadButton.Text = "取消";
             this.CancelDownloadButton.UseVisualStyleBackColor = false;
+            this.CancelDownloadButton.Click += new System.EventHandler(this.CancelDownloadButton_Click);
             // 
             // MainFormMenuStrip
             // 
@@ -440,7 +442,7 @@
             this.DownloadVideoToolStripMenuItem.CheckOnClick = true;
             this.DownloadVideoToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DownloadVideoToolStripMenuItem.Name = "DownloadVideoToolStripMenuItem";
-            this.DownloadVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DownloadVideoToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.DownloadVideoToolStripMenuItem.Text = "下载视频";
             this.DownloadVideoToolStripMenuItem.Click += new System.EventHandler(this.DownloadVideoToolStripMenuItem_Click);
             // 
@@ -450,7 +452,7 @@
             this.DownloadAttachmentToolStripMenuItem.CheckOnClick = true;
             this.DownloadAttachmentToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DownloadAttachmentToolStripMenuItem.Name = "DownloadAttachmentToolStripMenuItem";
-            this.DownloadAttachmentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DownloadAttachmentToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.DownloadAttachmentToolStripMenuItem.Text = "下载附件";
             this.DownloadAttachmentToolStripMenuItem.Click += new System.EventHandler(this.DownloadAttachmentToolStripMenuItem_Click);
             // 
@@ -460,7 +462,7 @@
             this.DownloadDocumentToolStripMenuItem.CheckOnClick = true;
             this.DownloadDocumentToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DownloadDocumentToolStripMenuItem.Name = "DownloadDocumentToolStripMenuItem";
-            this.DownloadDocumentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DownloadDocumentToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.DownloadDocumentToolStripMenuItem.Text = "下载课件";
             this.DownloadDocumentToolStripMenuItem.Click += new System.EventHandler(this.DownloadDocumentToolStripMenuItem_Click);
             // 
@@ -470,7 +472,7 @@
             this.DownloadSubtitlesToolStripMenuItem.CheckOnClick = true;
             this.DownloadSubtitlesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DownloadSubtitlesToolStripMenuItem.Name = "DownloadSubtitlesToolStripMenuItem";
-            this.DownloadSubtitlesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DownloadSubtitlesToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.DownloadSubtitlesToolStripMenuItem.Text = "下载字幕";
             this.DownloadSubtitlesToolStripMenuItem.Click += new System.EventHandler(this.DownloadSubtitlesToolStripMenuItem_Click);
             // 
@@ -484,11 +486,20 @@
             this.CourseQualityToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.CourseQualityToolStripMenuItem.Text = "课程视频质量";
             // 
+            // UHDToolStripMenuItem
+            // 
+            this.UHDToolStripMenuItem.Checked = true;
+            this.UHDToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.UHDToolStripMenuItem.Name = "UHDToolStripMenuItem";
+            this.UHDToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.UHDToolStripMenuItem.Text = "超清";
+            this.UHDToolStripMenuItem.Click += new System.EventHandler(this.UHDToolStripMenuItem_Click);
+            // 
             // HDToolStripMenuItem
             // 
             this.HDToolStripMenuItem.CheckOnClick = true;
             this.HDToolStripMenuItem.Name = "HDToolStripMenuItem";
-            this.HDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.HDToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.HDToolStripMenuItem.Text = "高清";
             this.HDToolStripMenuItem.Click += new System.EventHandler(this.HDToolStripMenuItem_Click);
             // 
@@ -496,18 +507,9 @@
             // 
             this.SDToolStripMenuItem.CheckOnClick = true;
             this.SDToolStripMenuItem.Name = "SDToolStripMenuItem";
-            this.SDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.SDToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.SDToolStripMenuItem.Text = "标清";
             this.SDToolStripMenuItem.Click += new System.EventHandler(this.SDToolStripMenuItem_Click);
-            // 
-            // UHDToolStripMenuItem
-            // 
-            this.UHDToolStripMenuItem.Checked = true;
-            this.UHDToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.UHDToolStripMenuItem.Name = "UHDToolStripMenuItem";
-            this.UHDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.UHDToolStripMenuItem.Text = "超清";
-            this.UHDToolStripMenuItem.Click += new System.EventHandler(this.UHDToolStripMenuItem_Click);
             // 
             // HelpToolStripMenuItem
             // 
@@ -524,33 +526,33 @@
             // ViewHelpToolStripMenuItem
             // 
             this.ViewHelpToolStripMenuItem.Name = "ViewHelpToolStripMenuItem";
-            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ViewHelpToolStripMenuItem.Text = "查看帮助";
             this.ViewHelpToolStripMenuItem.Click += new System.EventHandler(this.ViewHelpToolStripMenuItem_Click);
             // 
             // UpdateToolStripMenuItem
             // 
             this.UpdateToolStripMenuItem.Name = "UpdateToolStripMenuItem";
-            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.UpdateToolStripMenuItem.Text = "更新程序";
             this.UpdateToolStripMenuItem.Click += new System.EventHandler(this.UpdateToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
             // 
             // FeedbackToolStripMenuItem
             // 
             this.FeedbackToolStripMenuItem.Name = "FeedbackToolStripMenuItem";
-            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.FeedbackToolStripMenuItem.Text = "反馈";
             this.FeedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
             // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.AboutToolStripMenuItem.Text = "关于";
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -574,12 +576,14 @@
             this.UHDRadioButton.Name = "UHDRadioButton";
             this.UHDRadioButton.Size = new System.Drawing.Size(49, 17);
             this.UHDRadioButton.TabIndex = 4;
+            this.UHDRadioButton.TabStop = true;
             this.UHDRadioButton.Text = "超清";
             this.UHDRadioButton.UseVisualStyleBackColor = true;
             this.UHDRadioButton.CheckedChanged += new System.EventHandler(this.UHDRadioButton_CheckedChanged);
             // 
             // MainStatusStrip
             // 
+            this.MainStatusStrip.BackColor = System.Drawing.Color.Gainsboro;
             this.MainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.TotalStripProgressBar,
@@ -597,13 +601,24 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(36, 17);
-            this.toolStripStatusLabel1.Text = "进度:";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(49, 17);
+            this.toolStripStatusLabel1.Text = "总进度:";
             // 
             // TotalStripProgressBar
             // 
             this.TotalStripProgressBar.Name = "TotalStripProgressBar";
             this.TotalStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(62, 17);
+            this.toolStripStatusLabel4.Text = "当前进度:";
+            // 
+            // CurrentToolStripProgressBar
+            // 
+            this.CurrentToolStripProgressBar.Name = "CurrentToolStripProgressBar";
+            this.CurrentToolStripProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
             // toolStripStatusLabel2
             // 
@@ -616,17 +631,6 @@
             this.StatusToolStripStatusLabel.Name = "StatusToolStripStatusLabel";
             this.StatusToolStripStatusLabel.Size = new System.Drawing.Size(59, 17);
             this.StatusToolStripStatusLabel.Text = "准备就绪";
-            // 
-            // toolStripStatusLabel4
-            // 
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(62, 17);
-            this.toolStripStatusLabel4.Text = "当前进度:";
-            // 
-            // CurrentToolStripProgressBar
-            // 
-            this.CurrentToolStripProgressBar.Name = "CurrentToolStripProgressBar";
-            this.CurrentToolStripProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
             // MainForm
             // 

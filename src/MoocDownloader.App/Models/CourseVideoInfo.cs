@@ -1,4 +1,6 @@
-﻿namespace MoocDownloader.App.Models
+﻿using System.Collections.Generic;
+
+namespace MoocDownloader.App.Models
 {
     /// <summary>
     /// Information of the course video.
@@ -19,6 +21,11 @@
         /// list of downloaded ts files.
         /// </summary>
         public string MergeListFile { get; set; }
+
+        /// <summary>
+        /// ts files.
+        /// </summary>
+        public List<string> TSFiles { get; set; } = new List<string>();
 
         /// <summary>
         /// Whether or not to concat.
