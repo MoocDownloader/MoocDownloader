@@ -43,6 +43,9 @@ namespace MoocDownloader.App.ViewModels
         /// </summary>
         public Action<string> Log;
 
+        /// <summary>
+        /// Login mooc.
+        /// </summary>
         public void LoginMooc()
         {
             var form   = new LoginForm(_cookies);
@@ -65,8 +68,17 @@ namespace MoocDownloader.App.ViewModels
             }
         }
 
+        /// <summary>
+        /// start download.
+        /// </summary>
         public async void StartDownload()
         {
+            if (string.IsNullOrEmpty(_config.CourseUrl))
+            {
+                MessageBox.Show(@"课程链接尚未输入.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var courseUrl = _config.CourseUrl;
 
             if (!_config.IsDownloadDocument
