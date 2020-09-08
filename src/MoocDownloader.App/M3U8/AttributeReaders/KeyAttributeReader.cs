@@ -16,9 +16,14 @@ namespace MoocDownloader.App.M3U8.AttributeReaders
         {
             var source =
                 value.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-                     .Select(e => KV.Parse(e, '=').Value);
+                     .Select(e => KV.Parse(e, '='))
+                     .ToList();
+
             if (fileInfo.Key == null && source.Any())
+            {
                 fileInfo.Key = new M3UKeyInfo();
+            }
+
             foreach (var keyValuePair in source)
             {
                 var key = keyValuePair.Key;
@@ -26,17 +31,27 @@ namespace MoocDownloader.App.M3U8.AttributeReaders
                 {
                     if (key != "IV")
                     {
-                        if (key == "METHOD")
+                        if (key == "METHOD" && fileInfo.Key != null)
+                        {
                             fileInfo.Key.Method = keyValuePair.Value;
+                        }
                     }
                     else
-                        fileInfo.Key.IV = keyValuePair.Value;
+                    {
+                        if (fileInfo.Key != null)
+                        {
+                            fileInfo.Key.IV = keyValuePair.Value;
+                        }
+                    }
                 }
                 else
                 {
-                    fileInfo.Key.Uri = Uri.TryCreate(keyValuePair.Value, UriKind.Absolute, out var result)
-                        ? result
-                        : null;
+                    if (fileInfo.Key != null)
+                    {
+                        fileInfo.Key.Uri = Uri.TryCreate(keyValuePair.Value, UriKind.Absolute, out Uri result)
+                            ? result
+                            : null;
+                    }
                 }
             }
         }
