@@ -43,7 +43,15 @@ namespace MoocDownloader.App
             }
             catch (Exception)
             {
-                MessageBox.Show("程序文件缺失, 请重新下载.", "警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"程序组件缺失, 请重新下载.", @"中国大学 MOOC - 警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!File.Exists(@".\FFMPEG\ffmpeg.exe"))
+            {
+                MessageBox.Show(
+                    @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC - 警告", MessageBoxButtons.OK, MessageBoxIcon.Error
+                );
                 return;
             }
 

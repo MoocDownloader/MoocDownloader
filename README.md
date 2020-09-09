@@ -1,7 +1,5 @@
 # Mooc Downloader
 
-**开发中, 尚未开发完成. 请勿使用!!!**
-
 An icourse163.org MOOC downloader implemented by .NET.
 
 一枚由 C# 实现的中国大学 MOOC 下载器.
@@ -23,6 +21,8 @@ An icourse163.org MOOC downloader implemented by .NET.
 Mooc Downloader 可用于下载 `中国大学 MOOC` [icourse163.org](https://www.icourse163.org/) 课程 **视频** / **课件** / **附件** / **字幕**.
 
 ![主界面](./docs/images/main-interface.png)
+
+![正在下载](./docs/images/main-interface-downloading.png)
 
 ## 使用方法
 
@@ -47,4 +47,4 @@ Mooc Downloader 可用于下载 `中国大学 MOOC` [icourse163.org](https://www
 
 ## 特别声明
 
-使用本程序下载的课程, 仅可下载者自己使用, 请勿分享给其他人. 本程序开发的初衷是帮助来不及学完课程或者上网不方便的同学暂时缓存课程, 以便学习使用.
+使用本程序下载的课程, 仅可下载者自己使用, **请勿将课程分享给其他人**. 本程序开发的初衷是帮助来不及学完课程或者上网不方便的同学暂时缓存课程, 以便学习使用.

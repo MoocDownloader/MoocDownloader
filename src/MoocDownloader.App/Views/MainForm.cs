@@ -116,6 +116,11 @@ namespace MoocDownloader.App.Views
         /// <param name="isDisable">Is disabled.</param>
         private void SetUIStatus(bool isDisable)
         {
+            SettingToolStripMenuItem.Enabled = isDisable;
+
+            StartDownloadToolStripMenuItem.Enabled  = isDisable;
+            CancelDownloadToolStripMenuItem.Enabled = !isDisable;
+
             LoginMoocButton.Enabled  = isDisable;
             CourseUrlTextBox.Enabled = isDisable;
             SavePathTextBox.Enabled  = isDisable;
