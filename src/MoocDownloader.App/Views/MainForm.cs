@@ -13,13 +13,20 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private readonly MainViewModel _viewModel;
 
-        private bool _disabled = false;
-
         public MainForm()
         {
             InitializeComponent();
 
-            _viewModel = new MainViewModel {Log = Log};
+            _viewModel = new MainViewModel
+            {
+                Log              = Log,
+                SetStatus        = SetStatusText,
+                SetUIStatus      = SetUIStatus,
+                UpdateCurrentBar = UpdateCurrentProgressBar,
+                UpdateTotalBar   = UpdateTotalProgressBar,
+                ResetCurrentBar  = ResetCurrentProgressBar,
+                ResetTotalBar    = ResetTotalProgressBar
+            };
         }
 
         /// <summary>
@@ -28,6 +35,14 @@ namespace MoocDownloader.App.Views
         private void LoginMoocButton_Click(object sender, EventArgs e)
         {
             _viewModel.LoginMooc();
+        }
+
+        /// <summary>
+        /// clear course url text.
+        /// </summary>
+        private void ClearCourseUrlButton_Click(object sender, EventArgs e)
+        {
+            CourseUrlTextBox.Text = string.Empty;
         }
 
         /// <summary>
@@ -59,10 +74,6 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void StartDownloadButton_Click(object sender, EventArgs e)
         {
-            _disabled = true;
-            SetUIStatus(_disabled);
-            StatusToolStripStatusLabel.Text = "正在下载";
-
             _viewModel.StartDownload();
         }
 
@@ -71,8 +82,32 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void CancelDownloadButton_Click(object sender, EventArgs e)
         {
-            _disabled = false;
-            SetUIStatus(_disabled);
+            _viewModel.CancelDownload();
+        }
+
+        private void SetStatusText(string text)
+        {
+            StatusToolStripStatusLabel.Text = text;
+        }
+
+        private void UpdateCurrentProgressBar(int value)
+        {
+            CurrentToolStripProgressBar.Value = value;
+        }
+
+        private void ResetCurrentProgressBar()
+        {
+            CurrentToolStripProgressBar.Value = 0;
+        }
+
+        private void UpdateTotalProgressBar(int value)
+        {
+            TotalStripProgressBar.Value = value;
+        }
+
+        private void ResetTotalProgressBar()
+        {
+            TotalStripProgressBar.Value = 0;
         }
 
         /// <summary>
@@ -230,6 +265,7 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void StartDownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _viewModel.StartDownload();
         }
 
         /// <summary>
@@ -237,6 +273,7 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void CancelDownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _viewModel.CancelDownload();
         }
 
         /// <summary>
@@ -244,6 +281,16 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (StartDownloadButton.Enabled)
+            {
+                Environment.Exit(0);
+            }
+
+            if (MessageBox.Show($@"正在下载, 是否退出?", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)
+             == DialogResult.OK)
+            {
+                Environment.Exit(0);
+            }
         }
 
         #endregion
@@ -263,6 +310,19 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void PasteCourseLinkToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var data = Clipboard.GetDataObject();
+            if (data?.GetDataPresent(DataFormats.Text) ?? false)
+            {
+                var url = (string) data.GetData(DataFormats.Text);
+                if (Uri.TryCreate(url, UriKind.Absolute, out _))
+                {
+                    CourseUrlTextBox.Text = url;
+                }
+                else
+                {
+                    MessageBox.Show(@"复制的链接有误.", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
 
         /// <summary>
