@@ -118,6 +118,14 @@ namespace MoocDownloader.App.ViewModels
                 return;
             }
 
+
+            if (MessageBox.Show(@"开始下载?", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
+             == DialogResult.Cancel)
+            {
+                Log("取消下载.");
+                return;
+            }
+
             if (!Directory.Exists(_config.CourseSavePath))
             {
                 Log($@"路径: {_config.CourseSavePath} 不存在, 准备创建.");
