@@ -38,10 +38,19 @@ namespace MoocDownloader.App.ViewModels
         /// </summary>
         private const int MAX_TIMES = 5;
 
+        private bool _isCancel;
+
         /// <summary>
         /// Write log.
         /// </summary>
         public Action<string> Log;
+
+        public Action<string> SetStatus;
+        public Action<bool>   SetUIStatus;
+        public Action<int>    UpdateCurrentBar;
+        public Action<int>    UpdateTotalBar;
+        public Action         ResetCurrentBar;
+        public Action         ResetTotalBar;
 
         /// <summary>
         /// Login mooc.
@@ -66,6 +75,19 @@ namespace MoocDownloader.App.ViewModels
                     Log(@"已取消登录.");
                     break;
             }
+        }
+
+        private int CalculatePercentage(int current, int max)
+        {
+            var rate  = Convert.ToDouble(current + 1) / Convert.ToDouble(max) * 100D;
+            var value = Convert.ToInt32(Math.Ceiling(rate));
+
+            if (value > 100)
+            {
+                return 100;
+            }
+
+            return value;
         }
 
         /// <summary>
@@ -96,8 +118,6 @@ namespace MoocDownloader.App.ViewModels
                 return;
             }
 
-            Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
-
             if (!Directory.Exists(_config.CourseSavePath))
             {
                 Log($@"路径: {_config.CourseSavePath} 不存在, 准备创建.");
@@ -114,12 +134,17 @@ namespace MoocDownloader.App.ViewModels
                 }
             }
 
+            SetStatus("准备下载");
+            Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
+            SetUIStatus(false);
+
             // 1. initializes a mooc request.
             var mooc = new MoocRequest(_cookies, courseUrl);
 
             // 2. get term id.
             var termId = await mooc.GetTermIdAsync();
 
+            SetStatus("正在下载");
             Log($@"提取到课程 ID 是 {termId}");
 
             // 3. get Mooc term JavaScript code.
@@ -134,16 +159,22 @@ namespace MoocDownloader.App.ViewModels
 
             FFmpegWorker.Instance.Start();
 
-            for (var chapterIndex = 0; chapterIndex < course.Chapters.Count; chapterIndex++)
+            for (var chapterIndex = 0; chapterIndex < course.Chapters.Count && !_isCancel; chapterIndex++)
             {
                 var chapter = course.Chapters[chapterIndex];
 
-                for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count; lessonIndex++)
+                for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count && !_isCancel; lessonIndex++)
                 {
                     var lesson = chapter.Lessons[lessonIndex];
 
-                    for (var unitIndex = 0; unitIndex < lesson.Units.Count; unitIndex++)
+                    for (var unitIndex = 0; unitIndex < lesson.Units.Count && !_isCancel; unitIndex++)
                     {
+                        // update total progress bar.
+                        var totalMax     = course.Chapters.Count * chapter.Lessons.Count * lesson.Units.Count;
+                        var totalCurrent = chapterIndex * lessonIndex                    * unitIndex;
+
+                        UpdateTotalBar(CalculatePercentage(totalCurrent, totalMax));
+
                         var unit = lesson.Units[unitIndex];
 
                         // create unit save path.
@@ -198,7 +229,7 @@ namespace MoocDownloader.App.ViewModels
                                     MergeListFile = $@"{unitFileName}.text"
                                 };
 
-                                Log($@"准备下载视频: {unitFileName}");
+                                Log($@"下载视频: {unitFileName}");
 
                                 // subtitles
                                 foreach (var caption in video.Result.SrtCaptions)
@@ -231,8 +262,10 @@ namespace MoocDownloader.App.ViewModels
                                     var       m3u8Info = reader.Read();
                                     var       merger   = new StringBuilder();
 
-                                    for (var i = 0; i < m3u8Info.MediaFiles.Count; i++)
+                                    for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
                                     {
+                                        UpdateCurrentBar(CalculatePercentage(i, m3u8Info.MediaFiles.Count));
+
                                         var tsSavedName = $@"{unitFileName}-{i:00}.ts";
 
                                         for (var j = 0; j < MAX_TIMES; j++)
@@ -328,6 +361,32 @@ namespace MoocDownloader.App.ViewModels
                         }
                     }
                 }
+            }
+
+            SetUIStatus(true);
+
+            if (_isCancel)
+            {
+                Log("已取消下载.");
+            }
+            else
+            {
+                SetStatus("下载完成");
+                Log("下载完成!");
+            }
+        }
+
+        /// <summary>
+        /// cancel download.
+        /// </summary>
+        public void CancelDownload()
+        {
+            var result = MessageBox.Show(@"正在下载, 是否取消?", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+            if (result == DialogResult.OK)
+            {
+                Log("准备取消下载.");
+                _isCancel = true;
             }
         }
 
