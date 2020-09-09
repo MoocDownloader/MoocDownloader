@@ -248,6 +248,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.Controls.Add(this.DownloadVideoCheckBox);
             this.groupBox1.Controls.Add(this.DownloadDocumentCheckBox);
             this.groupBox1.Controls.Add(this.DownloadAttachmentCheckBox);
@@ -289,6 +290,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.Color.Transparent;
             this.groupBox2.Controls.Add(this.RunningLogListBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 223);
             this.groupBox2.Name = "groupBox2";
@@ -299,6 +301,7 @@
             // 
             // RunningLogListBox
             // 
+            this.RunningLogListBox.BackColor = System.Drawing.Color.White;
             this.RunningLogListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.RunningLogListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RunningLogListBox.FormattingEnabled = true;
@@ -311,6 +314,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.BackColor = System.Drawing.Color.Transparent;
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.LoginMoocButton);
             this.groupBox3.Controls.Add(this.CourseUrlTextBox);
@@ -561,6 +565,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.BackColor = System.Drawing.Color.Transparent;
             this.groupBox4.Controls.Add(this.UHDRadioButton);
             this.groupBox4.Controls.Add(this.HDRadioButton);
             this.groupBox4.Controls.Add(this.SDRadioButton);
@@ -650,6 +655,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(483, 392);
             this.Controls.Add(this.MainStatusStrip);
             this.Controls.Add(this.groupBox4);
