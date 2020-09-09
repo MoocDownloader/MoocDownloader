@@ -122,10 +122,11 @@ namespace MoocDownloader.App.Views
             StartDownloadToolStripMenuItem.Enabled  = isDisable;
             CancelDownloadToolStripMenuItem.Enabled = !isDisable;
 
-            LoginMoocButton.Enabled  = isDisable;
-            CourseUrlTextBox.Enabled = isDisable;
-            SavePathTextBox.Enabled  = isDisable;
-            FindPathButton.Enabled   = isDisable;
+            LoginMoocButton.Enabled      = isDisable;
+            ClearCourseUrlButton.Enabled = isDisable;
+            CourseUrlTextBox.Enabled     = isDisable;
+            SavePathTextBox.Enabled      = isDisable;
+            FindPathButton.Enabled       = isDisable;
 
             DownloadVideoCheckBox.Enabled      = isDisable;
             DownloadAttachmentCheckBox.Enabled = isDisable;
