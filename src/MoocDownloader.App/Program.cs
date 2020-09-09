@@ -13,6 +13,8 @@ namespace MoocDownloader.App
         /// </summary>
         public const string FIREFOX_PATH = "Firefox";
 
+        public const string FFMPEG = @".\FFMPEG\ffmpeg.exe";
+
         /// <summary>
         /// gecko kernel temp path.
         /// </summary>
@@ -43,14 +45,16 @@ namespace MoocDownloader.App
             }
             catch (Exception)
             {
-                MessageBox.Show(@"程序组件缺失, 请重新下载.", @"中国大学 MOOC - 警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    @"程序组件 ""FIREFOX"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
+                );
                 return;
             }
 
-            if (!File.Exists(@".\FFMPEG\ffmpeg.exe"))
+            if (!File.Exists(FFMPEG))
             {
                 MessageBox.Show(
-                    @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC - 警告", MessageBoxButtons.OK, MessageBoxIcon.Error
+                    @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
                 return;
             }
