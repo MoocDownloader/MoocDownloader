@@ -1,4 +1,5 @@
 ﻿using MoocDownloader.App.Models;
+using MoocDownloader.App.Utilities;
 using MoocDownloader.App.ViewModels;
 using System;
 using System.IO;
@@ -215,10 +216,31 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// When the program is started
         /// </summary>
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             // set the course save path.
             SavePathTextBox.Text = Path.Combine(Application.StartupPath, "课程下载");
+
+            // Check if there is a new version.
+            var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            var update         = new VersionUpdate();
+
+            var newVersionInfo = await update.GetNewVersionAsync();
+            var version        = Version.Parse(newVersionInfo.Version);
+
+            if (version > currentVersion)
+            {
+                /**
+                 * exist new version.
+                 *
+                 * https://docs.microsoft.com/en-us/dotnet/standard/assembly/versioning
+                 * <主版本>.<次版本>.<生成号>.<修订版本>
+                 * <major version>.<minor version>.<build number>.<revision>
+                 */
+                var form = new VersionForm(newVersionInfo);
+
+                form.ShowDialog();
+            }
         }
 
         /// <summary>
