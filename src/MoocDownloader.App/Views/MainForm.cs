@@ -257,21 +257,28 @@ namespace MoocDownloader.App.Views
             var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             var update         = new VersionUpdate();
 
-            var newVersionInfo = await update.GetNewVersionAsync();
-            var version        = Version.Parse(newVersionInfo.Version);
-
-            if (version > currentVersion)
+            try
             {
-                /**
-                 * exist new version.
-                 *
-                 * https://docs.microsoft.com/en-us/dotnet/standard/assembly/versioning
-                 * <主版本>.<次版本>.<生成号>.<修订版本>
-                 * <major version>.<minor version>.<build number>.<revision>
-                 */
-                var form = new VersionForm(newVersionInfo);
+                var newVersionInfo = await update.GetNewVersionAsync();
+                var version        = Version.Parse(newVersionInfo.Version);
 
-                form.ShowDialog();
+                if (version > currentVersion)
+                {
+                    /**
+                     * exist new version.
+                     *
+                     * https://docs.microsoft.com/en-us/dotnet/standard/assembly/versioning
+                     * <主版本>.<次版本>.<生成号>.<修订版本>
+                     * <major version>.<minor version>.<build number>.<revision>
+                     */
+                    var form = new VersionForm(newVersionInfo);
+
+                    form.ShowDialog();
+                }
+            }
+            catch (Exception)
+            {
+                Log("检测升级失败.");
             }
         }
 
