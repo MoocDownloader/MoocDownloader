@@ -234,7 +234,15 @@ namespace MoocDownloader.App.ViewModels
                 return;
             }
 
-            FFmpegWorker.Instance.Start();
+            try
+            {
+                FFmpegWorker.Instance.Start();
+            }
+            catch (Exception exception)
+            {
+                Log($"视频合并功能启动失败, 原因: {exception.Message}");
+                return;
+            }
 
             for (var chapterIndex = 0; chapterIndex < course.Chapters.Count && !_isCancel; chapterIndex++)
             {
@@ -500,6 +508,8 @@ namespace MoocDownloader.App.ViewModels
                                                     File.WriteAllBytes(
                                                         Path.Combine(unitPath, $"{unitFileName}.mp4"), videoBytes
                                                     );
+
+                                                    Log($@"课程 {unitFileName} 已下载完成.");
                                                     break;
                                                 }
                                             }
@@ -548,6 +558,8 @@ namespace MoocDownloader.App.ViewModels
                                                     File.WriteAllBytes(
                                                         Path.Combine(unitPath, $"{unitFileName}.flv"), videoBytes
                                                     );
+
+                                                    Log($@"课程 {unitFileName} 已下载完成.");
                                                     break;
                                                 }
                                             }
@@ -565,6 +577,12 @@ namespace MoocDownloader.App.ViewModels
                             {
                                 if (!_config.IsDownloadDocument)
                                 {
+                                    break;
+                                }
+
+                                if (string.IsNullOrEmpty(unitResult.TextOrigUrl))
+                                {
+                                    Log("文档: unitFileName 下载链接为空, 跳过下载.");
                                     break;
                                 }
 
@@ -614,6 +632,12 @@ namespace MoocDownloader.App.ViewModels
                                 }
 
                                 const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
+
+                                if (string.IsNullOrEmpty(unit.JsonContent))
+                                {
+                                    Log($"附件 {unit?.Name} 下载链接为空, 跳过下载.");
+                                    break;
+                                }
 
                                 var content            = JObject.Parse(unit.JsonContent);
                                 var nosKey             = content["nosKey"]?.ToString();
