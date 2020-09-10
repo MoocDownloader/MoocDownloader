@@ -152,33 +152,115 @@ namespace MoocDownloader.App.ViewModels
             var mooc = new MoocRequest(_cookies, courseUrl);
 
             // 2. get term id.
-            var termId = await mooc.GetTermIdAsync();
+            string termId;
+
+            try
+            {
+                termId = await mooc.GetTermIdAsync();
+
+                if (string.IsNullOrEmpty(termId))
+                {
+                    Log("获取课程 ID 失败, 请检查课程是否开课.");
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                Log($"获取课程 ID 失败, 原因: {exception.Message}");
+                return;
+            }
 
             SetStatus("正在下载");
             Log($@"提取到课程 ID 是 {termId}");
 
             // 3. get Mooc term JavaScript code.
-            var moocTermCode = await mooc.GetMocTermJavaScriptCodeAsync(termId);
+            string moocTermCode;
+            try
+            {
+                moocTermCode = await mooc.GetMocTermJavaScriptCodeAsync(termId);
+
+                if (string.IsNullOrEmpty(moocTermCode))
+                {
+                    Log("获取课程信息失败, 请检查课程是否开课.");
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                Log($"获取课程信息失败, 原因: {exception.Message}");
+
+                return;
+            }
 
             // 4. evaluate mooc term JavaScript code.
             moocTermCode = FixCourseBeanCode(moocTermCode);
-            var moocTermJSON = EvaluateJavaScriptCode(moocTermCode, COURSE_BEAN_NAME) as string;
+
+            string moocTermJson;
+            try
+            {
+                moocTermJson = EvaluateJavaScriptCode(moocTermCode, COURSE_BEAN_NAME) as string;
+
+                if (string.IsNullOrEmpty(moocTermJson))
+                {
+                    Log($"未提取到课程数据, 请检查课程是否开课.");
+
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                Log($"提取课程数据失败, 原因: {exception.Message}");
+
+                return;
+            }
 
             // 5. deserialize moocTermJSON.
-            var course = DeserializeObject<CourseModel>(moocTermJSON ?? string.Empty);
+            CourseModel course;
+
+            try
+            {
+                course = DeserializeObject<CourseModel>(moocTermJson);
+
+                if (course is null || course?.Chapters?.Count == 0)
+                {
+                    Log($"未提取到课程数据, 请检查课程是否开课.");
+
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                Log($"计算课程数据时发生错误, 原因: {exception.Message}");
+                return;
+            }
 
             FFmpegWorker.Instance.Start();
 
             for (var chapterIndex = 0; chapterIndex < course.Chapters.Count && !_isCancel; chapterIndex++)
             {
+                if (chapterIndex >= course.Chapters.Count)
+                {
+                    break;
+                }
+
                 var chapter = course.Chapters[chapterIndex];
 
                 for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count && !_isCancel; lessonIndex++)
                 {
+                    if (lessonIndex >= chapter.Lessons.Count)
+                    {
+                        break;
+                    }
+
                     var lesson = chapter.Lessons[lessonIndex];
 
                     for (var unitIndex = 0; unitIndex < lesson.Units.Count && !_isCancel; unitIndex++)
                     {
+                        if (unitIndex >= lesson.Units.Count)
+                        {
+                            break;
+                        }
+
                         // update total progress bar.
                         var totalMax     = course.Chapters.Count + chapter.Lessons.Count + lesson.Units.Count;
                         var totalCurrent = (chapterIndex + 1) + (lessonIndex + 1)        + (unitIndex + 1);
@@ -254,10 +336,27 @@ namespace MoocDownloader.App.ViewModels
                                         // subtitle file. E.g:
                                         //  01-第一节 Java明天 视频.zh.srt
                                         //  01-第一节 Java明天 视频.en.srt
-                                        var srtName    = $@"{unitFileName}.{caption.LanguageCode}.srt";
-                                        var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
+                                        var srtName = $@"{unitFileName}.{caption.LanguageCode}.srt";
 
-                                        File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
+                                        try
+                                        {
+                                            var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
+
+                                            if (srtContent is null)
+                                            {
+                                                Log($"字幕 {srtName} 下载失败.");
+
+                                                break;
+                                            }
+
+                                            File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
+                                        }
+                                        catch (Exception exception)
+                                        {
+                                            Log($"字幕 {srtName} 下载失败, 原因: {exception.Message}");
+
+                                            break;
+                                        }
                                     }
                                 }
 
@@ -275,7 +374,24 @@ namespace MoocDownloader.App.ViewModels
 
                                     Configuration.Default.BaseUri = new Uri(baseUrl, UriKind.Absolute);
 
-                                    var       m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
+                                    string m3u8List;
+
+                                    try
+                                    {
+                                        m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
+
+                                        if (string.IsNullOrEmpty(m3u8List))
+                                        {
+                                            Log($"下载课程 {unitFileName} 的视频列表失败.");
+                                            break;
+                                        }
+                                    }
+                                    catch (Exception exception)
+                                    {
+                                        Log($"下载课程 {unitFileName} 的视频列表发生错误, 原因: {exception.Message}");
+                                        break;
+                                    }
+
                                     using var reader   = new M3UFileReader(m3u8List);
                                     var       m3u8Info = reader.Read();
                                     var       merger   = new StringBuilder();
@@ -288,24 +404,38 @@ namespace MoocDownloader.App.ViewModels
 
                                         for (var j = 0; j < MAX_TIMES; j++)
                                         {
-                                            var tsBytes = await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+                                            try
+                                            {
+                                                var tsBytes =
+                                                    await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
 
-                                            if (tsBytes is null)
-                                            {
-                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j + 1)));
+                                                if (tsBytes is null)
+                                                {
+                                                    Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
+                                                }
+                                                else
+                                                {
+                                                    File.WriteAllBytes(Path.Combine(unitPath, tsSavedName), tsBytes);
+                                                    merger.AppendLine(
+                                                        $@"file '{Path.Combine(unitPath, tsSavedName)}'"
+                                                    ); // combine ts file path and add to list.
+
+                                                    courseVideo.TSFiles.Add(tsSavedName);
+
+                                                    break;
+                                                }
                                             }
-                                            else
+                                            catch (Exception exception)
                                             {
-                                                File.WriteAllBytes(Path.Combine(unitPath, tsSavedName), tsBytes);
-                                                break;
+                                                Log(
+                                                    $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
+                                                );
+                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                             }
                                         }
 
-                                        merger.AppendLine(
-                                            $@"file '{Path.Combine(unitPath, tsSavedName)}'"
-                                        ); // combine ts file path and add to list.
-
-                                        courseVideo.TSFiles.Add(tsSavedName);
+                                        Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
                                     }
 
                                     Log($@"课程 {unitFileName} 已下载完成.");
@@ -332,20 +462,31 @@ namespace MoocDownloader.App.ViewModels
 
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
-                                    var document = await mooc.DownloadDocumentAsync(documentUrl);
-
-                                    if (document is null)
+                                    try
                                     {
-                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1)));
+                                        var document = await mooc.DownloadDocumentAsync(documentUrl);
+
+                                        if (document is null)
+                                        {
+                                            Log($"下载文档 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                        }
+                                        else
+                                        {
+                                            File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
+
+                                            Log($@"文档 {fileName} 已下载完成.");
+                                            break;
+                                        }
                                     }
-                                    else
+                                    catch (Exception exception)
                                     {
-                                        File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
-
-                                        Log($@"文档 {fileName} 已下载完成.");
-                                        break;
+                                        Log($@"下载文档 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
+                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
                                     }
                                 }
+
+                                Log($"下载文档 {fileName} 失败, 已跳过.");
                             }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
@@ -366,22 +507,34 @@ namespace MoocDownloader.App.ViewModels
 
                                 for (var i = 0; i < MAX_TIMES; i++)
                                 {
-                                    var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
-
-                                    if (attachment is null)
+                                    try
                                     {
-                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i + 1)));
+                                        var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
+
+                                        if (attachment is null)
+                                        {
+                                            Log($"下载附件 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                        }
+                                        else
+                                        {
+                                            File.WriteAllBytes(
+                                                Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"),
+                                                attachment
+                                            );
+
+                                            Log($@"附件 {fileName} 已下载完成.");
+                                            break;
+                                        }
                                     }
-                                    else
+                                    catch (Exception exception)
                                     {
-                                        File.WriteAllBytes(
-                                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"), attachment
-                                        );
-
-                                        Log($@"附件 {fileName} 已下载完成.");
-                                        break;
+                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                        Log($@"下载附件 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
                                     }
                                 }
+
+                                Log($"下载附件 {fileName} 失败, 已跳过.");
                             }
                                 break;
                             default: // not recognized type
