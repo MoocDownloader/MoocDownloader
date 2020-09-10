@@ -16,8 +16,9 @@ namespace MoocDownloader.App.Utilities
         public static string FixPath(string name)
         {
             var invalidChars = Path.GetInvalidFileNameChars();
+            var fixedName    = new string(name.Where(m => !invalidChars.Contains(m)).ToArray());
 
-            return new string(name.Where(m => !invalidChars.Contains(m)).ToArray());
+            return fixedName.Replace(".", "").Trim();
         }
     }
 }
