@@ -14,6 +14,8 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private readonly MainViewModel _viewModel;
 
+        private DateTime _startTime = DateTime.MinValue;
+
         public MainForm()
         {
             InitializeComponent();
@@ -80,6 +82,11 @@ namespace MoocDownloader.App.Views
         private void Log(string message)
         {
             RunningLogListBox.Items.Add($"{DateTime.Now:hh:mm:ss} {message}");
+
+            if (AutoScrollCheckBox.Checked)
+            {
+                RunningLogListBox.SelectedIndex = RunningLogListBox.Items.Count - 1;
+            }
         }
 
         /// <summary>
@@ -126,31 +133,43 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// Set whether interface controls are disabled.
         /// </summary>
-        /// <param name="isDisable">Is disabled.</param>
-        private void SetUIStatus(bool isDisable)
+        /// <param name="isEnable">Is enable.</param>
+        private void SetUIStatus(bool isEnable)
         {
-            SettingToolStripMenuItem.Enabled = isDisable;
+            if (isEnable)
+            {
+                DownloadTimeToolStripStatusLabel.Text = @"00:00:00";
+                StatusToolStripStatusLabel.Text       = @"准备就绪";
+                MainTimer.Stop();
+            }
+            else
+            {
+                _startTime = DateTime.Now;
+                MainTimer.Start();
+            }
 
-            StartDownloadToolStripMenuItem.Enabled  = isDisable;
-            CancelDownloadToolStripMenuItem.Enabled = !isDisable;
+            SettingToolStripMenuItem.Enabled = isEnable;
 
-            LoginMoocButton.Enabled      = isDisable;
-            ClearCourseUrlButton.Enabled = isDisable;
-            CourseUrlTextBox.Enabled     = isDisable;
-            SavePathTextBox.Enabled      = isDisable;
-            FindPathButton.Enabled       = isDisable;
+            StartDownloadToolStripMenuItem.Enabled  = isEnable;
+            CancelDownloadToolStripMenuItem.Enabled = !isEnable;
 
-            DownloadVideoCheckBox.Enabled      = isDisable;
-            DownloadAttachmentCheckBox.Enabled = isDisable;
-            DownloadDocumentCheckBox.Enabled   = isDisable;
-            DownloadSubtitleCheckBox.Enabled   = isDisable;
+            LoginMoocButton.Enabled      = isEnable;
+            ClearCourseUrlButton.Enabled = isEnable;
+            CourseUrlTextBox.Enabled     = isEnable;
+            SavePathTextBox.Enabled      = isEnable;
+            FindPathButton.Enabled       = isEnable;
 
-            SDRadioButton.Enabled  = isDisable;
-            HDRadioButton.Enabled  = isDisable;
-            UHDRadioButton.Enabled = isDisable;
+            DownloadVideoCheckBox.Enabled      = isEnable;
+            DownloadAttachmentCheckBox.Enabled = isEnable;
+            DownloadDocumentCheckBox.Enabled   = isEnable;
+            DownloadSubtitleCheckBox.Enabled   = isEnable;
 
-            StartDownloadButton.Enabled  = isDisable;
-            CancelDownloadButton.Enabled = !isDisable;
+            SDRadioButton.Enabled  = isEnable;
+            HDRadioButton.Enabled  = isEnable;
+            UHDRadioButton.Enabled = isEnable;
+
+            StartDownloadButton.Enabled  = isEnable;
+            CancelDownloadButton.Enabled = !isEnable;
         }
 
         #region UI controls properties binding.
@@ -454,5 +473,16 @@ namespace MoocDownloader.App.Views
         }
 
         #endregion
+
+        private void MainTimer_Tick(object sender, EventArgs e)
+        {
+            if (_startTime == DateTime.MinValue)
+            {
+                return;
+            }
+
+            var diff = DateTime.Now - _startTime;
+            DownloadTimeToolStripStatusLabel.Text = diff.ToString(@"hh\:mm\:ss");
+        }
     }
 }

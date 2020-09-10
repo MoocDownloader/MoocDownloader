@@ -248,6 +248,8 @@ namespace MoocDownloader.App.ViewModels
 
                     return;
                 }
+
+                Log($@"准备开始下载课程: {course.CourseName}");
             }
             catch (Exception exception)
             {
@@ -728,9 +730,11 @@ namespace MoocDownloader.App.ViewModels
                 UpdateTotalBar(100);
                 UpdateCurrentBar(100);
                 SetStatus("下载完成");
-                Log("下载完成!");
+                Log($"课程 {course.CourseName} 已下载完成!");
 
-                MessageBox.Show(@"下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    $"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
             }
         }
 
