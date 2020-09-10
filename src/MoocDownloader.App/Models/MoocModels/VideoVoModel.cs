@@ -40,5 +40,23 @@ namespace MoocDownloader.App.Models.MoocModels
 
         [JsonProperty("videoId")]
         public long? VideoId { get; set; }
+
+        [JsonProperty("flvHdUrl")]
+        public string FlvHdUrl { get; set; }
+
+        [JsonProperty("flvSdUrl")]
+        public string FlvSdUrl { get; set; }
+
+        [JsonProperty("flvShdUrl")]
+        public string FlvShdUrl { get; set; }
+
+        [JsonProperty("mp4HdUrl")]
+        public string Mp4HdUrl { get; set; }
+
+        [JsonProperty("mp4SdUrl")]
+        public string Mp4SdUrl { get; set; }
+
+        [JsonProperty("mp4ShdUrl")]
+        public string Mp4ShdUrl { get; set; }
     }
 }

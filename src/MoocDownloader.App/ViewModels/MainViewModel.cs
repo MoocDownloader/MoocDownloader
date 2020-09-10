@@ -293,8 +293,8 @@ namespace MoocDownloader.App.ViewModels
 
                         unitCode = FixCourseBeanCode(unitCode);
 
-                        var unitJSON   = EvaluateJavaScriptCode(unitCode, COURSE_BEAN_NAME) as string;
-                        var unitResult = DeserializeObject<UnitResultModel>(unitJSON ?? string.Empty);
+                        var unitJson   = EvaluateJavaScriptCode(unitCode, COURSE_BEAN_NAME) as string;
+                        var unitResult = DeserializeObject<UnitResultModel>(unitJson ?? string.Empty);
 
                         // Parse video / document / attachment link.
                         var unitType = (UnitType) (unit.ContentType ?? 0);
@@ -365,97 +365,198 @@ namespace MoocDownloader.App.ViewModels
                                       && (VideoQuality) v.Quality == _config.VideoQuality
                                 );
 
-                                if (videoInfo != null)
+                                if (videoInfo != null && !string.IsNullOrEmpty(videoInfo.Format))
                                 {
-                                    var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
-
-                                    var baseUrl = $@"{videoUrl.Scheme}://{videoUrl.Host}" +
-                                                  string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1));
-
-                                    Configuration.Default.BaseUri = new Uri(baseUrl, UriKind.Absolute);
-
-                                    string m3u8List;
-
-                                    try
+                                    if (videoInfo.Format.ToLower() == "hls") // m3u8 format.
                                     {
-                                        m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
+                                        var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
 
-                                        if (string.IsNullOrEmpty(m3u8List))
+                                        var baseUrl = $@"{videoUrl.Scheme}://{videoUrl.Host}" +
+                                                      string.Join(
+                                                          "", videoUrl.Segments.Take(videoUrl.Segments.Length - 1));
+
+                                        Configuration.Default.BaseUri = new Uri(baseUrl, UriKind.Absolute);
+
+                                        string m3u8List;
+
+                                        try
                                         {
-                                            Log($"下载课程 {unitFileName} 的视频列表失败.");
+                                            m3u8List = await mooc.DownloadM3U8ListAsync(videoUrl);
+
+                                            if (string.IsNullOrEmpty(m3u8List))
+                                            {
+                                                Log($"下载课程 {unitFileName} 的视频列表失败.");
+                                                break;
+                                            }
+                                        }
+                                        catch (Exception exception)
+                                        {
+                                            Log($"下载课程 {unitFileName} 的视频列表发生错误, 原因: {exception.Message}");
                                             break;
                                         }
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        Log($"下载课程 {unitFileName} 的视频列表发生错误, 原因: {exception.Message}");
-                                        break;
-                                    }
 
-                                    try
-                                    {
-                                        using var reader   = new M3UFileReader(m3u8List);
-                                        var       m3u8Info = reader.Read();
-                                        var       merger   = new StringBuilder();
-
-                                        for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
+                                        try
                                         {
-                                            UpdateCurrentBar(CalculatePercentage(i + 1, m3u8Info.MediaFiles.Count));
+                                            using var reader   = new M3UFileReader(m3u8List);
+                                            var       m3u8Info = reader.Read();
+                                            var       merger   = new StringBuilder();
 
-                                            var tsSavedName          = $@"{unitFileName}-{i:00}.ts";
-                                            var downloadVideoSuccess = false;
-
-                                            for (var j = 0; j < MAX_TIMES; j++)
+                                            for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
                                             {
-                                                try
-                                                {
-                                                    var tsBytes =
-                                                        await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+                                                UpdateCurrentBar(CalculatePercentage(i + 1, m3u8Info.MediaFiles.Count));
 
-                                                    if (tsBytes is null)
+                                                var tsSavedName          = $@"{unitFileName}-{i:00}.ts";
+                                                var downloadVideoSuccess = false;
+
+                                                for (var j = 0; j < MAX_TIMES; j++)
+                                                {
+                                                    try
                                                     {
-                                                        Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                        var tsBytes =
+                                                            await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+
+                                                        if (tsBytes is null)
+                                                        {
+                                                            Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
+                                                        }
+                                                        else
+                                                        {
+                                                            File.WriteAllBytes(
+                                                                Path.Combine(unitPath, tsSavedName), tsBytes);
+                                                            merger.AppendLine(
+                                                                $@"file '{Path.Combine(unitPath, tsSavedName)}'"
+                                                            ); // combine ts file path and add to list.
+
+                                                            courseVideo.TSFiles.Add(tsSavedName);
+                                                            downloadVideoSuccess = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    catch (Exception exception)
+                                                    {
+                                                        Log(
+                                                            $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
+                                                        );
                                                         await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                                     }
-                                                    else
-                                                    {
-                                                        File.WriteAllBytes(
-                                                            Path.Combine(unitPath, tsSavedName), tsBytes);
-                                                        merger.AppendLine(
-                                                            $@"file '{Path.Combine(unitPath, tsSavedName)}'"
-                                                        ); // combine ts file path and add to list.
-
-                                                        courseVideo.TSFiles.Add(tsSavedName);
-                                                        downloadVideoSuccess = true;
-                                                        break;
-                                                    }
                                                 }
-                                                catch (Exception exception)
+
+                                                if (!downloadVideoSuccess)
                                                 {
-                                                    Log(
-                                                        $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
-                                                    );
-                                                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
+                                                    Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
                                                 }
                                             }
 
-                                            if (!downloadVideoSuccess)
-                                            {
-                                                Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
-                                            }
+                                            Log($@"课程 {unitFileName} 已下载完成.");
+
+                                            File.WriteAllText(
+                                                Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"),
+                                                merger.ToString()
+                                            );
+
+                                            FFmpegWorker.Instance.Enqueue(courseVideo);
+                                        }
+                                        catch (Exception exception)
+                                        {
+                                            Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                        }
+                                    }
+                                    else if (videoInfo.Format.ToLower() == "mp4")
+                                    {
+                                        var mp4Url = string.Empty;
+
+                                        switch (_config.VideoQuality)
+                                        {
+                                            case VideoQuality.SD:
+                                                mp4Url = unitResult.VideoVo.Mp4SdUrl;
+                                                break;
+                                            case VideoQuality.HD:
+                                                mp4Url = unitResult.VideoVo.Mp4HdUrl;
+                                                break;
+                                            case VideoQuality.UHD:
+                                                mp4Url = unitResult.VideoVo.Mp4ShdUrl;
+                                                break;
                                         }
 
-                                        Log($@"课程 {unitFileName} 已下载完成.");
+                                        if (string.IsNullOrEmpty(mp4Url))
+                                        {
+                                            mp4Url = videoInfo.VideoUrl;
+                                        }
 
-                                        File.WriteAllText(
-                                            Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"), merger.ToString()
-                                        );
+                                        for (var i = 0; i < MAX_TIMES; i++)
+                                        {
+                                            try
+                                            {
+                                                var videoBytes = await mooc.DownloadVideoAsync(mp4Url);
 
-                                        FFmpegWorker.Instance.Enqueue(courseVideo);
+                                                if (videoBytes is null)
+                                                {
+                                                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                    Log($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                }
+                                                else
+                                                {
+                                                    File.WriteAllBytes(
+                                                        Path.Combine(unitPath, $"{unitFileName}.mp4"), videoBytes
+                                                    );
+                                                    break;
+                                                }
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                            }
+                                        }
                                     }
-                                    catch (Exception exception)
+                                    else if (videoInfo.Format.ToLower() == "flv")
                                     {
-                                        Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                        var flvUrl = string.Empty;
+
+                                        switch (_config.VideoQuality)
+                                        {
+                                            case VideoQuality.SD:
+                                                flvUrl = unitResult.VideoVo.FlvSdUrl;
+                                                break;
+                                            case VideoQuality.HD:
+                                                flvUrl = unitResult.VideoVo.FlvHdUrl;
+                                                break;
+                                            case VideoQuality.UHD:
+                                                flvUrl = unitResult.VideoVo.FlvShdUrl;
+                                                break;
+                                        }
+
+                                        if (string.IsNullOrEmpty(flvUrl))
+                                        {
+                                            flvUrl = videoInfo.VideoUrl;
+                                        }
+
+                                        for (var i = 0; i < MAX_TIMES; i++)
+                                        {
+                                            try
+                                            {
+                                                var videoBytes = await mooc.DownloadVideoAsync(flvUrl);
+
+                                                if (videoBytes is null)
+                                                {
+                                                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                    Log($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                }
+                                                else
+                                                {
+                                                    File.WriteAllBytes(
+                                                        Path.Combine(unitPath, $"{unitFileName}.flv"), videoBytes
+                                                    );
+                                                    break;
+                                                }
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -299,6 +299,23 @@ namespace MoocDownloader.App.Mooc
         }
 
         /// <summary>
+        /// download video file from url.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<byte[]> DownloadVideoAsync(string url)
+        {
+            var request  = new HttpRequestMessage(HttpMethod.Get, url);
+            var response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Download m3u8 play list from url.
         /// </summary>
         /// <param name="videoUrl">url of m3u8 file.</param>
