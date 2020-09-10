@@ -33,9 +33,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.CurrentVersionLabel = new System.Windows.Forms.Label();
             this.NewVersionLabel = new System.Windows.Forms.Label();
-            this.UpdateMessageTextBox = new System.Windows.Forms.TextBox();
             this.CancelDownloadButton = new System.Windows.Forms.Button();
             this.DownloadNewVersionButton = new System.Windows.Forms.Button();
+            this.UpdateMessageTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -89,19 +89,6 @@
             this.NewVersionLabel.TabIndex = 0;
             this.NewVersionLabel.Text = "0.0.0.0";
             // 
-            // UpdateMessageTextBox
-            // 
-            this.UpdateMessageTextBox.BackColor = System.Drawing.Color.White;
-            this.UpdateMessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.UpdateMessageTextBox.Location = new System.Drawing.Point(83, 67);
-            this.UpdateMessageTextBox.Multiline = true;
-            this.UpdateMessageTextBox.Name = "UpdateMessageTextBox";
-            this.UpdateMessageTextBox.ReadOnly = true;
-            this.UpdateMessageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.UpdateMessageTextBox.Size = new System.Drawing.Size(278, 125);
-            this.UpdateMessageTextBox.TabIndex = 1;
-            this.UpdateMessageTextBox.Text = "程序更新说明";
-            // 
             // CancelDownloadButton
             // 
             this.CancelDownloadButton.Location = new System.Drawing.Point(286, 205);
@@ -122,6 +109,17 @@
             this.DownloadNewVersionButton.UseVisualStyleBackColor = true;
             this.DownloadNewVersionButton.Click += new System.EventHandler(this.DownloadNewVersionButton_Click);
             // 
+            // UpdateMessageTextBox
+            // 
+            this.UpdateMessageTextBox.BackColor = System.Drawing.Color.White;
+            this.UpdateMessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.UpdateMessageTextBox.Location = new System.Drawing.Point(83, 66);
+            this.UpdateMessageTextBox.Multiline = true;
+            this.UpdateMessageTextBox.Name = "UpdateMessageTextBox";
+            this.UpdateMessageTextBox.ReadOnly = true;
+            this.UpdateMessageTextBox.Size = new System.Drawing.Size(278, 133);
+            this.UpdateMessageTextBox.TabIndex = 3;
+            // 
             // VersionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -130,12 +128,12 @@
             this.ClientSize = new System.Drawing.Size(379, 240);
             this.Controls.Add(this.DownloadNewVersionButton);
             this.Controls.Add(this.CancelDownloadButton);
-            this.Controls.Add(this.UpdateMessageTextBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.NewVersionLabel);
             this.Controls.Add(this.CurrentVersionLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.UpdateMessageTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "VersionForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -153,8 +151,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label CurrentVersionLabel;
         private System.Windows.Forms.Label NewVersionLabel;
-        private System.Windows.Forms.TextBox UpdateMessageTextBox;
         private System.Windows.Forms.Button CancelDownloadButton;
         private System.Windows.Forms.Button DownloadNewVersionButton;
+        private System.Windows.Forms.TextBox UpdateMessageTextBox;
     }
 }
