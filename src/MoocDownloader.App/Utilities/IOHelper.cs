@@ -19,8 +19,14 @@ namespace MoocDownloader.App.Utilities
             var fixedName    = new string(name.Where(m => !invalidChars.Contains(m)).ToArray());
 
             var lastIndex = fixedName.LastIndexOf('.');
-            var prefix    = fixedName.Substring(0, lastIndex).Replace(".", "").Trim();
-            var postfix   = fixedName.Substring(lastIndex);
+
+            if (lastIndex == -1)
+            {
+                return fixedName;
+            }
+
+            var prefix  = fixedName.Substring(0, lastIndex).Replace(".", "").Trim();
+            var postfix = fixedName.Substring(lastIndex);
 
             return prefix + postfix;
         }
