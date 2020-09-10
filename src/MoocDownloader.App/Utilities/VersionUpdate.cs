@@ -18,7 +18,11 @@ namespace MoocDownloader.App.Utilities
         /// Link for update.
         /// </summary>
         private const string UPDATE_URL =
+#if DEBUG
+            @"https://yufan.io/xinqian/mooc-downloader-update/raw/branch/master/test-mooc-version.json";
+#else
             @"https://yufan.io/xinqian/mooc-downloader-update/raw/branch/master/mooc-version.json";
+#endif
 
         public VersionUpdate()
         {
