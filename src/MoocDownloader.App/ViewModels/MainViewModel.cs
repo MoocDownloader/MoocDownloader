@@ -221,9 +221,9 @@ namespace MoocDownloader.App.ViewModels
             {
                 course = DeserializeObject<CourseModel>(moocTermJson);
 
-                if (course is null || course?.Chapters?.Count == 0)
+                if (course is null || course.Chapters?.Count == 0)
                 {
-                    Log($"未提取到课程数据, 请检查课程是否开课.");
+                    Log("未提取到课程数据, 请检查课程是否开课.");
 
                     return;
                 }
@@ -392,59 +392,71 @@ namespace MoocDownloader.App.ViewModels
                                         break;
                                     }
 
-                                    using var reader   = new M3UFileReader(m3u8List);
-                                    var       m3u8Info = reader.Read();
-                                    var       merger   = new StringBuilder();
-
-                                    for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
+                                    try
                                     {
-                                        UpdateCurrentBar(CalculatePercentage(i + 1, m3u8Info.MediaFiles.Count));
+                                        using var reader   = new M3UFileReader(m3u8List);
+                                        var       m3u8Info = reader.Read();
+                                        var       merger   = new StringBuilder();
 
-                                        var tsSavedName = $@"{unitFileName}-{i:00}.ts";
-
-                                        for (var j = 0; j < MAX_TIMES; j++)
+                                        for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
                                         {
-                                            try
-                                            {
-                                                var tsBytes =
-                                                    await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+                                            UpdateCurrentBar(CalculatePercentage(i + 1, m3u8Info.MediaFiles.Count));
 
-                                                if (tsBytes is null)
+                                            var tsSavedName          = $@"{unitFileName}-{i:00}.ts";
+                                            var downloadVideoSuccess = false;
+
+                                            for (var j = 0; j < MAX_TIMES; j++)
+                                            {
+                                                try
                                                 {
-                                                    Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                    var tsBytes =
+                                                        await mooc.DownloadM3U8TSAsync(m3u8Info.MediaFiles[i].Uri);
+
+                                                    if (tsBytes is null)
+                                                    {
+                                                        Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
+                                                    }
+                                                    else
+                                                    {
+                                                        File.WriteAllBytes(
+                                                            Path.Combine(unitPath, tsSavedName), tsBytes);
+                                                        merger.AppendLine(
+                                                            $@"file '{Path.Combine(unitPath, tsSavedName)}'"
+                                                        ); // combine ts file path and add to list.
+
+                                                        courseVideo.TSFiles.Add(tsSavedName);
+                                                        downloadVideoSuccess = true;
+                                                        break;
+                                                    }
+                                                }
+                                                catch (Exception exception)
+                                                {
+                                                    Log(
+                                                        $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
+                                                    );
                                                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                                 }
-                                                else
-                                                {
-                                                    File.WriteAllBytes(Path.Combine(unitPath, tsSavedName), tsBytes);
-                                                    merger.AppendLine(
-                                                        $@"file '{Path.Combine(unitPath, tsSavedName)}'"
-                                                    ); // combine ts file path and add to list.
-
-                                                    courseVideo.TSFiles.Add(tsSavedName);
-
-                                                    break;
-                                                }
                                             }
-                                            catch (Exception exception)
+
+                                            if (!downloadVideoSuccess)
                                             {
-                                                Log(
-                                                    $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
-                                                );
-                                                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
+                                                Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
                                             }
                                         }
 
-                                        Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
+                                        Log($@"课程 {unitFileName} 已下载完成.");
+
+                                        File.WriteAllText(
+                                            Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"), merger.ToString()
+                                        );
+
+                                        FFmpegWorker.Instance.Enqueue(courseVideo);
                                     }
-
-                                    Log($@"课程 {unitFileName} 已下载完成.");
-
-                                    File.WriteAllText(
-                                        Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"), merger.ToString()
-                                    );
-
-                                    FFmpegWorker.Instance.Enqueue(courseVideo);
+                                    catch (Exception exception)
+                                    {
+                                        Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                    }
                                 }
                             }
                                 break;
@@ -455,8 +467,9 @@ namespace MoocDownloader.App.ViewModels
                                     break;
                                 }
 
-                                var documentUrl = unitResult.TextOrigUrl;
-                                var fileName    = $@"{unitFileName}.pdf";
+                                var documentUrl        = unitResult.TextOrigUrl;
+                                var fileName           = $@"{unitFileName}.pdf";
+                                var downloadDocSuccess = false;
 
                                 Log($@"准备下载文档: {fileName}");
 
@@ -474,7 +487,7 @@ namespace MoocDownloader.App.ViewModels
                                         else
                                         {
                                             File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
-
+                                            downloadDocSuccess = true;
                                             Log($@"文档 {fileName} 已下载完成.");
                                             break;
                                         }
@@ -486,7 +499,10 @@ namespace MoocDownloader.App.ViewModels
                                     }
                                 }
 
-                                Log($"下载文档 {fileName} 失败, 已跳过.");
+                                if (!downloadDocSuccess)
+                                {
+                                    Log($"下载文档 {fileName} 失败, 已跳过.");
+                                }
                             }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
@@ -498,10 +514,11 @@ namespace MoocDownloader.App.ViewModels
 
                                 const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
 
-                                var content       = JObject.Parse(unit.JsonContent);
-                                var nosKey        = content["nosKey"]?.ToString();
-                                var fileName      = content["fileName"]?.ToString();
-                                var attachmentUrl = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+                                var content            = JObject.Parse(unit.JsonContent);
+                                var nosKey             = content["nosKey"]?.ToString();
+                                var fileName           = content["fileName"]?.ToString();
+                                var attachmentUrl      = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+                                var downloadAttSuccess = false;
 
                                 Log($@"准备下载附件: {fileName}");
 
@@ -522,6 +539,7 @@ namespace MoocDownloader.App.ViewModels
                                                 Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"),
                                                 attachment
                                             );
+                                            downloadAttSuccess = true;
 
                                             Log($@"附件 {fileName} 已下载完成.");
                                             break;
@@ -534,7 +552,10 @@ namespace MoocDownloader.App.ViewModels
                                     }
                                 }
 
-                                Log($"下载附件 {fileName} 失败, 已跳过.");
+                                if (!downloadAttSuccess)
+                                {
+                                    Log($"下载附件 {fileName} 失败, 已跳过.");
+                                }
                             }
                                 break;
                             default: // not recognized type
