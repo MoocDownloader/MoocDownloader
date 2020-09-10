@@ -107,6 +107,20 @@ namespace MoocDownloader.App.ViewModels
                 return;
             }
 
+            if (!Uri.TryCreate(_config.CourseUrl, UriKind.RelativeOrAbsolute, out _))
+            {
+                var builder = new StringBuilder();
+
+                builder.AppendLine("课程链接无法解析:");
+                builder.AppendLine(_config.CourseUrl);
+                builder.AppendLine("请检查链接.");
+
+                MessageBox.Show(
+                    builder.ToString(), @"提示", MessageBoxButtons.OK, MessageBoxIcon.Warning
+                );
+                return;
+            }
+
             var courseUrl = _config.CourseUrl;
 
             if (!_config.IsDownloadDocument
@@ -696,6 +710,9 @@ namespace MoocDownloader.App.ViewModels
             if (_isCancel)
             {
                 Log("已取消下载.");
+
+                UpdateTotalBar(0);
+                UpdateCurrentBar(0);
             }
             else
             {
