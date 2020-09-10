@@ -69,30 +69,28 @@ namespace MoocDownloader.App.M3U8
             if (cache != null)
                 return cache;
 
-            using (var reader = new LineReader(adapter))
+            using var reader = new LineReader(adapter);
+            if (!reader.MoveNext())
+                throw new InvalidDataException("Invalid M3U file.");
+            if (!string.Equals(reader.Current?.Trim(), "#EXTM3U"))
+                throw new InvalidDataException("Missing M3U header.");
+
+            var fileInfo = new M3UFileInfo();
+            while (reader.MoveNext())
             {
-                if (!reader.MoveNext())
-                    throw new InvalidDataException("Invalid M3U file.");
-                if (!string.Equals(reader.Current?.Trim(), "#EXTM3U"))
-                    throw new InvalidDataException("Missing M3U header.");
-
-                var fileInfo = new M3UFileInfo();
-                while (reader.MoveNext())
+                var flag = false;
+                foreach (var attributeReader in attributeReaders)
                 {
-                    var flag = false;
-                    foreach (var attributeReader in attributeReaders)
-                    {
-                        flag = attributeReader.Read(reader, fileInfo);
-                        if (flag)
-                            break;
-                    }
-
+                    flag = attributeReader.Read(reader, fileInfo);
                     if (flag)
                         break;
                 }
 
-                return cache = fileInfo;
+                if (flag)
+                    break;
             }
+
+            return cache = fileInfo;
         }
     }
 }
