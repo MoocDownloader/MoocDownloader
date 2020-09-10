@@ -50,6 +50,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.RunningLogListBox = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ClearCourseUrlButton = new System.Windows.Forms.Button();
             this.CancelDownloadButton = new System.Windows.Forms.Button();
             this.MainFormMenuStrip = new System.Windows.Forms.MenuStrip();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +86,6 @@
             this.CurrentToolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ClearCourseUrlButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -333,6 +333,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "课程设置";
             // 
+            // ClearCourseUrlButton
+            // 
+            this.ClearCourseUrlButton.Location = new System.Drawing.Point(208, 104);
+            this.ClearCourseUrlButton.Name = "ClearCourseUrlButton";
+            this.ClearCourseUrlButton.Size = new System.Drawing.Size(40, 23);
+            this.ClearCourseUrlButton.TabIndex = 3;
+            this.ClearCourseUrlButton.Text = "清空";
+            this.ClearCourseUrlButton.UseVisualStyleBackColor = true;
+            this.ClearCourseUrlButton.Click += new System.EventHandler(this.ClearCourseUrlButton_Click);
+            // 
             // CancelDownloadButton
             // 
             this.CancelDownloadButton.BackColor = System.Drawing.Color.DarkOrange;
@@ -376,7 +386,7 @@
             // StartDownloadToolStripMenuItem
             // 
             this.StartDownloadToolStripMenuItem.Name = "StartDownloadToolStripMenuItem";
-            this.StartDownloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.StartDownloadToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.StartDownloadToolStripMenuItem.Text = "开始下载";
             this.StartDownloadToolStripMenuItem.Click += new System.EventHandler(this.StartDownloadToolStripMenuItem_Click);
             // 
@@ -384,19 +394,19 @@
             // 
             this.CancelDownloadToolStripMenuItem.Enabled = false;
             this.CancelDownloadToolStripMenuItem.Name = "CancelDownloadToolStripMenuItem";
-            this.CancelDownloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.CancelDownloadToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.CancelDownloadToolStripMenuItem.Text = "取消下载";
             this.CancelDownloadToolStripMenuItem.Click += new System.EventHandler(this.CancelDownloadToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(123, 6);
             // 
             // ExitToolStripMenuItem
             // 
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ExitToolStripMenuItem.Text = "退出";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -534,33 +544,33 @@
             // ViewHelpToolStripMenuItem
             // 
             this.ViewHelpToolStripMenuItem.Name = "ViewHelpToolStripMenuItem";
-            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ViewHelpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.ViewHelpToolStripMenuItem.Text = "查看帮助";
             this.ViewHelpToolStripMenuItem.Click += new System.EventHandler(this.ViewHelpToolStripMenuItem_Click);
             // 
             // UpdateToolStripMenuItem
             // 
             this.UpdateToolStripMenuItem.Name = "UpdateToolStripMenuItem";
-            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.UpdateToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.UpdateToolStripMenuItem.Text = "更新程序";
             this.UpdateToolStripMenuItem.Click += new System.EventHandler(this.UpdateToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(123, 6);
             // 
             // FeedbackToolStripMenuItem
             // 
             this.FeedbackToolStripMenuItem.Name = "FeedbackToolStripMenuItem";
-            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.FeedbackToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.FeedbackToolStripMenuItem.Text = "反馈";
             this.FeedbackToolStripMenuItem.Click += new System.EventHandler(this.FeedbackToolStripMenuItem_Click);
             // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
-            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.AboutToolStripMenuItem.Text = "关于";
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -641,16 +651,6 @@
             this.StatusToolStripStatusLabel.Size = new System.Drawing.Size(59, 17);
             this.StatusToolStripStatusLabel.Text = "准备就绪";
             // 
-            // ClearCourseUrlButton
-            // 
-            this.ClearCourseUrlButton.Location = new System.Drawing.Point(208, 104);
-            this.ClearCourseUrlButton.Name = "ClearCourseUrlButton";
-            this.ClearCourseUrlButton.Size = new System.Drawing.Size(40, 23);
-            this.ClearCourseUrlButton.TabIndex = 3;
-            this.ClearCourseUrlButton.Text = "清空";
-            this.ClearCourseUrlButton.UseVisualStyleBackColor = true;
-            this.ClearCourseUrlButton.Click += new System.EventHandler(this.ClearCourseUrlButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -671,6 +671,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "中国大学 MOOC 下载器";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

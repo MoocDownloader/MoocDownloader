@@ -62,6 +62,18 @@ namespace MoocDownloader.App.Views
         }
 
         /// <summary>
+        /// window closing.
+        /// </summary>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show(@"确认关闭程序.", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)
+             != DialogResult.OK)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
         /// Write log.
         /// </summary>
         /// <param name="message">log message.</param>
