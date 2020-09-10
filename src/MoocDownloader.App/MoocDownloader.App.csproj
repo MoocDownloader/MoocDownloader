@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>MoocDownloader.App</RootNamespace>
     <AssemblyName>MoocDownloader.App</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -197,6 +197,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(SolutionDir)packages\Geckofx60.64.60.0.47\content\ $(TargetDir) /E /Y</PostBuildEvent>
+  </PropertyGroup>
   <Import Project="..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets" Condition="Exists('..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -204,7 +207,4 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Geckofx60.64.60.0.47\build\Geckofx60.64.targets'))" />
   </Target>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy $(SolutionDir)packages\Geckofx60.64.60.0.47\content\ $(TargetDir) /E /Y</PostBuildEvent>
-  </PropertyGroup>
 </Project>
