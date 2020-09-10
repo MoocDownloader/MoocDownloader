@@ -34,7 +34,11 @@ namespace MoocDownloader.App
             }
             else
             {
+#if DEBUG
+                // In debug mode, ignore browser file emptying.
+#else
                 DeleteFiles(profilePath);
+#endif
             }
 
             Xpcom.ProfileDirectory = profilePath;
