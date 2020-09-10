@@ -223,6 +223,11 @@ namespace MoocDownloader.App.ViewModels
                                 break;
                             case UnitType.Video: // video type.
                             {
+                                if (!_config.IsDownloadVideo)
+                                {
+                                    break;
+                                }
+
                                 // get access token.
                                 var tokenJSON = await mooc.GetResourceTokenJsonAsync(
                                     $"{unit.Id}", $@"{unit.TermId}", $"{unit.ContentType}"
@@ -242,15 +247,18 @@ namespace MoocDownloader.App.ViewModels
                                 Log($@"下载视频: {unitFileName}");
 
                                 // subtitles
-                                foreach (var caption in video.Result.SrtCaptions)
+                                if (_config.IsDownloadSubtitle)
                                 {
-                                    // subtitle file. E.g:
-                                    //  01-第一节 Java明天 视频.zh.srt
-                                    //  01-第一节 Java明天 视频.en.srt
-                                    var srtName    = $@"{unitFileName}.{caption.LanguageCode}.srt";
-                                    var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
+                                    foreach (var caption in video.Result.SrtCaptions)
+                                    {
+                                        // subtitle file. E.g:
+                                        //  01-第一节 Java明天 视频.zh.srt
+                                        //  01-第一节 Java明天 视频.en.srt
+                                        var srtName    = $@"{unitFileName}.{caption.LanguageCode}.srt";
+                                        var srtContent = await mooc.DownloadSubtitleAsync(caption.Url);
 
-                                    File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
+                                        File.WriteAllBytes(Path.Combine(unitPath, srtName), srtContent);
+                                    }
                                 }
 
                                 var videoInfo = video.Result.Videos.FirstOrDefault(
@@ -274,7 +282,7 @@ namespace MoocDownloader.App.ViewModels
 
                                     for (var i = 0; i < m3u8Info.MediaFiles.Count && !_isCancel; i++)
                                     {
-                                        UpdateCurrentBar(CalculatePercentage(i, m3u8Info.MediaFiles.Count));
+                                        UpdateCurrentBar(CalculatePercentage(i + 1, m3u8Info.MediaFiles.Count));
 
                                         var tsSavedName = $@"{unitFileName}-{i:00}.ts";
 
@@ -312,6 +320,11 @@ namespace MoocDownloader.App.ViewModels
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
                             {
+                                if (!_config.IsDownloadDocument)
+                                {
+                                    break;
+                                }
+
                                 var documentUrl = unitResult.TextOrigUrl;
                                 var fileName    = $@"{unitFileName}.pdf";
 
@@ -337,6 +350,11 @@ namespace MoocDownloader.App.ViewModels
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
                             {
+                                if (!_config.IsDownloadAttachment)
+                                {
+                                    break;
+                                }
+
                                 const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
 
                                 var content       = JObject.Parse(unit.JsonContent);
