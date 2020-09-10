@@ -79,7 +79,7 @@ namespace MoocDownloader.App.ViewModels
 
         private int CalculatePercentage(int current, int max)
         {
-            var rate  = Convert.ToDouble(current + 1) / Convert.ToDouble(max) * 100D;
+            var rate  = Convert.ToDouble(current) / Convert.ToDouble(max) * 100D;
             var value = Convert.ToInt32(Math.Ceiling(rate));
 
             if (value > 100)
@@ -145,6 +145,8 @@ namespace MoocDownloader.App.ViewModels
             SetStatus("准备下载");
             Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
             SetUIStatus(false);
+            ResetCurrentBar();
+            ResetTotalBar();
 
             // 1. initializes a mooc request.
             var mooc = new MoocRequest(_cookies, courseUrl);
@@ -178,8 +180,8 @@ namespace MoocDownloader.App.ViewModels
                     for (var unitIndex = 0; unitIndex < lesson.Units.Count && !_isCancel; unitIndex++)
                     {
                         // update total progress bar.
-                        var totalMax     = course.Chapters.Count * chapter.Lessons.Count * lesson.Units.Count;
-                        var totalCurrent = chapterIndex * lessonIndex                    * unitIndex;
+                        var totalMax     = course.Chapters.Count + chapter.Lessons.Count + lesson.Units.Count;
+                        var totalCurrent = (chapterIndex + 1) + (lessonIndex + 1)        + (unitIndex + 1);
 
                         UpdateTotalBar(CalculatePercentage(totalCurrent, totalMax));
 
@@ -379,6 +381,8 @@ namespace MoocDownloader.App.ViewModels
             }
             else
             {
+                UpdateTotalBar(100);
+                UpdateCurrentBar(100);
                 SetStatus("下载完成");
                 Log("下载完成!");
             }
