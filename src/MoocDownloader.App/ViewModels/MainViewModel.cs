@@ -175,12 +175,14 @@ namespace MoocDownloader.App.ViewModels
                 if (string.IsNullOrEmpty(termId))
                 {
                     Log("获取课程 ID 失败, 请检查课程是否开课.");
+                    SetUIStatus(true);
                     return;
                 }
             }
             catch (Exception exception)
             {
                 Log($"获取课程 ID 失败, 原因: {exception.Message}");
+                SetUIStatus(true);
                 return;
             }
 
@@ -196,12 +198,14 @@ namespace MoocDownloader.App.ViewModels
                 if (string.IsNullOrEmpty(moocTermCode))
                 {
                     Log("获取课程信息失败, 请检查课程是否开课.");
+                    SetUIStatus(true);
                     return;
                 }
             }
             catch (Exception exception)
             {
                 Log($"获取课程信息失败, 原因: {exception.Message}");
+                SetUIStatus(true);
 
                 return;
             }
@@ -216,7 +220,8 @@ namespace MoocDownloader.App.ViewModels
 
                 if (string.IsNullOrEmpty(moocTermJson))
                 {
-                    Log($"未提取到课程数据, 请检查课程是否开课.");
+                    Log("未提取到课程数据, 请检查课程是否开课.");
+                    SetUIStatus(true);
 
                     return;
                 }
@@ -224,6 +229,7 @@ namespace MoocDownloader.App.ViewModels
             catch (Exception exception)
             {
                 Log($"提取课程数据失败, 原因: {exception.Message}");
+                SetUIStatus(true);
 
                 return;
             }
@@ -238,6 +244,7 @@ namespace MoocDownloader.App.ViewModels
                 if (course is null || course.Chapters?.Count == 0)
                 {
                     Log("未提取到课程数据, 请检查课程是否开课.");
+                    SetUIStatus(true);
 
                     return;
                 }
@@ -245,6 +252,7 @@ namespace MoocDownloader.App.ViewModels
             catch (Exception exception)
             {
                 Log($"计算课程数据时发生错误, 原因: {exception.Message}");
+                SetUIStatus(true);
                 return;
             }
 
@@ -255,6 +263,7 @@ namespace MoocDownloader.App.ViewModels
             catch (Exception exception)
             {
                 Log($"视频合并功能启动失败, 原因: {exception.Message}");
+                SetUIStatus(true);
                 return;
             }
 
@@ -711,8 +720,8 @@ namespace MoocDownloader.App.ViewModels
             {
                 Log("已取消下载.");
 
-                UpdateTotalBar(0);
-                UpdateCurrentBar(0);
+                ResetCurrentBar();
+                ResetTotalBar();
             }
             else
             {
@@ -720,6 +729,8 @@ namespace MoocDownloader.App.ViewModels
                 UpdateCurrentBar(100);
                 SetStatus("下载完成");
                 Log("下载完成!");
+
+                MessageBox.Show(@"下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
