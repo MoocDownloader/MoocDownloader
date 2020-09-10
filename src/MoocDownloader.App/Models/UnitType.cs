@@ -23,6 +23,11 @@
         Attachment = 4,
 
         /// <summary>
+        /// Examination
+        /// </summary>
+        Exam = 5,
+
+        /// <summary>
         /// Discuss.
         /// </summary>
         Discuss = 6,
