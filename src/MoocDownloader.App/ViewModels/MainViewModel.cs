@@ -559,7 +559,8 @@ namespace MoocDownloader.App.ViewModels
                             }
                                 break;
                             default: // not recognized type
-                                throw new ArgumentOutOfRangeException();
+                                Log($"当前课程单元: {unitFileName} 类型不支持下载, 已忽略.");
+                                break;
                         }
                     }
                 }

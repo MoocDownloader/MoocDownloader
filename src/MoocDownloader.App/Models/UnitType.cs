@@ -20,6 +20,11 @@
         /// <summary>
         /// Attachment.
         /// </summary>
-        Attachment = 4
+        Attachment = 4,
+
+        /// <summary>
+        /// Discuss.
+        /// </summary>
+        Discuss = 6,
     }
 }
