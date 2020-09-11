@@ -608,114 +608,12 @@ namespace MoocDownloader.App.ViewModels
                             }
                                 break;
                             case UnitType.Document: // document type. E.g pdf.
-                            {
-                                if (!_config.IsDownloadDocument)
-                                {
-                                    break;
-                                }
+                                await DownloadDocumentAsync(unitResult, unitFileName, mooc, unitPath);
 
-                                if (string.IsNullOrEmpty(unitResult.TextOrigUrl))
-                                {
-                                    Log("文档: unitFileName 下载链接为空, 跳过下载.");
-                                    break;
-                                }
-
-                                var documentUrl        = unitResult.TextOrigUrl;
-                                var fileName           = $@"{unitFileName}.pdf";
-                                var downloadDocSuccess = false;
-
-                                Log($@"准备下载文档: {fileName}");
-
-                                for (var i = 0; i < MAX_TIMES; i++)
-                                {
-                                    try
-                                    {
-                                        var document = await mooc.DownloadDocumentAsync(documentUrl);
-
-                                        if (document is null)
-                                        {
-                                            Log($"下载文档 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
-                                            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                        }
-                                        else
-                                        {
-                                            File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
-                                            downloadDocSuccess = true;
-                                            Log($@"文档 {fileName} 已下载完成.");
-                                            break;
-                                        }
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        Log($@"下载文档 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
-                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                    }
-                                }
-
-                                if (!downloadDocSuccess)
-                                {
-                                    Log($"下载文档 {fileName} 失败, 已跳过.");
-                                }
-                            }
                                 break;
                             case UnitType.Attachment: // attachment type. E.g source code.
-                            {
-                                if (!_config.IsDownloadAttachment)
-                                {
-                                    break;
-                                }
+                                await DownloadAttachmentAsync(unit, mooc, unitPath, unitFileName);
 
-                                const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
-
-                                if (string.IsNullOrEmpty(unit.JsonContent))
-                                {
-                                    Log($"附件 {unit?.Name} 下载链接为空, 跳过下载.");
-                                    break;
-                                }
-
-                                var content            = JObject.Parse(unit.JsonContent);
-                                var nosKey             = content["nosKey"]?.ToString();
-                                var fileName           = content["fileName"]?.ToString();
-                                var attachmentUrl      = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
-                                var downloadAttSuccess = false;
-
-                                Log($@"准备下载附件: {fileName}");
-
-                                for (var i = 0; i < MAX_TIMES; i++)
-                                {
-                                    try
-                                    {
-                                        var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
-
-                                        if (attachment is null)
-                                        {
-                                            Log($"下载附件 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
-                                            await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                        }
-                                        else
-                                        {
-                                            File.WriteAllBytes(
-                                                Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"),
-                                                attachment
-                                            );
-                                            downloadAttSuccess = true;
-
-                                            Log($@"附件 {fileName} 已下载完成.");
-                                            break;
-                                        }
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                        Log($@"下载附件 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
-                                    }
-                                }
-
-                                if (!downloadAttSuccess)
-                                {
-                                    Log($"下载附件 {fileName} 失败, 已跳过.");
-                                }
-                            }
                                 break;
                             default: // not recognized type
                                 Log($"当前课程单元: {unitFileName} 类型不支持下载, 已忽略.");
@@ -744,6 +642,118 @@ namespace MoocDownloader.App.ViewModels
                 MessageBox.Show(
                     $"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
+            }
+        }
+
+        private async Task DownloadDocumentAsync(UnitResultModel unitResult, string unitFileName, MoocRequest mooc,
+                                                 string          unitPath)
+        {
+            if (!_config.IsDownloadDocument)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(unitResult.TextOrigUrl))
+            {
+                Log("文档: unitFileName 下载链接为空, 跳过下载.");
+                return;
+            }
+
+            var documentUrl        = unitResult.TextOrigUrl;
+            var fileName           = $@"{unitFileName}.pdf";
+            var downloadDocSuccess = false;
+
+            Log($@"准备下载文档: {fileName}");
+
+            for (var i = 0; i < MAX_TIMES; i++)
+            {
+                try
+                {
+                    var document = await mooc.DownloadDocumentAsync(documentUrl);
+
+                    if (document is null)
+                    {
+                        Log($"下载文档 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
+                        downloadDocSuccess = true;
+                        Log($@"文档 {fileName} 已下载完成.");
+                        break;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log($@"下载文档 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
+                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                }
+            }
+
+            if (!downloadDocSuccess)
+            {
+                Log($"下载文档 {fileName} 失败, 已跳过.");
+            }
+        }
+
+        private async Task DownloadAttachmentAsync(UnitModel unit, MoocRequest mooc, string unitPath,
+                                                   string    unitFileName)
+        {
+            if (!_config.IsDownloadAttachment)
+            {
+                return;
+            }
+
+            const string attachmentBaseUrl = "https://www.icourse163.org/course/attachment.htm";
+
+            if (string.IsNullOrEmpty(unit.JsonContent))
+            {
+                Log($"附件 {unit?.Name} 下载链接为空, 跳过下载.");
+                return;
+            }
+
+            var content            = JObject.Parse(unit.JsonContent);
+            var nosKey             = content["nosKey"]?.ToString();
+            var fileName           = content["fileName"]?.ToString();
+            var attachmentUrl      = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
+            var downloadAttSuccess = false;
+
+            Log($@"准备下载附件: {fileName}");
+
+            for (var i = 0; i < MAX_TIMES; i++)
+            {
+                try
+                {
+                    var attachment = await mooc.DownloadAttachmentAsync(attachmentUrl);
+
+                    if (attachment is null)
+                    {
+                        Log($"下载附件 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(
+                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"),
+                            attachment
+                        );
+                        downloadAttSuccess = true;
+
+                        Log($@"附件 {fileName} 已下载完成.");
+                        break;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                    Log($@"下载附件 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
+                }
+            }
+
+            if (!downloadAttSuccess)
+            {
+                Log($"下载附件 {fileName} 失败, 已跳过.");
             }
         }
 
