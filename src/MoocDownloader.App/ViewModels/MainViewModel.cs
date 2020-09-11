@@ -156,14 +156,23 @@ namespace MoocDownloader.App.ViewModels
                 }
             }
 
+            // 1. initializes a mooc request.
+            MoocRequest mooc;
+            try
+            {
+                mooc = new MoocRequest(_cookies, courseUrl);
+            }
+            catch (Exception exception)
+            {
+                Log($@"登录信息有误, 需要重启软件. 原因: {exception.Message}.");
+                return;
+            }
+
             SetStatus("准备下载");
             Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
             SetUIStatus(false);
             ResetCurrentBar();
             ResetTotalBar();
-
-            // 1. initializes a mooc request.
-            var mooc = new MoocRequest(_cookies, courseUrl);
 
             // 2. get term id.
             string termId;
