@@ -189,6 +189,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ARIA2C\aria2c.exe" />
     <Content Include="Assets\Icons\app.ico" />
     <Content Include="Assets\Images\app.png" />
     <Content Include="FFMPEG\ffmpeg.exe">
