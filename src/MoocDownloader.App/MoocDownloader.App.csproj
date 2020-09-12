@@ -122,6 +122,7 @@
     <Compile Include="Mooc\FFmpegWorker.cs" />
     <Compile Include="Mooc\MoocCodeCorrector.cs" />
     <Compile Include="Mooc\MoocRequest.cs" />
+    <Compile Include="Utilities\AriaDownloader.cs" />
     <Compile Include="Utilities\IOHelper.cs" />
     <Compile Include="Utilities\JavaScriptHelper.cs" />
     <Compile Include="Utilities\VersionUpdate.cs" />

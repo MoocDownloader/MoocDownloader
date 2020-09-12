@@ -66,7 +66,7 @@ namespace MoocDownloader.App.ViewModels
                 {
                     if (_cookies.Any())
                     {
-                        Log(@"已收集到登录信息.");
+                        Log(@"登录成功! 已收集到登录信息.");
                     }
 
                     break;
@@ -306,7 +306,7 @@ namespace MoocDownloader.App.ViewModels
                 Log($"课程 {course.CourseName} 已下载完成!");
 
                 MessageBox.Show(
-                    $"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
+                    $@"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
             }
         }
@@ -735,6 +735,13 @@ namespace MoocDownloader.App.ViewModels
             var fileName           = content["fileName"]?.ToString();
             var attachmentUrl      = $@"{attachmentBaseUrl}?fileName={fileName}&nosKey={nosKey}";
             var downloadAttSuccess = false;
+            var attachSavePath     = Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}");
+
+            if (File.Exists(attachSavePath)) // exist attachment, skip.
+            {
+                Log($@"附件 {fileName} 已下载, 跳过.");
+                return;
+            }
 
             Log($@"准备下载附件: {fileName}");
 
@@ -751,10 +758,7 @@ namespace MoocDownloader.App.ViewModels
                     }
                     else
                     {
-                        File.WriteAllBytes(
-                            Path.Combine(unitPath, $@"{unitFileName}-{FixPath(fileName)}"),
-                            attachment
-                        );
+                        File.WriteAllBytes(attachSavePath, attachment);
                         downloadAttSuccess = true;
 
                         Log($@"附件 {fileName} 已下载完成.");
