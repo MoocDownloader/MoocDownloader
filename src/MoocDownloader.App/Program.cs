@@ -1,9 +1,9 @@
 ﻿using Gecko;
 using MoocDownloader.App.Views;
+using Serilog;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using Serilog;
 
 namespace MoocDownloader.App
 {
@@ -15,6 +15,8 @@ namespace MoocDownloader.App
         public const string FIREFOX_PATH = "Firefox";
 
         public const string FFMPEG_EXE = @".\ffmpeg\ffmpeg.exe";
+
+        public const string ARIA_EXE = @".\aria2c\aria2c.exe";
 
         /// <summary>
         /// gecko kernel temp path.
@@ -60,6 +62,14 @@ namespace MoocDownloader.App
             {
                 MessageBox.Show(
                     @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
+                );
+                return;
+            }
+
+            if (!File.Exists(ARIA_EXE))
+            {
+                MessageBox.Show(
+                    @"程序组件 ""ARIA2C"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
                 return;
             }

@@ -4,19 +4,20 @@ using MoocDownloader.App.Models.MoocModels;
 using MoocDownloader.App.Mooc;
 using MoocDownloader.App.Views;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Serilog;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
 using static Newtonsoft.Json.JsonConvert;
-using static Serilog.Log;
 
 namespace MoocDownloader.App.ViewModels
 {
@@ -565,20 +566,77 @@ namespace MoocDownloader.App.ViewModels
                                         {
                                             try
                                             {
-                                                var videoBytes = await mooc.DownloadVideoAsync(mp4Url);
+                                                //var videoBytes = await mooc.DownloadVideoAsync(mp4Url);
 
-                                                if (videoBytes is null)
-                                                {
-                                                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                    WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
-                                                }
-                                                else
-                                                {
-                                                    File.WriteAllBytes(mp4File, videoBytes);
+                                                //if (videoBytes is null)
+                                                //{
+                                                //    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                //    WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                //}
+                                                //else
+                                                //{
+                                                //    File.WriteAllBytes(mp4File, videoBytes);
 
-                                                    WriteLog($@"课程 {unitFileName} 已下载完成.");
-                                                    break;
-                                                }
+                                                //    WriteLog($@"课程 {unitFileName} 已下载完成.");
+                                                //    break;
+                                                //}
+                                                var argsBuilder = new StringBuilder();
+                                                var cmdWaiter   = new AutoResetEvent(false);
+
+                                                argsBuilder.Append(mp4Url);
+                                                argsBuilder.Append(
+                                                    @" --header=""Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"""
+                                                );
+                                                argsBuilder.Append(@" --check-certificate=false");
+                                                argsBuilder.Append(@" --max-connection-per-server=8");
+                                                argsBuilder.Append(@" --split=16");
+                                                argsBuilder.Append(@" --max-concurrent-downloads=16");
+                                                argsBuilder.Append(@" --min-split-size=4M");
+                                                argsBuilder.Append(@" --disk-cache=64M");
+                                                argsBuilder.Append(@" --referer=""http://www.icourse163.org""");
+                                                argsBuilder.Append($@" --out=""{unitFileName}.mp4""");
+                                                argsBuilder.Append($@" --dir=""{unitPath}""");
+
+                                                var args = argsBuilder.ToString();
+
+                                                Log.Information($"参数: {args}");
+
+                                                var process = new Process
+                                                {
+                                                    StartInfo =
+                                                    {
+                                                        FileName               = Program.ARIA_EXE, // command  
+                                                        Arguments              = args,             // arguments  
+                                                        CreateNoWindow         = true,
+                                                        UseShellExecute        = false, // do not create a window.  
+                                                        RedirectStandardInput  = true,  // redirect input.  
+                                                        RedirectStandardOutput = true,  // redirect output.  
+                                                        RedirectStandardError  = true   // redirect error.  
+                                                    },
+                                                    EnableRaisingEvents = true
+                                                };
+
+                                                process.OutputDataReceived += (sender, eventArgs) =>
+                                                {
+                                                    Console.WriteLine(eventArgs.Data);
+                                                };
+                                                process.ErrorDataReceived += (sender, eventArgs) =>
+                                                {
+                                                    Console.WriteLine(eventArgs.Data);
+                                                };
+
+                                                process.Exited += (sender, eventArgs) =>
+                                                {
+                                                    Console.WriteLine("退出了");
+                                                    cmdWaiter.Set();
+                                                };
+
+                                                process.Start();
+                                                cmdWaiter.WaitOne();
+
+                                                var code = process.ExitCode;
+
+                                                Log.Information($"code={code}");
                                             }
                                             catch (Exception exception)
                                             {
