@@ -3,6 +3,7 @@ using MoocDownloader.App.Views;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Serilog;
 
 namespace MoocDownloader.App
 {
@@ -13,7 +14,7 @@ namespace MoocDownloader.App
         /// </summary>
         public const string FIREFOX_PATH = "Firefox";
 
-        public const string FFMPEG = @".\ffmpeg\ffmpeg.exe";
+        public const string FFMPEG_EXE = @".\ffmpeg\ffmpeg.exe";
 
         /// <summary>
         /// gecko kernel temp path.
@@ -55,13 +56,20 @@ namespace MoocDownloader.App
                 return;
             }
 
-            if (!File.Exists(FFMPEG))
+            if (!File.Exists(FFMPEG_EXE))
             {
                 MessageBox.Show(
                     @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
                 return;
             }
+
+            Log.Logger = new LoggerConfiguration() // Logger.
+                        .MinimumLevel.Information()
+                        .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
+                        .CreateLogger();
+
+            Log.Information("=========程序启动=========");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

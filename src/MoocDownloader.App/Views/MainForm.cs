@@ -22,7 +22,7 @@ namespace MoocDownloader.App.Views
 
             _viewModel = new MainViewModel
             {
-                Log              = Log,
+                WriteLog         = Log,
                 SetStatus        = SetStatusText,
                 SetUIStatus      = SetUIStatus,
                 UpdateCurrentBar = UpdateCurrentProgressBar,
@@ -140,11 +140,13 @@ namespace MoocDownloader.App.Views
             {
                 DownloadTimeToolStripStatusLabel.Text = @"00:00:00";
                 StatusToolStripStatusLabel.Text       = @"准备就绪";
+                StartDownloadButton.Text              = @"开始下载";
                 MainTimer.Stop();
             }
             else
             {
-                _startTime = DateTime.Now;
+                StartDownloadButton.Text = @"正在下载";
+                _startTime               = DateTime.Now;
                 MainTimer.Start();
             }
 

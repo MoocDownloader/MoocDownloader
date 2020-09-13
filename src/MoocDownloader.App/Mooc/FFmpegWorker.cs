@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 namespace MoocDownloader.App.Mooc
 {
     /// <summary>
-    /// FFMPEG worker.
+    /// FFMPEG_EXE worker.
     /// </summary>
     public class FFmpegWorker
     {
-        private const string FFMPEG_EXE = @".\FFMPEG\ffmpeg.exe";
-
         private readonly ConcurrentQueue<CourseVideoInfo> _videoQueue;
         private readonly EventWaitHandle                  _handle;
 
@@ -67,8 +65,8 @@ namespace MoocDownloader.App.Mooc
                             {
                                 StartInfo =
                                 {
-                                    FileName               = FFMPEG_EXE, // command  
-                                    Arguments              = args,       // arguments  
+                                    FileName               = Program.FFMPEG_EXE, // command  
+                                    Arguments              = args,               // arguments  
                                     CreateNoWindow         = true,
                                     UseShellExecute        = false, // do not create a window.  
                                     RedirectStandardInput  = true,  // redirect input.  

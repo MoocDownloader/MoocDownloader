@@ -11,10 +11,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Serilog;
 using static MoocDownloader.App.Mooc.MoocCodeCorrector;
 using static MoocDownloader.App.Utilities.IOHelper;
 using static MoocDownloader.App.Utilities.JavaScriptHelper;
 using static Newtonsoft.Json.JsonConvert;
+using static Serilog.Log;
 
 namespace MoocDownloader.App.ViewModels
 {
@@ -43,7 +45,7 @@ namespace MoocDownloader.App.ViewModels
         /// <summary>
         /// Write log.
         /// </summary>
-        public Action<string> Log;
+        public Action<string> WriteLog;
 
         public Action<string> SetStatus;
         public Action<bool>   SetUIStatus;
@@ -66,13 +68,13 @@ namespace MoocDownloader.App.ViewModels
                 {
                     if (_cookies.Any())
                     {
-                        Log(@"登录成功! 已收集到登录信息.");
+                        WriteLog(@"登录成功! 已收集到登录信息.");
                     }
 
                     break;
                 }
                 case DialogResult.Cancel:
-                    Log(@"已取消登录.");
+                    WriteLog(@"已取消登录.");
                     break;
             }
         }
@@ -82,12 +84,7 @@ namespace MoocDownloader.App.ViewModels
             var rate  = Convert.ToDouble(current) / Convert.ToDouble(max) * 100D;
             var value = Convert.ToInt32(Math.Ceiling(rate));
 
-            if (value > 100)
-            {
-                return 100;
-            }
-
-            return value;
+            return value > 100 ? 100 : value;
         }
 
         /// <summary>
@@ -135,22 +132,22 @@ namespace MoocDownloader.App.ViewModels
             if (MessageBox.Show(@"开始下载?", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
              == DialogResult.Cancel)
             {
-                Log("取消下载.");
+                WriteLog("取消下载.");
                 return;
             }
 
             if (!Directory.Exists(_config.CourseSavePath))
             {
-                Log($@"路径: {_config.CourseSavePath} 不存在, 准备创建.");
+                WriteLog($@"路径: {_config.CourseSavePath} 不存在, 准备创建.");
 
                 try
                 {
                     Directory.CreateDirectory(_config.CourseSavePath);
-                    Log($@"路径: {_config.CourseSavePath} 创建成功.");
+                    WriteLog($@"路径: {_config.CourseSavePath} 创建成功.");
                 }
                 catch (Exception exception)
                 {
-                    Log($@"路径: {_config.CourseSavePath} 创建失败, 原因: {exception.Message}.");
+                    WriteLog($@"路径: {_config.CourseSavePath} 创建失败, 原因: {exception.Message}.");
                     return;
                 }
             }
@@ -163,12 +160,14 @@ namespace MoocDownloader.App.ViewModels
             }
             catch (Exception exception)
             {
-                Log($@"登录信息有误, 需要重启软件. 原因: {exception.Message}.");
+                WriteLog($@"登录信息有误, 需要重启软件. 原因: {exception.Message}.");
                 return;
             }
 
             SetStatus("准备下载");
-            Log($@"课程将会下载到文件夹: {_config.CourseSavePath}");
+
+            Log.Information($@"课程将会下载到文件夹: {_config.CourseSavePath}");
+            WriteLog($@"课程将会下载到文件夹: {_config.CourseSavePath}");
             SetUIStatus(false);
             ResetCurrentBar();
             ResetTotalBar();
@@ -182,20 +181,20 @@ namespace MoocDownloader.App.ViewModels
 
                 if (string.IsNullOrEmpty(termId))
                 {
-                    Log("获取课程 ID 失败, 请检查课程是否开课.");
+                    WriteLog("获取课程 ID 失败, 请检查课程是否开课.");
                     SetUIStatus(true);
                     return;
                 }
             }
             catch (Exception exception)
             {
-                Log($"获取课程 ID 失败, 原因: {exception.Message}");
+                WriteLog($"获取课程 ID 失败, 原因: {exception.Message}");
                 SetUIStatus(true);
                 return;
             }
 
             SetStatus("正在下载");
-            Log($@"提取到课程 ID 是 {termId}");
+            WriteLog($@"提取到课程 ID 是 {termId}");
 
             // 3. get Mooc term JavaScript code.
             string moocTermCode;
@@ -205,14 +204,14 @@ namespace MoocDownloader.App.ViewModels
 
                 if (string.IsNullOrEmpty(moocTermCode))
                 {
-                    Log("获取课程信息失败, 请检查课程是否开课.");
+                    WriteLog("获取课程信息失败, 请检查课程是否开课.");
                     SetUIStatus(true);
                     return;
                 }
             }
             catch (Exception exception)
             {
-                Log($"获取课程信息失败, 原因: {exception.Message}");
+                WriteLog($"获取课程信息失败, 原因: {exception.Message}");
                 SetUIStatus(true);
 
                 return;
@@ -228,7 +227,7 @@ namespace MoocDownloader.App.ViewModels
 
                 if (string.IsNullOrEmpty(moocTermJson))
                 {
-                    Log("未提取到课程数据, 请检查课程是否开课.");
+                    WriteLog("未提取到课程数据, 请检查课程是否开课.");
                     SetUIStatus(true);
 
                     return;
@@ -236,7 +235,7 @@ namespace MoocDownloader.App.ViewModels
             }
             catch (Exception exception)
             {
-                Log($"提取课程数据失败, 原因: {exception.Message}");
+                WriteLog($"提取课程数据失败, 原因: {exception.Message}");
                 SetUIStatus(true);
 
                 return;
@@ -251,17 +250,17 @@ namespace MoocDownloader.App.ViewModels
 
                 if (course is null || course.Chapters?.Count == 0)
                 {
-                    Log("未提取到课程数据, 请检查课程是否开课.");
+                    WriteLog("未提取到课程数据, 请检查课程是否开课.");
                     SetUIStatus(true);
 
                     return;
                 }
 
-                Log($@"准备开始下载课程: {course.CourseName}");
+                WriteLog($@"准备开始下载课程: {course.CourseName}");
             }
             catch (Exception exception)
             {
-                Log($"计算课程数据时发生错误, 原因: {exception.Message}");
+                WriteLog($"计算课程数据时发生错误, 原因: {exception.Message}");
                 SetUIStatus(true);
                 return;
             }
@@ -272,7 +271,7 @@ namespace MoocDownloader.App.ViewModels
             }
             catch (Exception exception)
             {
-                Log($"视频合并功能启动失败, 原因: {exception.Message}");
+                WriteLog($"视频合并功能启动失败, 原因: {exception.Message}");
                 SetUIStatus(true);
                 return;
             }
@@ -284,7 +283,7 @@ namespace MoocDownloader.App.ViewModels
             catch (Exception exception)
             {
                 SetUIStatus(true);
-                Log($"下载课程发生错误, 原因: {exception}");
+                WriteLog($"下载课程发生错误, 原因: {exception}");
 
                 return;
             }
@@ -293,7 +292,7 @@ namespace MoocDownloader.App.ViewModels
 
             if (_isCancel)
             {
-                Log("已取消下载.");
+                WriteLog("已取消下载.");
 
                 ResetCurrentBar();
                 ResetTotalBar();
@@ -303,7 +302,7 @@ namespace MoocDownloader.App.ViewModels
                 UpdateTotalBar(100);
                 UpdateCurrentBar(100);
                 SetStatus("下载完成");
-                Log($"课程 {course.CourseName} 已下载完成!");
+                WriteLog($"课程 {course.CourseName} 已下载完成!");
 
                 MessageBox.Show(
                     $@"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
@@ -313,37 +312,24 @@ namespace MoocDownloader.App.ViewModels
 
         private async Task DownloadCourseListAsync(CourseModel course, MoocRequest mooc)
         {
+            var total = course.Chapters.Sum(c => c.Lessons.Sum(l => l.Units.Count));
+            Log.Information($@"当前一共有 {total} 个课程单元.");
+
+            var current = 0;
+
             int chapterIndex;
             for (chapterIndex = 0; chapterIndex < course.Chapters.Count && !_isCancel; chapterIndex++)
             {
-                if (chapterIndex >= course.Chapters.Count)
-                {
-                    break;
-                }
-
                 var chapter = course.Chapters[chapterIndex];
 
                 for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count && !_isCancel; lessonIndex++)
                 {
-                    if (lessonIndex >= chapter.Lessons.Count)
-                    {
-                        break;
-                    }
-
                     var lesson = chapter.Lessons[lessonIndex];
 
                     for (var unitIndex = 0; unitIndex < lesson.Units.Count && !_isCancel; unitIndex++)
                     {
-                        if (unitIndex >= lesson.Units.Count)
-                        {
-                            break;
-                        }
-
                         // update total progress bar.
-                        var totalMax     = course.Chapters.Count + chapter.Lessons.Count + lesson.Units.Count;
-                        var totalCurrent = (chapterIndex + 1) + (lessonIndex + 1)        + (unitIndex + 1);
-
-                        UpdateTotalBar(CalculatePercentage(totalCurrent, totalMax));
+                        UpdateTotalBar(CalculatePercentage(++current, total));
 
                         var unit = lesson.Units[unitIndex];
 
@@ -403,8 +389,9 @@ namespace MoocDownloader.App.ViewModels
                                     VideoFileName = $@"{unitFileName}.mp4",
                                     MergeListFile = $@"{unitFileName}.text"
                                 };
+                                Log.Information($@"下载视频: {unitFileName}.mp4");
 
-                                Log($@"下载视频: {unitFileName}");
+                                WriteLog($@"下载视频: {unitFileName}");
 
                                 // subtitles
                                 if (_config.IsDownloadSubtitle)
@@ -415,6 +402,7 @@ namespace MoocDownloader.App.ViewModels
                                         //  01-第一节 Java明天 视频.zh.srt
                                         //  01-第一节 Java明天 视频.en.srt
                                         var srtName = $@"{unitFileName}.{caption.LanguageCode}.srt";
+                                        Log.Information($@"下载字幕: {srtName}");
 
                                         try
                                         {
@@ -422,7 +410,7 @@ namespace MoocDownloader.App.ViewModels
 
                                             if (srtContent is null)
                                             {
-                                                Log($"字幕 {srtName} 下载失败.");
+                                                WriteLog($"字幕 {srtName} 下载失败.");
 
                                                 break;
                                             }
@@ -431,7 +419,7 @@ namespace MoocDownloader.App.ViewModels
                                         }
                                         catch (Exception exception)
                                         {
-                                            Log($"字幕 {srtName} 下载失败, 原因: {exception.Message}");
+                                            WriteLog($"字幕 {srtName} 下载失败, 原因: {exception.Message}");
 
                                             break;
                                         }
@@ -443,13 +431,12 @@ namespace MoocDownloader.App.ViewModels
                                       && (VideoQuality) v.Quality == _config.VideoQuality
                                 );
 
-                                var videoFormat = videoInfo?.Format?.ToLower();
+                                var videoFormat = videoInfo.Format.ToLower();
 
-                                switch (videoFormat) // m3u8 format.
+                                switch (videoFormat)
                                 {
-                                    case "hls":
+                                    case "hls":                                     // m3u8 format.
                                         var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
-
                                         var baseUrl =
                                             $@"{videoUrl.Scheme}://{videoUrl.Host}" +
                                             string.Join("", videoUrl.Segments.Take(videoUrl.Segments.Length - 1));
@@ -464,13 +451,13 @@ namespace MoocDownloader.App.ViewModels
 
                                             if (string.IsNullOrEmpty(m3u8List))
                                             {
-                                                Log($"下载课程 {unitFileName} 的视频列表失败.");
+                                                WriteLog($"下载课程 {unitFileName} 的视频列表失败.");
                                                 break;
                                             }
                                         }
                                         catch (Exception exception)
                                         {
-                                            Log($"下载课程 {unitFileName} 的视频列表发生错误, 原因: {exception.Message}");
+                                            WriteLog($"下载课程 {unitFileName} 的视频列表发生错误, 原因: {exception.Message}");
                                             break;
                                         }
 
@@ -496,7 +483,9 @@ namespace MoocDownloader.App.ViewModels
 
                                                         if (tsBytes is null)
                                                         {
-                                                            Log($"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                            WriteLog(
+                                                                $"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次."
+                                                            );
                                                             await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                                         }
                                                         else
@@ -514,7 +503,7 @@ namespace MoocDownloader.App.ViewModels
                                                     }
                                                     catch (Exception exception)
                                                     {
-                                                        Log(
+                                                        WriteLog(
                                                             $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
                                                         );
                                                         await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
@@ -523,11 +512,11 @@ namespace MoocDownloader.App.ViewModels
 
                                                 if (!downloadVideoSuccess)
                                                 {
-                                                    Log($"下载视频片段 {tsSavedName} 失败, 已跳过.");
+                                                    WriteLog($"下载视频片段 {tsSavedName} 失败, 已跳过.");
                                                 }
                                             }
 
-                                            Log($@"课程 {unitFileName} 已下载完成.");
+                                            WriteLog($@"课程 {unitFileName} 已下载完成.");
 
                                             File.WriteAllText(
                                                 Path.Combine(unitPath, $@"{courseVideo.MergeListFile}"),
@@ -538,11 +527,18 @@ namespace MoocDownloader.App.ViewModels
                                         }
                                         catch (Exception exception)
                                         {
-                                            Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                            WriteLog($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
                                         }
 
                                         break;
                                     case "mp4":
+                                        var mp4File = Path.Combine(unitPath, $"{unitFileName}.mp4");
+
+                                        if (File.Exists(mp4File)) // exist mp4, skip.
+                                        {
+                                            WriteLog($@"课程: {$"{unitFileName}.mp4"} 已存在, 跳过下载.");
+                                        }
+
                                         var mp4Url = string.Empty;
 
                                         switch (_config.VideoQuality)
@@ -563,6 +559,8 @@ namespace MoocDownloader.App.ViewModels
                                             mp4Url = videoInfo.VideoUrl;
                                         }
 
+                                        Log.Information($@"{unitFileName} 的下载链接是: {mp4Url}");
+
                                         for (var i = 0; i < MAX_TIMES; i++)
                                         {
                                             try
@@ -572,22 +570,20 @@ namespace MoocDownloader.App.ViewModels
                                                 if (videoBytes is null)
                                                 {
                                                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                    Log($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                    WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
                                                 }
                                                 else
                                                 {
-                                                    File.WriteAllBytes(
-                                                        Path.Combine(unitPath, $"{unitFileName}.mp4"), videoBytes
-                                                    );
+                                                    File.WriteAllBytes(mp4File, videoBytes);
 
-                                                    Log($@"课程 {unitFileName} 已下载完成.");
+                                                    WriteLog($@"课程 {unitFileName} 已下载完成.");
                                                     break;
                                                 }
                                             }
                                             catch (Exception exception)
                                             {
                                                 await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                                WriteLog($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
                                             }
                                         }
 
@@ -613,6 +609,8 @@ namespace MoocDownloader.App.ViewModels
                                             flvUrl = videoInfo.VideoUrl;
                                         }
 
+                                        Log.Information($@"{unitFileName} 的下载链接是: {flvUrl}");
+
                                         for (var i = 0; i < MAX_TIMES; i++)
                                         {
                                             try
@@ -622,7 +620,7 @@ namespace MoocDownloader.App.ViewModels
                                                 if (videoBytes is null)
                                                 {
                                                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                    Log($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                    WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
                                                 }
                                                 else
                                                 {
@@ -630,14 +628,14 @@ namespace MoocDownloader.App.ViewModels
                                                         Path.Combine(unitPath, $"{unitFileName}.flv"), videoBytes
                                                     );
 
-                                                    Log($@"课程 {unitFileName} 已下载完成.");
+                                                    WriteLog($@"课程 {unitFileName} 已下载完成.");
                                                     break;
                                                 }
                                             }
                                             catch (Exception exception)
                                             {
                                                 await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                Log($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
+                                                WriteLog($"下载课程 {unitFileName} 的视频发生错误, 原因: {exception.Message}");
                                             }
                                         }
 
@@ -654,11 +652,32 @@ namespace MoocDownloader.App.ViewModels
 
                                 break;
                             default: // not recognized type
-                                Log($"当前课程单元: {unitFileName} 类型不支持下载, 已忽略.");
+                                WriteLog($"当前课程单元: {unitFileName} 类型不支持下载, 已忽略.");
                                 break;
                         }
                     }
                 }
+            }
+
+            SetUIStatus(true);
+
+            if (_isCancel)
+            {
+                WriteLog("已取消下载.");
+
+                ResetCurrentBar();
+                ResetTotalBar();
+            }
+            else
+            {
+                UpdateTotalBar(100);
+                UpdateCurrentBar(100);
+                SetStatus("下载完成");
+                WriteLog($"课程 {course.CourseName} 已下载完成!");
+
+                MessageBox.Show(
+                    $"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
             }
         }
 
@@ -672,7 +691,7 @@ namespace MoocDownloader.App.ViewModels
 
             if (string.IsNullOrEmpty(unitResult.TextOrigUrl))
             {
-                Log("文档: unitFileName 下载链接为空, 跳过下载.");
+                WriteLog("文档: unitFileName 下载链接为空, 跳过下载.");
                 return;
             }
 
@@ -680,7 +699,7 @@ namespace MoocDownloader.App.ViewModels
             var fileName           = $@"{unitFileName}.pdf";
             var downloadDocSuccess = false;
 
-            Log($@"准备下载文档: {fileName}");
+            WriteLog($@"准备下载文档: {fileName}");
 
             for (var i = 0; i < MAX_TIMES; i++)
             {
@@ -690,27 +709,27 @@ namespace MoocDownloader.App.ViewModels
 
                     if (document is null)
                     {
-                        Log($"下载文档 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                        WriteLog($"下载文档 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
                         await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
                     }
                     else
                     {
                         File.WriteAllBytes(Path.Combine(unitPath, fileName), document);
                         downloadDocSuccess = true;
-                        Log($@"文档 {fileName} 已下载完成.");
+                        WriteLog($@"文档 {fileName} 已下载完成.");
                         break;
                     }
                 }
                 catch (Exception exception)
                 {
-                    Log($@"下载文档 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
+                    WriteLog($@"下载文档 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
                 }
             }
 
             if (!downloadDocSuccess)
             {
-                Log($"下载文档 {fileName} 失败, 已跳过.");
+                WriteLog($"下载文档 {fileName} 失败, 已跳过.");
             }
         }
 
@@ -726,7 +745,7 @@ namespace MoocDownloader.App.ViewModels
 
             if (string.IsNullOrEmpty(unit.JsonContent))
             {
-                Log($"附件 {unit.Name} 下载链接为空, 跳过下载.");
+                WriteLog($"附件 {unit.Name} 下载链接为空, 跳过下载.");
                 return;
             }
 
@@ -739,11 +758,11 @@ namespace MoocDownloader.App.ViewModels
 
             if (File.Exists(attachSavePath)) // exist attachment, skip.
             {
-                Log($@"附件 {fileName} 已下载, 跳过.");
+                WriteLog($@"附件 {fileName} 已下载, 跳过.");
                 return;
             }
 
-            Log($@"准备下载附件: {fileName}");
+            WriteLog($@"准备下载附件: {fileName}");
 
             for (var i = 0; i < MAX_TIMES; i++)
             {
@@ -753,7 +772,7 @@ namespace MoocDownloader.App.ViewModels
 
                     if (attachment is null)
                     {
-                        Log($"下载附件 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                        WriteLog($"下载附件 {fileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
                         await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
                     }
                     else
@@ -761,20 +780,20 @@ namespace MoocDownloader.App.ViewModels
                         File.WriteAllBytes(attachSavePath, attachment);
                         downloadAttSuccess = true;
 
-                        Log($@"附件 {fileName} 已下载完成.");
+                        WriteLog($@"附件 {fileName} 已下载完成.");
                         break;
                     }
                 }
                 catch (Exception exception)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                    Log($@"下载附件 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
+                    WriteLog($@"下载附件 {fileName} 发生错误, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次.");
                 }
             }
 
             if (!downloadAttSuccess)
             {
-                Log($"下载附件 {fileName} 失败, 已跳过.");
+                WriteLog($"下载附件 {fileName} 失败, 已跳过.");
             }
         }
 
@@ -787,7 +806,7 @@ namespace MoocDownloader.App.ViewModels
 
             if (result == DialogResult.OK)
             {
-                Log("准备取消下载.");
+                WriteLog("准备取消下载.");
                 _isCancel = true;
             }
         }
