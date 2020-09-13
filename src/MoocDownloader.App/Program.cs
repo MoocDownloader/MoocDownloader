@@ -13,7 +13,7 @@ namespace MoocDownloader.App
         /// </summary>
         public const string FIREFOX_PATH = "Firefox";
 
-        public const string FFMPEG = @".\FFMPEG\ffmpeg.exe";
+        public const string FFMPEG = @".\ffmpeg\ffmpeg.exe";
 
         /// <summary>
         /// gecko kernel temp path.
