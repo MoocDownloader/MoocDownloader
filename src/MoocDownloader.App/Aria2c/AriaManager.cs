@@ -1,16 +1,21 @@
 ﻿using MoocDownloader.App.Aria2c.Attributes;
 using MoocDownloader.App.Aria2c.JsonRpc;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MoocDownloader.App.Aria2c
 {
     public class AriaManager
     {
+        private const string UAER_AGENT =
+            @"Moozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36";
+
+        private const string REFERER = @"http://www.icourse163.org";
+
         private readonly JsonRpcHttpClient RpcClient;
 
         public AriaManager(string rpcUrl = "http://localhost:6800/jsonrpc")
@@ -20,16 +25,13 @@ namespace MoocDownloader.App.Aria2c
 
         public static void Start(string aria)
         {
-            var args = $@"";
-
-            var cmdWaiter = new AutoResetEvent(false);
-
+            const string args = @"--enable-rpc=true --rpc-allow-origin-all=true";
             var process = new Process
             {
                 StartInfo =
                 {
-                    FileName               = Program.ARIA_EXE, // command  
-                    Arguments              = args,             // arguments  
+                    FileName               = aria, // command  
+                    Arguments              = args, // arguments  
                     CreateNoWindow         = true,
                     UseShellExecute        = false, // do not create a window.  
                     RedirectStandardInput  = true,  // redirect input.  
@@ -42,24 +44,30 @@ namespace MoocDownloader.App.Aria2c
             process.OutputDataReceived += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
             process.ErrorDataReceived  += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
 
-            process.Exited += (sender, eventArgs) => { cmdWaiter.Set(); };
+            process.Exited += (sender, eventArgs) => { };
 
-            process.Start();
+            var result = process.Start();
+
+            Log.Information($"启动 ARIA: {result}");
         }
 
-        public async Task<string> AddUri(List<string> uriList)
+        public async Task<string> AddUri(string url, string fileName, string path)
         {
-            return await RpcClient.Invoke<string>("aria2.addUri", uriList);
-        }
-
-        public async Task<string> AddUri(List<string> uriList, string userAgent, string referrer)
-        {
-            return await RpcClient.Invoke<string>("aria2.addUri", uriList,
-                new Dictionary<string, string>
+            return await RpcClient.Invoke<string>(
+                "aria2.addUri", new List<string> {url}, new Dictionary<string, string>
                 {
-                    {"user-agent", userAgent},
-                    {"referer", referrer}
-                });
+                    {"user-agent", UAER_AGENT},
+                    {"referer", REFERER},
+                    {"check-certificate", "false"},
+                    {"max-connection-per-server", "8"},
+                    {"split", "16"},
+                    {"max-concurrent-downloads", "16"},
+                    {"min-split-size", "4M"},
+                    {"disk-cache", "64M"},
+                    {"out", $@"""{fileName}.mp4"""},
+                    {"dir", $@"""{path}"""},
+                }
+            );
         }
 
         public async Task<string> AddMetaLink(string filePath)

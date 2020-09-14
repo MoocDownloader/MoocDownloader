@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using MoocDownloader.App.Aria2c;
 
 namespace MoocDownloader.App
 {
@@ -38,8 +39,16 @@ namespace MoocDownloader.App
             else
             {
 #if DEBUG
-                // In debug mode, ignore browser file emptying.
+                Log.Logger = new LoggerConfiguration() // Logger.
+                            .MinimumLevel.Verbose()
+                            .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
+                            .CreateLogger();
 #else
+                Log.Logger = new LoggerConfiguration() // Logger.
+                            .MinimumLevel.Information()
+                            .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
+                            .CreateLogger();
+
                 DeleteFiles(profilePath);
 #endif
             }
@@ -73,11 +82,10 @@ namespace MoocDownloader.App
                 );
                 return;
             }
-
-            Log.Logger = new LoggerConfiguration() // Logger.
-                        .MinimumLevel.Information()
-                        .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
-                        .CreateLogger();
+            else
+            {
+                AriaManager.Start(ARIA_EXE);
+            }
 
             Log.Information("=========程序启动=========");
 
