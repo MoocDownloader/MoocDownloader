@@ -30,13 +30,13 @@ namespace MoocDownloader.App.Aria2c
             {
                 StartInfo =
                 {
-                    FileName               = aria, // command  
-                    Arguments              = args, // arguments  
+                    FileName               = aria, // command
+                    Arguments              = args, // arguments
                     CreateNoWindow         = true,
-                    UseShellExecute        = false, // do not create a window.  
-                    RedirectStandardInput  = true,  // redirect input.  
-                    RedirectStandardOutput = true,  // redirect output.  
-                    RedirectStandardError  = true   // redirect error.  
+                    UseShellExecute        = false, // do not create a window.
+                    RedirectStandardInput  = true,  // redirect input.
+                    RedirectStandardOutput = true,  // redirect output.
+                    RedirectStandardError  = true,  // redirect error.
                 },
                 EnableRaisingEvents = true
             };
@@ -64,8 +64,8 @@ namespace MoocDownloader.App.Aria2c
                     {"max-concurrent-downloads", "16"},
                     {"min-split-size", "4M"},
                     {"disk-cache", "64M"},
-                    {"out", $@"""{fileName}.mp4"""},
-                    {"dir", $@"""{path}"""},
+                    {"out", $@"{fileName}"},
+                    {"dir", $@"{path}"},
                 }
             );
         }

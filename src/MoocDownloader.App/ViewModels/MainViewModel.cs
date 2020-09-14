@@ -42,6 +42,8 @@ namespace MoocDownloader.App.ViewModels
 
         private bool _isCancel;
 
+        private readonly AriaManager _aria;
+
         /// <summary>
         /// Write log.
         /// </summary>
@@ -53,6 +55,11 @@ namespace MoocDownloader.App.ViewModels
         public Action<int>    UpdateTotalBar;
         public Action         ResetCurrentBar;
         public Action         ResetTotalBar;
+
+        public MainViewModel(AriaManager aria)
+        {
+            _aria = aria;
+        }
 
         /// <summary>
         /// Login mooc.
@@ -580,16 +587,13 @@ namespace MoocDownloader.App.ViewModels
                                                 //    break;
                                                 //}
 
-                                                var aria = new AriaManager();
+                                                var gid = await _aria.AddUri(mp4Url, $"{unitFileName}.mp4", unitPath);
 
-                                                var result = await aria.GetGlobalStatus();
+                                                Log.Information($"{unitFileName}={gid}");
 
-                                                var gid = await aria.AddUri(mp4Url, $"{unitFileName}.mp4", unitPath);
+                                                var status = await _aria.GetStatus(gid);
 
-                                                while (true)
-                                                {
-                                                    var status = aria.GetStatus(gid);
-                                                }
+                                                break;
                                             }
                                             catch (Exception exception)
                                             {

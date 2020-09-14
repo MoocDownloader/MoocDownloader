@@ -11,7 +11,7 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
     /// </remarks>
     public class RpcClient : IRpcClient
     {
-        private RpcClientOptions _Options;
+        private readonly RpcClientOptions _options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RpcClient"/> class.
@@ -26,10 +26,10 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
         public RpcClient(RpcClientOptions options)
         {
             options.GuardNull(nameof(options));
-            options.Transport.GuardNull(nameof(options) + "." + nameof(options.Transport));
+            options.Transport.GuardNull(nameof(options) + "."  + nameof(options.Transport));
             options.Serializer.GuardNull(nameof(options) + "." + nameof(options.Serializer));
 
-            _Options = options;
+            _options = options;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
             var request = new RpcRequest()
             {
                 MethodName = methodName,
-                Arguments = arguments
+                Arguments  = arguments
             };
 
             return await SendRequest<T>(methodName, request).ConfigureAwait(false);
@@ -87,7 +87,7 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
             var request = new RpcRequest()
             {
                 MethodName = methodName,
-                Arguments = arguments
+                Arguments  = arguments
             };
 
             return await SendRequest<T>(methodName, request).ConfigureAwait(false);
@@ -108,7 +108,7 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
             var request = new RpcRequest()
             {
                 MethodName = methodName,
-                Arguments = arguments
+                Arguments  = arguments
             };
 
             return await SendRequest<T>(methodName, request).ConfigureAwait(false);
@@ -117,25 +117,22 @@ namespace MoocDownloader.App.Aria2c.JsonRpc
         private async Task<T> SendRequest<T>(string methodName, RpcRequest request)
         {
             //Serialize request
-            using (var stream = new System.IO.MemoryStream())
-            {
-                _Options.Serializer.Serialize(request, stream);
-                stream.Seek(0, System.IO.SeekOrigin.Begin);
+            using var stream = new System.IO.MemoryStream();
+            _options.Serializer.Serialize(request, stream);
+            stream.Seek(0, System.IO.SeekOrigin.Begin);
 
-                //SendRequest
-                using (var responseStream = await _Options.Transport.SendRequest(stream).ConfigureAwait(false))
-                {
-                    // Deserialize the response
-                    var rpcResult = _Options.Serializer.Deserialize<T>(responseStream);
+            //SendRequest
+            using var responseStream = await _options.Transport.SendRequest(stream).ConfigureAwait(false);
 
-                    // Report error if one occurred
-                    if (rpcResult.Error != null)
-                        throw new RpcException(methodName, rpcResult.Error);
+            // Deserialize the response
+            var rpcResult = _options.Serializer.Deserialize<T>(responseStream);
 
-                    //Return the result
-                    return rpcResult.Result;
-                }
-            }
+            // Report error if one occurred
+            if (rpcResult.Error != null)
+                throw new RpcException(methodName, rpcResult.Error);
+
+            //Return the result
+            return rpcResult.Result;
         }
     }
 }

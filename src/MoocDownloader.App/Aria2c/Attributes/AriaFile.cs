@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 
 namespace MoocDownloader.App.Aria2c.Attributes
@@ -22,6 +21,6 @@ namespace MoocDownloader.App.Aria2c.Attributes
         public string Selected { get; set; }
 
         [JsonProperty("uris")]
-        public List<Uri> Uris { get; set; }
+        public List<AriaUri> Uris { get; set; }
     }
 }

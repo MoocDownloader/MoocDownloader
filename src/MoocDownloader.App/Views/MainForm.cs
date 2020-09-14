@@ -4,6 +4,7 @@ using MoocDownloader.App.ViewModels;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using MoocDownloader.App.Aria2c;
 
 namespace MoocDownloader.App.Views
 {
@@ -16,11 +17,15 @@ namespace MoocDownloader.App.Views
 
         private DateTime _startTime = DateTime.MinValue;
 
+        private readonly AriaManager _aria;
+
         public MainForm()
         {
             InitializeComponent();
 
-            _viewModel = new MainViewModel
+            _aria = new AriaManager();
+
+            _viewModel = new MainViewModel(_aria)
             {
                 WriteLog         = Log,
                 SetStatus        = SetStatusText,
@@ -483,12 +488,19 @@ namespace MoocDownloader.App.Views
 
         #endregion
 
-        private void MainTimer_Tick(object sender, EventArgs e)
+        private async void MainTimer_Tick(object sender, EventArgs e)
         {
             if (_startTime == DateTime.MinValue)
             {
                 return;
             }
+
+            var status = await _aria.GetGlobalStatus();
+
+            Console.WriteLine($"DownloadSpeed: {status.DownloadSpeed}");
+            Console.WriteLine($"ActiveTaskCount: {status.ActiveTaskCount}");
+            Console.WriteLine($"StoppedTaskCount: {status.StoppedTaskCount}");
+            Console.WriteLine($"WaitingTaskCount: {status.WaitingTaskCount}");
 
             var diff = DateTime.Now - _startTime;
             DownloadTimeToolStripStatusLabel.Text = diff.ToString(@"hh\:mm\:ss");

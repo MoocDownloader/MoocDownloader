@@ -2,6 +2,7 @@
 using MoocDownloader.App.Views;
 using Serilog;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using MoocDownloader.App.Aria2c;
@@ -84,6 +85,20 @@ namespace MoocDownloader.App
             }
             else
             {
+                try // kill all aria2c.exe process.
+                {
+                    var ariaProcesses = Process.GetProcessesByName("aria2c");
+
+                    foreach (var p in ariaProcesses)
+                    {
+                        p.Kill();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"结束进程发生异常: {exception.Message}");
+                }
+
                 AriaManager.Start(ARIA_EXE);
             }
 

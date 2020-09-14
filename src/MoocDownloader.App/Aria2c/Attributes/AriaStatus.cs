@@ -5,7 +5,6 @@ namespace MoocDownloader.App.Aria2c.Attributes
 {
     public class AriaStatus
     {
-
         [JsonProperty("bitfield")]
         public string Bitfield { get; set; }
 
