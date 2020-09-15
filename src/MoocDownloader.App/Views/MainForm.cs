@@ -1,10 +1,11 @@
-﻿using MoocDownloader.App.Models;
+﻿using MoocDownloader.App.Aria2c;
+using MoocDownloader.App.Models;
 using MoocDownloader.App.Utilities;
 using MoocDownloader.App.ViewModels;
+using Serilog;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using MoocDownloader.App.Aria2c;
 
 namespace MoocDownloader.App.Views
 {
@@ -15,9 +16,17 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private readonly MainViewModel _viewModel;
 
+        /// <summary>
+        /// time of start downloading.
+        /// </summary>
         private DateTime _startTime = DateTime.MinValue;
 
+        /// <summary>
+        /// Aria mananger.
+        /// </summary>
         private readonly AriaManager _aria;
+
+        private bool readyToClose;
 
         public MainForm()
         {
@@ -27,7 +36,7 @@ namespace MoocDownloader.App.Views
 
             _viewModel = new MainViewModel(_aria)
             {
-                WriteLog         = Log,
+                WriteLog         = WriteLog,
                 SetStatus        = SetStatusText,
                 SetUIStatus      = SetUIStatus,
                 UpdateCurrentBar = UpdateCurrentProgressBar,
@@ -64,19 +73,44 @@ namespace MoocDownloader.App.Views
             if (result == DialogResult.OK)
             {
                 SavePathTextBox.Text = dialog.SelectedPath;
-                Log($@"已设置保存路径为 {SavePathTextBox.Text}.");
+                WriteLog($@"已设置保存路径为 {SavePathTextBox.Text}.");
             }
         }
 
         /// <summary>
         /// window closing.
         /// </summary>
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show(@"确认关闭程序.", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)
-             != DialogResult.OK)
+            if (!readyToClose)
             {
-                e.Cancel = true;
+                var result = MessageBox.Show(
+                    StartDownloadButton.Enabled ? $@"正在下载, 是否退出?" : @"确认关闭程序.", @"提示",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.OK)
+                {
+                    e.Cancel = true;
+
+                    try
+                    {
+                        var status = await _aria.Shutdown(true).ConfigureAwait(true);
+
+                        Log.Information($"关闭程序状态: {status}");
+                    }
+                    catch (Exception exception)
+                    {
+                        Log.Error($@"退出程序发生异常: {exception.Message}");
+                    }
+
+                    readyToClose = true;
+                    Close();
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -84,7 +118,7 @@ namespace MoocDownloader.App.Views
         /// Write log.
         /// </summary>
         /// <param name="message">log message.</param>
-        private void Log(string message)
+        private void WriteLog(string message)
         {
             RunningLogListBox.Items.Add($"{DateTime.Now:hh:mm:ss} {message}");
 
@@ -285,7 +319,7 @@ namespace MoocDownloader.App.Views
             }
             catch (Exception)
             {
-                Log("检测升级失败.");
+                WriteLog("检测升级失败.");
             }
         }
 
@@ -354,16 +388,7 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (StartDownloadButton.Enabled)
-            {
-                Environment.Exit(0);
-            }
-
-            if (MessageBox.Show($@"正在下载, 是否退出?", @"提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)
-             == DialogResult.OK)
-            {
-                Environment.Exit(0);
-            }
+            MainForm_FormClosing(sender, null);
         }
 
         #endregion
@@ -497,10 +522,10 @@ namespace MoocDownloader.App.Views
 
             var status = await _aria.GetGlobalStatus();
 
-            Console.WriteLine($"DownloadSpeed: {status.DownloadSpeed}");
-            Console.WriteLine($"ActiveTaskCount: {status.ActiveTaskCount}");
-            Console.WriteLine($"StoppedTaskCount: {status.StoppedTaskCount}");
-            Console.WriteLine($"WaitingTaskCount: {status.WaitingTaskCount}");
+            Console.WriteLine($@"DownloadSpeed: {status.DownloadSpeed}");
+            Console.WriteLine($@"ActiveTaskCount: {status.ActiveTaskCount}");
+            Console.WriteLine($@"StoppedTaskCount: {status.StoppedTaskCount}");
+            Console.WriteLine($@"WaitingTaskCount: {status.WaitingTaskCount}");
 
             var diff = DateTime.Now - _startTime;
             DownloadTimeToolStripStatusLabel.Text = diff.ToString(@"hh\:mm\:ss");

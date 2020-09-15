@@ -106,7 +106,16 @@ namespace MoocDownloader.App
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            try
+            {
+                Application.Run(new MainForm());
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception, $@"程序运行发生错误: {exception.Message}");
+                MessageBox.Show($@"程序运行发生错误: {exception.Message}");
+            }
         }
 
         /// <summary>

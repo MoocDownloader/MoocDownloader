@@ -691,7 +691,7 @@ namespace MoocDownloader.App.ViewModels
                 WriteLog($"课程 {course.CourseName} 已下载完成!");
 
                 MessageBox.Show(
-                    $"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
+                    $@"课程 {course.CourseName} 已下载完成!", @"提示", MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
             }
         }
