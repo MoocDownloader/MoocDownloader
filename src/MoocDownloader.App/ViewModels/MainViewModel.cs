@@ -425,10 +425,23 @@ namespace MoocDownloader.App.ViewModels
                                     }
                                 }
 
-                                var videoInfo = video.Result.Videos.FirstOrDefault(
-                                    v => v.Quality.HasValue
-                                      && (VideoQuality) v.Quality == _config.VideoQuality
-                                );
+                                var quality = video.Result.Videos.Select(v => v.Quality ?? 1).ToList().Max();
+
+                                VideoModel videoInfo;
+
+                                if (quality < (int) _config.VideoQuality)
+                                {
+                                    videoInfo = video.Result.Videos.FirstOrDefault(
+                                        v => v.Quality.HasValue && v.Quality == quality
+                                    );
+                                }
+                                else
+                                {
+                                    videoInfo = video.Result.Videos.FirstOrDefault(
+                                        v => v.Quality.HasValue
+                                          && (VideoQuality) v.Quality == _config.VideoQuality
+                                    );
+                                }
 
                                 var videoFormat = videoInfo.Format.ToLower();
 
