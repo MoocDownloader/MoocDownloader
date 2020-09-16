@@ -74,7 +74,7 @@ namespace MoocDownloader.App.Views
         {
             var result = MessageBox.Show(
                 StartDownloadButton.Enabled ? @"确认关闭程序." : @"正在下载, 是否退出?", @"提示",
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question
+                MessageBoxButtons.OKCancel, StartDownloadButton.Enabled ? MessageBoxIcon.Question : MessageBoxIcon.Error
             );
 
             switch (result)
