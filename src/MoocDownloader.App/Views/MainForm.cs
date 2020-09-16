@@ -26,15 +26,24 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private readonly AriaManager _aria;
 
-        private bool readyToClose;
+        private bool _readyToClose;
+
+        private bool _hasAira;
 
         public MainForm()
         {
             InitializeComponent();
 
-            _aria = new AriaManager();
+            try
+            {
+                _aria = new AriaManager();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"启动 ARIA 发生异常: {ex.Message}");
+            }
 
-            _viewModel = new MainViewModel(_aria)
+            _viewModel = new MainViewModel()
             {
                 WriteLog         = WriteLog,
                 SetStatus        = SetStatusText,
@@ -82,34 +91,35 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!readyToClose)
+            if (!_readyToClose)
             {
                 var result = MessageBox.Show(
-                    StartDownloadButton.Enabled ? $@"正在下载, 是否退出?" : @"确认关闭程序.", @"提示",
+                    StartDownloadButton.Enabled ? @"确认关闭程序." : @"正在下载, 是否退出?", @"提示",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question
                 );
 
-                if (result == DialogResult.OK)
+                switch (result)
                 {
-                    e.Cancel = true;
+                    case DialogResult.OK:
+                        e.Cancel = true;
 
-                    try
-                    {
-                        var status = await _aria.Shutdown(true).ConfigureAwait(true);
+                        try
+                        {
+                            var status = await _aria.Shutdown(true).ConfigureAwait(true);
 
-                        Log.Information($"关闭程序状态: {status}");
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.Error($@"退出程序发生异常: {exception.Message}");
-                    }
+                            Log.Information($"关闭程序状态: {status}");
+                        }
+                        catch (Exception exception)
+                        {
+                            Log.Error($@"退出程序发生异常: {exception.Message}");
+                        }
 
-                    readyToClose = true;
-                    Close();
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    e.Cancel = true;
+                        _readyToClose = true;
+                        Close();
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
                 }
             }
         }
@@ -317,10 +327,33 @@ namespace MoocDownloader.App.Views
                     form.ShowDialog();
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                WriteLog("检测升级失败.");
+                Log.Error($"检测升级发生异常, 原因: {exception.Message}");
             }
+
+            try
+            {
+                var status = await _aria.GetGlobalStatus();
+
+                if (status is null)
+                {
+                    Log.Warning(@"Aria 未检测到.");
+                    _hasAira = false;
+                }
+                else
+                {
+                    Log.Information(@"Aria 已检测到.");
+                    _hasAira = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                _hasAira = false;
+                Log.Error($"获取 aria 状态发生异常, 原因: {exception.Message}");
+            }
+
+            _viewModel.SetAria(_hasAira, _aria);
         }
 
         /// <summary>
@@ -520,12 +553,15 @@ namespace MoocDownloader.App.Views
                 return;
             }
 
-            var status = await _aria.GetGlobalStatus();
+            if (_hasAira)
+            {
+                var status = await _aria.GetGlobalStatus();
 
-            Console.WriteLine($@"DownloadSpeed: {status.DownloadSpeed}");
-            Console.WriteLine($@"ActiveTaskCount: {status.ActiveTaskCount}");
-            Console.WriteLine($@"StoppedTaskCount: {status.StoppedTaskCount}");
-            Console.WriteLine($@"WaitingTaskCount: {status.WaitingTaskCount}");
+                Console.WriteLine($@"DownloadSpeed: {status.DownloadSpeed}");
+                Console.WriteLine($@"ActiveTaskCount: {status.ActiveTaskCount}");
+                Console.WriteLine($@"StoppedTaskCount: {status.StoppedTaskCount}");
+                Console.WriteLine($@"WaitingTaskCount: {status.WaitingTaskCount}");
+            }
 
             var diff = DateTime.Now - _startTime;
             DownloadTimeToolStripStatusLabel.Text = diff.ToString(@"hh\:mm\:ss");

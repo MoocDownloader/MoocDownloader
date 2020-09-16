@@ -42,7 +42,9 @@ namespace MoocDownloader.App.ViewModels
 
         private bool _isCancel;
 
-        private readonly AriaManager _aria;
+        private AriaManager _aria;
+
+        private bool _hasAria;
 
         /// <summary>
         /// Write log.
@@ -56,9 +58,10 @@ namespace MoocDownloader.App.ViewModels
         public Action         ResetCurrentBar;
         public Action         ResetTotalBar;
 
-        public MainViewModel(AriaManager aria)
+        public void SetAria(bool hasAria, AriaManager aria)
         {
-            _aria = aria;
+            _hasAria = hasAria;
+            _aria    = aria;
         }
 
         /// <summary>
@@ -572,28 +575,52 @@ namespace MoocDownloader.App.ViewModels
                                         {
                                             try
                                             {
-                                                //var videoBytes = await mooc.DownloadVideoAsync(mp4Url);
+                                                if (_hasAria)
+                                                {
+                                                    try
+                                                    {
+                                                        var gid = await _aria.AddUri(
+                                                            mp4Url, $"{unitFileName}.mp4",
+                                                            unitPath
+                                                        ).ConfigureAwait(true);
 
-                                                //if (videoBytes is null)
-                                                //{
-                                                //    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
-                                                //    WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
-                                                //}
-                                                //else
-                                                //{
-                                                //    File.WriteAllBytes(mp4File, videoBytes);
+                                                        if (string.IsNullOrEmpty(gid))
+                                                        {
+                                                            continue;
+                                                        }
 
-                                                //    WriteLog($@"课程 {unitFileName} 已下载完成.");
-                                                //    break;
-                                                //}
+                                                        Log.Information($"{unitFileName}={gid}");
 
-                                                var gid = await _aria.AddUri(mp4Url, $"{unitFileName}.mp4", unitPath);
+                                                        var status = await _aria.GetStatus(gid);
 
-                                                Log.Information($"{unitFileName}={gid}");
+                                                        Console.WriteLine($@"下载速度: {status.DownloadSpeed}");
 
-                                                var status = await _aria.GetStatus(gid);
+                                                        break;
+                                                    }
+                                                    catch (Exception exception)
+                                                    {
+                                                        Log.Error(
+                                                            $@"向 ARIA 添加 {unitFileName} 链接: {mp4Url} 发生异常, 原因: {exception.Message}"
+                                                        );
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var videoBytes = await mooc.DownloadVideoAsync(mp4Url);
 
-                                                break;
+                                                    if (videoBytes is null)
+                                                    {
+                                                        await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, i)));
+                                                        WriteLog($"下载课程视频 {unitFileName} 失败, 准备重试, 当前重试第 {i + 1} 次.");
+                                                    }
+                                                    else
+                                                    {
+                                                        File.WriteAllBytes(mp4File, videoBytes);
+
+                                                        WriteLog($@"课程 {unitFileName} 已下载完成.");
+                                                        break;
+                                                    }
+                                                }
                                             }
                                             catch (Exception exception)
                                             {
