@@ -7,20 +7,18 @@ namespace MoocDownloader.App.Views
 {
     public partial class VersionForm : Form
     {
+        private readonly NewVersion _version;
+
         public VersionForm(NewVersion version)
         {
             InitializeComponent();
 
-            CurrentVersionLabel.Text  = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            NewVersionLabel.Text      = version.Version;
-            UpdateMessageTextBox.Text = version.Message;
+            _version = version;
         }
 
         private void DownloadNewVersionButton_Click(object sender, EventArgs e)
         {
-            const string RELEASES_URL = "https://github.com/xixixixixiao/mooc-downloader/releases";
-
-            System.Diagnostics.Process.Start(RELEASES_URL);
+            System.Diagnostics.Process.Start(_version.Url);
         }
 
         private void CancelDownloadButton_Click(object sender, EventArgs e)
@@ -30,6 +28,9 @@ namespace MoocDownloader.App.Views
 
         private void VersionForm_Load(object sender, EventArgs e)
         {
+            CurrentVersionLabel.Text  = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            NewVersionLabel.Text      = _version.Version;
+            UpdateMessageTextBox.Text = _version.Message;
         }
     }
 }
