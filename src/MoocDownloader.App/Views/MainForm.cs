@@ -1,5 +1,4 @@
-﻿using MoocDownloader.App.Aria2c;
-using MoocDownloader.App.Models;
+﻿using MoocDownloader.App.Models;
 using MoocDownloader.App.Utilities;
 using MoocDownloader.App.ViewModels;
 using Serilog;
@@ -21,27 +20,9 @@ namespace MoocDownloader.App.Views
         /// </summary>
         private DateTime _startTime = DateTime.MinValue;
 
-        /// <summary>
-        /// Aria mananger.
-        /// </summary>
-        private readonly AriaManager _aria;
-
-        private bool _readyToClose;
-
-        private bool _hasAira;
-
         public MainForm()
         {
             InitializeComponent();
-
-            try
-            {
-                _aria = new AriaManager();
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"启动 ARIA 发生异常: {ex.Message}");
-            }
 
             _viewModel = new MainViewModel()
             {
@@ -89,38 +70,20 @@ namespace MoocDownloader.App.Views
         /// <summary>
         /// window closing.
         /// </summary>
-        private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!_readyToClose)
+            var result = MessageBox.Show(
+                StartDownloadButton.Enabled ? @"确认关闭程序." : @"正在下载, 是否退出?", @"提示",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Question
+            );
+
+            switch (result)
             {
-                var result = MessageBox.Show(
-                    StartDownloadButton.Enabled ? @"确认关闭程序." : @"正在下载, 是否退出?", @"提示",
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question
-                );
-
-                switch (result)
-                {
-                    case DialogResult.OK:
-                        e.Cancel = true;
-
-                        try
-                        {
-                            var status = await _aria.Shutdown(true).ConfigureAwait(true);
-
-                            Log.Information($"关闭程序状态: {status}");
-                        }
-                        catch (Exception exception)
-                        {
-                            Log.Error($@"退出程序发生异常: {exception.Message}");
-                        }
-
-                        _readyToClose = true;
-                        Close();
-                        break;
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                }
+                case DialogResult.OK:
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
             }
         }
 
@@ -331,29 +294,6 @@ namespace MoocDownloader.App.Views
             {
                 Log.Error($"检测升级发生异常, 原因: {exception.Message}");
             }
-
-            try
-            {
-                var status = await _aria.GetGlobalStatus();
-
-                if (status is null)
-                {
-                    Log.Warning(@"Aria 未检测到.");
-                    _hasAira = false;
-                }
-                else
-                {
-                    Log.Information(@"Aria 已检测到.");
-                    _hasAira = true;
-                }
-            }
-            catch (Exception exception)
-            {
-                _hasAira = false;
-                Log.Error($"获取 aria 状态发生异常, 原因: {exception.Message}");
-            }
-
-            _viewModel.SetAria(_hasAira, _aria);
         }
 
         /// <summary>
@@ -546,21 +486,11 @@ namespace MoocDownloader.App.Views
 
         #endregion
 
-        private async void MainTimer_Tick(object sender, EventArgs e)
+        private void MainTimer_Tick(object sender, EventArgs e)
         {
             if (_startTime == DateTime.MinValue)
             {
                 return;
-            }
-
-            if (_hasAira)
-            {
-                var status = await _aria.GetGlobalStatus();
-
-                Console.WriteLine($@"DownloadSpeed: {status.DownloadSpeed}");
-                Console.WriteLine($@"ActiveTaskCount: {status.ActiveTaskCount}");
-                Console.WriteLine($@"StoppedTaskCount: {status.StoppedTaskCount}");
-                Console.WriteLine($@"WaitingTaskCount: {status.WaitingTaskCount}");
             }
 
             var diff = DateTime.Now - _startTime;

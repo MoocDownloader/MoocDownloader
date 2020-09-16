@@ -2,10 +2,8 @@
 using MoocDownloader.App.Views;
 using Serilog;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using MoocDownloader.App.Aria2c;
 
 namespace MoocDownloader.App
 {
@@ -17,8 +15,6 @@ namespace MoocDownloader.App
         public const string FIREFOX_PATH = "Firefox";
 
         public const string FFMPEG_EXE = @".\ffmpeg\ffmpeg.exe";
-
-        public const string ARIA_EXE = @".\aria2c\aria2c.exe";
 
         /// <summary>
         /// gecko kernel temp path.
@@ -74,32 +70,6 @@ namespace MoocDownloader.App
                     @"程序组件 ""FFMPEG"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
                 );
                 return;
-            }
-
-            if (!File.Exists(ARIA_EXE))
-            {
-                MessageBox.Show(
-                    @"程序组件 ""ARIA2C"" 缺失, 请重新下载.", @"中国大学 MOOC 下载器", MessageBoxButtons.OK, MessageBoxIcon.Error
-                );
-                return;
-            }
-            else
-            {
-                try // kill all aria2c.exe process.
-                {
-                    var ariaProcesses = Process.GetProcessesByName("aria2c");
-
-                    foreach (var p in ariaProcesses)
-                    {
-                        p.Kill();
-                    }
-                }
-                catch (Exception exception)
-                {
-                    Log.Error($"结束进程发生异常: {exception.Message}");
-                }
-
-                AriaManager.Start(ARIA_EXE);
             }
 
             Log.Information("=========程序启动=========");
