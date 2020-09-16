@@ -281,6 +281,7 @@ namespace MoocDownloader.App.ViewModels
             }
             catch (Exception exception)
             {
+                Log.Error(exception, $"下载课程发生错误, 原因: {exception}");
                 SetUIStatus(true);
                 WriteLog($"下载课程发生错误, 原因: {exception}");
 
@@ -447,7 +448,16 @@ namespace MoocDownloader.App.ViewModels
 
                                 switch (videoFormat)
                                 {
-                                    case "hls":                                     // m3u8 format.
+                                    case "hls": // m3u8 format.
+                                        var ts2Mp4File = Path.Combine(courseVideo.SavePath, courseVideo.VideoFileName);
+
+                                        if (File.Exists(ts2Mp4File))
+                                        {
+                                            Log.Warning($@"课程 {courseVideo.VideoFileName} 已存在, 跳过下载.");
+                                            WriteLog($@"课程 {courseVideo.VideoFileName} 已存在, 跳过下载.");
+                                            break;
+                                        }
+
                                         var videoUrl = new Uri(videoInfo.VideoUrl); // video url.
                                         var baseUrl =
                                             $@"{videoUrl.Scheme}://{videoUrl.Host}" +
@@ -548,6 +558,7 @@ namespace MoocDownloader.App.ViewModels
 
                                         if (File.Exists(mp4File)) // exist mp4, skip.
                                         {
+                                            Log.Warning($@"课程: {$"{unitFileName}.mp4"} 已存在, 跳过下载.");
                                             WriteLog($@"课程: {$"{unitFileName}.mp4"} 已存在, 跳过下载.");
                                         }
 
@@ -601,6 +612,14 @@ namespace MoocDownloader.App.ViewModels
 
                                         break;
                                     case "flv":
+                                        var flvFile = Path.Combine(unitPath, $"{unitFileName}.flv");
+
+                                        if (File.Exists(flvFile)) // exist mp4, skip.
+                                        {
+                                            Log.Warning($@"课程: {$"{unitFileName}.flv"} 已存在, 跳过下载.");
+                                            WriteLog($@"课程: {$"{unitFileName}.flv"} 已存在, 跳过下载.");
+                                        }
+
                                         var flvUrl = string.Empty;
 
                                         switch (_config.VideoQuality)
@@ -636,9 +655,7 @@ namespace MoocDownloader.App.ViewModels
                                                 }
                                                 else
                                                 {
-                                                    File.WriteAllBytes(
-                                                        Path.Combine(unitPath, $"{unitFileName}.flv"), videoBytes
-                                                    );
+                                                    File.WriteAllBytes(flvFile, videoBytes);
 
                                                     WriteLog($@"课程 {unitFileName} 已下载完成.");
                                                     break;
