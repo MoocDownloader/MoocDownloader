@@ -36,19 +36,23 @@ namespace MoocDownloader.App
             else
             {
 #if DEBUG
-                Log.Logger = new LoggerConfiguration() // Logger.
-                            .MinimumLevel.Verbose()
-                            .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
-                            .CreateLogger();
+                // do not delete temp files in DEBUG mode.
 #else
-                Log.Logger = new LoggerConfiguration() // Logger.
-                            .MinimumLevel.Information()
-                            .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
-                            .CreateLogger();
-
                 DeleteFiles(profilePath);
 #endif
             }
+
+#if DEBUG
+            Log.Logger = new LoggerConfiguration() // Logger.
+                        .MinimumLevel.Verbose()
+                        .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
+                        .CreateLogger();
+#else
+            Log.Logger = new LoggerConfiguration() // Logger.
+                        .MinimumLevel.Information()
+                        .WriteTo.File(@".\log\mooc.log", rollingInterval: RollingInterval.Day)
+                        .CreateLogger();
+#endif
 
             Xpcom.ProfileDirectory = profilePath;
 
