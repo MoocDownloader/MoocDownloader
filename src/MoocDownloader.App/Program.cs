@@ -38,7 +38,7 @@ namespace MoocDownloader.App
 #if DEBUG
                 // do not delete temp files in DEBUG mode.
 #else
-                DeleteFiles(profilePath);
+                EmptyFolder(profilePath);
 #endif
             }
 
@@ -93,38 +93,56 @@ namespace MoocDownloader.App
         }
 
         /// <summary>
-        /// Delete ProfilePath Files
+        /// Attempt to empty the folder. Return false if it fails (locked files...).
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static void DeleteFiles(string path)
+        /// <param name="pathName">target path.</param>
+        /// <returns>true on success</returns>
+        public static bool EmptyFolder(string pathName)
         {
-            var dir = new DirectoryInfo(path);
+            var errors = false;
+            var dir    = new DirectoryInfo(pathName);
 
-            try
+            foreach (var fi in dir.EnumerateFiles())
             {
-                foreach (var item in dir.GetFiles())
+                try
                 {
-                    File.Delete(item.FullName);
-                }
+                    fi.IsReadOnly = false;
+                    fi.Delete();
 
-                if (dir.GetDirectories().Length != 0)
-                {
-                    foreach (var item in dir.GetDirectories())
+                    //Wait for the item to disapear (avoid 'dir not empty' error).
+                    while (fi.Exists)
                     {
-                        DeleteFiles(item.FullName);
+                        System.Threading.Thread.Sleep(10);
+                        fi.Refresh();
                     }
                 }
-
-                if (Path.Combine(Application.StartupPath, FIREFOX_TEMP) != path)
+                catch (IOException)
                 {
-                    Directory.Delete(path);
+                    errors = true;
                 }
             }
-            catch
+
+            foreach (var di in dir.EnumerateDirectories())
             {
-                // ignored
+                try
+                {
+                    EmptyFolder(di.FullName);
+                    di.Delete();
+
+                    //Wait for the item to disapear (avoid 'dir not empty' error).
+                    while (di.Exists)
+                    {
+                        System.Threading.Thread.Sleep(10);
+                        di.Refresh();
+                    }
+                }
+                catch (IOException)
+                {
+                    errors = true;
+                }
             }
+
+            return !errors;
         }
     }
 }
