@@ -79,7 +79,7 @@ namespace MoocDownloader.App.Mooc
                 CookieContainer        = cookieContainer
             };
 
-            _client = new HttpClient(handler) {Timeout = TimeSpan.FromMinutes(10)};
+            _client = new HttpClient(handler) {Timeout = TimeSpan.MaxValue};
 
             _client.DefaultRequestHeaders.Add(
                 "user-agent",
