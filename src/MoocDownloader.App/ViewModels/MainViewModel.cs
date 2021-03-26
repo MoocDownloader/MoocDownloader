@@ -512,7 +512,7 @@ namespace MoocDownloader.App.ViewModels
                                                         if (tsBytes is null)
                                                         {
                                                             WriteLog(
-                                                                $"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {i + 1} 次."
+                                                                $"下载视频片段 {tsSavedName} 失败, 准备重试, 当前重试第 {j + 1} 次."
                                                             );
                                                             await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                                         }
@@ -532,7 +532,7 @@ namespace MoocDownloader.App.ViewModels
                                                     catch (Exception exception)
                                                     {
                                                         WriteLog(
-                                                            $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {i + 1} 次."
+                                                            $"下载视频片段 {tsSavedName} 发生异常, 原因: {exception.Message}, 准备重试, 当前重试第 {j + 1} 次."
                                                         );
                                                         await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, j)));
                                                     }
