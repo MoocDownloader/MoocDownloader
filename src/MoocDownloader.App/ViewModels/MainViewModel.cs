@@ -568,24 +568,22 @@ namespace MoocDownloader.App.ViewModels
                                             WriteLog($@"课程: {$"{unitFileName}.mp4"} 已存在, 跳过下载.");
                                         }
 
-                                        var mp4Url = string.Empty;
-
-                                        switch (_config.VideoQuality)
-                                        {
-                                            case VideoQuality.SD:
-                                                mp4Url = unitResult.VideoVo.Mp4SdUrl;
-                                                break;
-                                            case VideoQuality.HD:
-                                                mp4Url = unitResult.VideoVo.Mp4HdUrl;
-                                                break;
-                                            case VideoQuality.UHD:
-                                                mp4Url = unitResult.VideoVo.Mp4ShdUrl;
-                                                break;
-                                        }
+                                        var mp4Url = videoInfo.VideoUrl;
 
                                         if (string.IsNullOrEmpty(mp4Url))
                                         {
-                                            mp4Url = videoInfo.VideoUrl;
+                                            switch (_config.VideoQuality)
+                                            {
+                                                case VideoQuality.SD:
+                                                    mp4Url = unitResult.VideoVo.Mp4SdUrl;
+                                                    break;
+                                                case VideoQuality.HD:
+                                                    mp4Url = unitResult.VideoVo.Mp4HdUrl;
+                                                    break;
+                                                case VideoQuality.UHD:
+                                                    mp4Url = unitResult.VideoVo.Mp4ShdUrl;
+                                                    break;
+                                            }
                                         }
 
                                         Log.Information($@"{unitFileName} 的下载链接是: {mp4Url}");
