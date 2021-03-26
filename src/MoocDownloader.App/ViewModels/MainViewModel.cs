@@ -312,7 +312,13 @@ namespace MoocDownloader.App.ViewModels
 
         private async Task DownloadCourseListAsync(CourseModel course, MoocRequest mooc)
         {
-            var total = course.Chapters.Sum(c => c.Lessons.Sum(l => l.Units.Count));
+            var total = course.Chapters.Sum(c => c.Lessons?.Sum(l => l?.Units?.Count ?? 0)) ?? 0;
+
+            if (total == 0)
+            {
+                return;
+            }
+
             Log.Information($@"当前一共有 {total} 个课程单元.");
 
             var current = 0;
