@@ -207,6 +207,13 @@ namespace MoocDownloader.App.ViewModels
                     SetUIStatus(true);
                     return;
                 }
+
+                if (moocTermCode.Contains("com.netease.edu.commons.exceptions.FrontNotifiableRuntimeException"))
+                {
+                    // Old version of the course.
+                    WriteLog("检测到课程是旧版课程, 暂时无法下载.");
+                    return;
+                }
             }
             catch (Exception exception)
             {
