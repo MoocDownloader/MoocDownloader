@@ -319,7 +319,7 @@ namespace MoocDownloader.App.ViewModels
 
         private async Task DownloadCourseListAsync(CourseModel course, MoocRequest mooc)
         {
-            var total = course.Chapters.Sum(c => c.Lessons?.Sum(l => l?.Units?.Count ?? 0)) ?? 0;
+            var total = course?.Chapters?.Sum(c => c.Lessons?.Sum(l => l?.Units?.Count ?? 0)) ?? 0;
 
             if (total == 0)
             {
@@ -331,24 +331,29 @@ namespace MoocDownloader.App.ViewModels
             var current = 0;
 
             int chapterIndex;
-            for (chapterIndex = 0; chapterIndex < course.Chapters.Count && !_isCancel; chapterIndex++)
+            for (chapterIndex = 0; chapterIndex < course?.Chapters?.Count && !_isCancel; chapterIndex++)
             {
-                var chapter = course.Chapters[chapterIndex];
+                var chapter = course?.Chapters?[chapterIndex];
 
-                for (var lessonIndex = 0; lessonIndex < chapter.Lessons.Count && !_isCancel; lessonIndex++)
+                for (var lessonIndex = 0; lessonIndex < chapter?.Lessons?.Count && !_isCancel; lessonIndex++)
                 {
-                    var lesson = chapter.Lessons[lessonIndex];
+                    var lesson = chapter?.Lessons?[lessonIndex];
 
-                    for (var unitIndex = 0; unitIndex < lesson.Units.Count && !_isCancel; unitIndex++)
+                    for (var unitIndex = 0; unitIndex < lesson?.Units?.Count && !_isCancel; unitIndex++)
                     {
                         // update total progress bar.
                         UpdateTotalBar(CalculatePercentage(++current, total));
 
-                        var unit = lesson.Units[unitIndex];
+                        var unit = lesson?.Units?[unitIndex];
+
+                        if (unit is null)
+                        {
+                            break;
+                        }
 
                         // create unit save path.
                         var chapterDir = $@"{chapterIndex + 1:00}-{FixPath(chapter.Name)}";
-                        var lessonDir  = $@"{lessonIndex  + 1:00}-{FixPath(lesson.Name)}";
+                        var lessonDir  = $@"{lessonIndex + 1:00}-{FixPath(lesson.Name)}";
                         var unitPath   = Path.Combine(_config.CourseSavePath, course.CourseName, chapterDir, lessonDir);
 
                         var unitFileName = $@"{unitIndex + 1:00}-{FixPath(unit.Name)}";
