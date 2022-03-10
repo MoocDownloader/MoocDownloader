@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoocDownloader.App", "src\MoocDownloader.App\MoocDownloader.App.csproj", "{77DA8D8D-5C8E-4E42-BEC5-8E7324C243BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77DA8D8D-5C8E-4E42-BEC5-8E7324C243BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DA8D8D-5C8E-4E42-BEC5-8E7324C243BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DA8D8D-5C8E-4E42-BEC5-8E7324C243BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DA8D8D-5C8E-4E42-BEC5-8E7324C243BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D666B3DA-8440-4F27-B100-CF4B3B607818}
+	EndGlobalSection
+EndGlobal
