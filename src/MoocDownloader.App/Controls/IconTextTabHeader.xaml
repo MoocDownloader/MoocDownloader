@@ -11,11 +11,6 @@
     <RadioButton.Resources>
         <Style TargetType="Border">
             <Setter Property="Background" Value="Transparent" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=IsChecked}" Value="True">
-                    <Setter Property="Background" Value="#FFEFEFEF" />
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="#727272" />
