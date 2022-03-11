@@ -24,6 +24,7 @@
         <Style TargetType="icon:PackIconUnicons">
             <Setter Property="Width" Value="12" />
             <Setter Property="Height" Value="12" />
+            <Setter Property="Margin" Value="0,0,10,0" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Foreground" Value="#727272" />
@@ -37,15 +38,10 @@
     <RadioButton.Template>
         <ControlTemplate TargetType="RadioButton">
             <Border Padding="10">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <icon:PackIconUnicons Grid.Column="0" Kind="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=Icon}" />
-                    <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=Text}" />
-                </Grid>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <icon:PackIconUnicons Kind="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=Icon}" />
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RadioButton}, Path=Text}" />
+                </StackPanel>
             </Border>
         </ControlTemplate>
     </RadioButton.Template>

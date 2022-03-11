@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Padding="5"
+                Padding="10 5"
                 BorderBrush="#F2F2F2"
                 BorderThickness="0,1">
             <Grid>
@@ -27,7 +27,7 @@
                         <Setter Property="Padding" Value="5" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Foreground" Value="#7A7F8A" />
-                        <Setter Property="Margin" Value="5,0" />
+                        <Setter Property="Margin" Value="10,0" />
                     </Style>
                 </Grid.Resources>
 
