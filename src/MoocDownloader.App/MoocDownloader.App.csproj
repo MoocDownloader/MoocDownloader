@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Icons\app.ico" />
-    <None Remove="Assets\Icons\app.png" />
+    <None Remove="Assets\Images\kanna.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,13 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Images\" />
+    <Folder Include="Sources\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\Icons\app.ico" />
-    <Resource Include="Assets\Icons\app.png" />
+    <Resource Include="Assets\Images\kanna.png" />
   </ItemGroup>
 
 </Project>
