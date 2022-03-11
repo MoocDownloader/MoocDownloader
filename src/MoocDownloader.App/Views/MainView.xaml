@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:MoocDownloader.App.Controls"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:MoocDownloader.App.Views"
         xmlns:vm="clr-namespace:MoocDownloader.App.ViewModels"
         Title="慕课精灵"
         Width="600"
@@ -74,7 +75,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="#FFF3F3F3">
+                <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -94,6 +95,10 @@
                                              GroupName="DownloadGroup"
                                              Icon="TrashAlt"
                                              Text="回收站" />
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <views:DownloadingView />
                 </Grid>
             </Grid>
             <Grid Grid.Column="1" />
