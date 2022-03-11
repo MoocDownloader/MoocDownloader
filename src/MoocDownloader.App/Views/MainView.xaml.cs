@@ -47,4 +47,14 @@ public partial class MainView
             };
         }
     }
+
+    /// <inheritdoc />
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        base.OnClosing(e);
+
+        e.Cancel = true;
+        WindowState = WindowState.Minimized;
+    }
 }
+
