@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.IconPacks;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using static MahApps.Metro.IconPacks.PackIconUniconsKind;
@@ -47,4 +48,14 @@ public partial class MainView
             };
         }
     }
+
+    /// <inheritdoc />
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        base.OnClosing(e);
+
+        e.Cancel = true;
+        WindowState = WindowState.Minimized;
+    }
 }
+
