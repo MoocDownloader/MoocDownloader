@@ -11,6 +11,8 @@
   <ItemGroup>
     <None Remove="Assets\Icons\app.ico" />
     <None Remove="Assets\Images\kanna.png" />
+    <None Remove="Assets\Images\thumbnail01.jpg" />
+    <None Remove="Assets\Images\thumbnail02.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +35,8 @@
   <ItemGroup>
     <Resource Include="Assets\Icons\app.ico" />
     <Resource Include="Assets\Images\kanna.png" />
+    <Resource Include="Assets\Images\thumbnail01.jpg" />
+    <Resource Include="Assets\Images\thumbnail02.png" />
   </ItemGroup>
 
 </Project>

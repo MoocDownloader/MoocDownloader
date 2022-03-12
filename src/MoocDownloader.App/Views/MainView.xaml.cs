@@ -54,8 +54,7 @@ public partial class MainView
     {
         base.OnClosing(e);
 
-        e.Cancel = true;
+        e.Cancel    = true;
         WindowState = WindowState.Minimized;
     }
 }
-

@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Padding="10 5"
+                Padding="5"
                 BorderBrush="#F2F2F2"
                 BorderThickness="0,1">
             <Grid>
@@ -53,7 +53,13 @@
         </Border>
 
         <Grid Grid.Row="1">
-            <ItemsControl />
+            <ItemsControl>
+                <local:DownloadingListItem />
+                <local:DownloadingListItem />
+                <local:DownloadingListItem />
+                <local:DownloadingListItem />
+                <local:DownloadingListItem />
+            </ItemsControl>
         </Grid>
     </Grid>
 </UserControl>
