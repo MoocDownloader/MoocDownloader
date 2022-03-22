@@ -33,7 +33,7 @@
                     BorderThickness="1"
                     CornerRadius="5">
                 <Border.Background>
-                    <ImageBrush ImageSource="../Assets/Images/thumbnail02.png" />
+                    <ImageBrush ImageSource="{Binding Path=CoverImage, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
                 </Border.Background>
             </Border>
 
@@ -51,7 +51,7 @@
                            FontSize="12"
                            FontWeight="Bold"
                            Foreground="#4D4D4D"
-                           Text="线性代数解题技巧及典型题解析"
+                           Text="{Binding Path=CourseName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                            TextWrapping="WrapWithOverflow" />
 
                 <Grid Grid.Row="1" Margin="0,0,0,2">
@@ -62,19 +62,22 @@
 
                     <TextBlock Grid.Column="0"
                                FontSize="11"
-                               Foreground="#B3B3B3"
-                               Text="000/000" />
+                               Foreground="#B3B3B3">
+                        <Run Text="{Binding Path=DownloadedFiles, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding Path=TotalFiles, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                    </TextBlock>
                     <TextBlock Grid.Column="1"
                                FontSize="11"
                                Foreground="#B3B3B3"
-                               Text="已暂停" />
+                               Text="{Binding Path=Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
                 </Grid>
 
                 <ProgressBar Grid.Row="2"
                              Height="5"
                              BorderThickness="0"
                              Foreground="#FF77B7E7"
-                             Value="50" />
+                             Value="{Binding Path=ProgressRate, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
             </Grid>
 
             <Grid Grid.Column="2" Height="60">

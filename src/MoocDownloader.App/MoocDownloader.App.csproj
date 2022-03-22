@@ -28,11 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Sources\" />
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Icons\app.ico" />
     <Resource Include="Assets\Images\kanna.png" />
     <Resource Include="Assets\Images\thumbnail01.jpg" />
