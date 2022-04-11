@@ -5,9 +5,9 @@
              xmlns:local="clr-namespace:MoocDownloader.App.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MoocDownloader.App.ViewModels"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance vm:MainViewModel}"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -58,7 +58,9 @@
         </Border>
 
         <Grid Grid.Row="1">
-            <!--<ListBox BorderThickness="0" ItemsSource="{Binding Collection}">
+            <ListBox HorizontalContentAlignment="Stretch"
+                     BorderThickness="0"
+                     ItemsSource="{Binding Courses}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:DownloadingListItem />
@@ -72,29 +74,7 @@
                         </ScrollViewer>
                     </ControlTemplate>
                 </ListBox.Template>
-            </ListBox>-->
-            
-            <ScrollViewer>
-                <ItemsControl BorderThickness="0">
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                    <local:DownloadingListItem />
-                </ItemsControl>
-            </ScrollViewer>
+            </ListBox>
         </Grid>
     </Grid>
 </UserControl>
