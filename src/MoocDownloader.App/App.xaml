@@ -10,6 +10,7 @@
 
                 <ResourceDictionary Source="Resources/BrushResource.xaml" />
                 <ResourceDictionary Source="Resources/ConverterResource.xaml" />
+                <ResourceDictionary Source="Resources/EffectResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
