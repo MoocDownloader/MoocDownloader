@@ -18,8 +18,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0"></StackPanel>
-            <StackPanel Grid.Column="1"></StackPanel>
+            <StackPanel Grid.Column="0" />
+            <StackPanel Grid.Column="1" />
         </Grid>
     </Grid>
 </UserControl>

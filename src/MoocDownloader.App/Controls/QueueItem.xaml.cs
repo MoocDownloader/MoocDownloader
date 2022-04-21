@@ -4,16 +4,16 @@ using System.Windows.Media;
 namespace MoocDownloader.App.Controls;
 
 /// <summary>
-/// Interaction logic for DownloadingListItem.xaml
+/// Interaction logic for QueueItem.xaml
 /// </summary>
-public partial class DownloadingListItem
+public partial class QueueItem
 {
     /// <summary>
     /// Name of the current course.
     /// </summary>
     public string CourseName
     {
-        get => (string) GetValue(CourseNameProperty);
+        get => (string)GetValue(CourseNameProperty);
         set => SetValue(CourseNameProperty, value);
     }
 
@@ -22,7 +22,7 @@ public partial class DownloadingListItem
     /// </summary>
     public int DownloadedFiles
     {
-        get => (int) GetValue(DownloadedFilesProperty);
+        get => (int)GetValue(DownloadedFilesProperty);
         set => SetValue(DownloadedFilesProperty, value);
     }
 
@@ -31,7 +31,7 @@ public partial class DownloadingListItem
     /// </summary>
     public int TotalFiles
     {
-        get => (int) GetValue(TotalFilesProperty);
+        get => (int)GetValue(TotalFilesProperty);
         set => SetValue(TotalFilesProperty, value);
     }
 
@@ -40,7 +40,7 @@ public partial class DownloadingListItem
     /// </summary>
     public string Status
     {
-        get => (string) GetValue(StatusProperty);
+        get => (string)GetValue(StatusProperty);
         set => SetValue(StatusProperty, value);
     }
 
@@ -49,7 +49,7 @@ public partial class DownloadingListItem
     /// </summary>
     public ImageSource CoverImage
     {
-        get => (ImageSource) GetValue(CoverImageProperty);
+        get => (ImageSource)GetValue(CoverImageProperty);
         set => SetValue(CoverImageProperty, value);
     }
 
@@ -58,45 +58,45 @@ public partial class DownloadingListItem
     /// </summary>
     public int ProgressRate
     {
-        get => (int) GetValue(ProgressRateProperty);
+        get => (int)GetValue(ProgressRateProperty);
         set => SetValue(ProgressRateProperty, value);
     }
 
-#region Dependency Properties
+    #region Dependency Properties
 
     public static readonly DependencyProperty CourseNameProperty = DependencyProperty.Register
     (
-        "CourseName", typeof(string), typeof(DownloadingListItem), new PropertyMetadata(string.Empty)
+        "CourseName", typeof(string), typeof(QueueItem), new PropertyMetadata(string.Empty)
     );
 
     public static readonly DependencyProperty DownloadedFilesProperty = DependencyProperty.Register
     (
-        "DownloadedFiles", typeof(int), typeof(DownloadingListItem), new PropertyMetadata(0)
+        "DownloadedFiles", typeof(int), typeof(QueueItem), new PropertyMetadata(0)
     );
 
     public static readonly DependencyProperty TotalFilesProperty = DependencyProperty.Register
     (
-        "TotalFiles", typeof(int), typeof(DownloadingListItem), new PropertyMetadata(0)
+        "TotalFiles", typeof(int), typeof(QueueItem), new PropertyMetadata(0)
     );
 
     public static readonly DependencyProperty StatusProperty = DependencyProperty.Register
     (
-        "Status", typeof(string), typeof(DownloadingListItem), new PropertyMetadata(string.Empty)
+        "Status", typeof(string), typeof(QueueItem), new PropertyMetadata(string.Empty)
     );
 
     public static readonly DependencyProperty CoverImageProperty = DependencyProperty.Register
     (
-        "CoverImage", typeof(ImageSource), typeof(DownloadingListItem)
+        "CoverImage", typeof(ImageSource), typeof(QueueItem)
     );
 
     public static readonly DependencyProperty ProgressRateProperty = DependencyProperty.Register
     (
-        "ProgressRate", typeof(int), typeof(DownloadingListItem), new PropertyMetadata(0)
+        "ProgressRate", typeof(int), typeof(QueueItem), new PropertyMetadata(0)
     );
 
-#endregion
+    #endregion
 
-    public DownloadingListItem()
+    public QueueItem()
     {
         InitializeComponent();
     }

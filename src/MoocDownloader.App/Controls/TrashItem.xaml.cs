@@ -1,11 +1,11 @@
 ﻿namespace MoocDownloader.App.Controls;
 
 /// <summary>
-/// Interaction logic for FinishedListItem.xaml
+/// Interaction logic for TrashItem.xaml
 /// </summary>
-public partial class FinishedListItem
+public partial class TrashItem
 {
-    public FinishedListItem()
+    public TrashItem()
     {
         InitializeComponent();
     }

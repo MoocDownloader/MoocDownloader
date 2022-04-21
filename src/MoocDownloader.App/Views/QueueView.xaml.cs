@@ -1,11 +1,11 @@
 ﻿namespace MoocDownloader.App.Views;
 
 /// <summary>
-/// Interaction logic for DownloadingView.xaml
+/// Interaction logic for QueueView.xaml
 /// </summary>
-public partial class DownloadingView
+public partial class QueueView
 {
-    public DownloadingView()
+    public QueueView()
     {
         InitializeComponent();
     }

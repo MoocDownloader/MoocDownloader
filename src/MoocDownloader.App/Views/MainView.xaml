@@ -16,65 +16,65 @@
         Icon="../Assets/Images/kanna.png"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
-	<WindowChrome.WindowChrome>
-		<WindowChrome CaptionHeight="0"
-			          CornerRadius="0"
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      CornerRadius="0"
                       GlassFrameThickness="1"
                       NonClientFrameEdges="None"
                       UseAeroCaptionButtons="False" />
-	</WindowChrome.WindowChrome>
+    </WindowChrome.WindowChrome>
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition />
-		</Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-		<!--  View title  -->
-		<Grid Grid.Row="0"
+        <!--  View title  -->
+        <Grid Grid.Row="0"
               Height="45"
               Background="#EDEEF2"
               MouseLeftButtonDown="DragMove">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition Width="Auto" />
-			</Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-			<!--  Icon and title  -->
-			<StackPanel Grid.Column="0" Orientation="Horizontal">
-				<Image Width="30"
+            <!--  Icon and title  -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Image Width="30"
                        Height="30"
                        Margin="15,0"
                        Source="../Assets/Images/kanna.png" />
-				<TextBlock FontSize="16"
+                <TextBlock FontSize="16"
                            Foreground="#262A2F"
                            Text="慕课精灵" />
-			</StackPanel>
+            </StackPanel>
 
-			<!--  Control buttons of the view  -->
-			<StackPanel Grid.Column="1" Orientation="Horizontal">
-				<StackPanel.Resources>
-					<Style BasedOn="{StaticResource WindowButtonStyle}" TargetType="Button" />
-				</StackPanel.Resources>
+            <!--  Control buttons of the view  -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style BasedOn="{StaticResource WindowButtonStyle}" TargetType="Button" />
+                </StackPanel.Resources>
 
-				<Button Click="ChangeWindowState" Tag="Minus" />
-				<Button Click="ChangeWindowState" Tag="Square" />
-				<Button Click="ChangeWindowState" Tag="Multiply" />
-			</StackPanel>
-		</Grid>
+                <Button Click="ChangeWindowState" Tag="Minus" />
+                <Button Click="ChangeWindowState" Tag="Square" />
+                <Button Click="ChangeWindowState" Tag="Multiply" />
+            </StackPanel>
+        </Grid>
 
-		<!--  View content  -->
-		<Grid Grid.Row="1">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="2*" MaxWidth="350" />
-				<ColumnDefinition Width="3*" />
-			</Grid.ColumnDefinitions>
+        <!--  View content  -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MaxWidth="350" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
 
-			<Grid Grid.Column="0" Background="#FAFAFA">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition />
-				</Grid.RowDefinitions>
+            <Grid Grid.Column="0" Background="#FAFAFA">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -83,23 +83,23 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-					<local:IconTextTabHeader Grid.Column="0"
+                    <local:IconTextTabHeader Grid.Column="0"
                                              GroupName="DownloadGroup"
                                              Icon="ArrowToBottom"
                                              IsChecked="True"
                                              Text="下载中" />
-					<local:IconTextTabHeader Grid.Column="1"
+                    <local:IconTextTabHeader Grid.Column="1"
                                              GroupName="DownloadGroup"
                                              Icon="Check"
                                              Text="已完成" />
-					<local:IconTextTabHeader Grid.Column="2"
+                    <local:IconTextTabHeader Grid.Column="2"
                                              GroupName="DownloadGroup"
                                              Icon="TrashAlt"
                                              Text="回收站" />
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    <views:DownloadingView />
+                    <views:QueueView />
                 </Grid>
             </Grid>
             <Grid Grid.Column="1" />

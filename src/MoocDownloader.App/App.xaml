@@ -6,7 +6,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="Styles/ScrollViewer.xaml" />
+                <ResourceDictionary Source="Styles/ScrollStyle.xaml" />
+
+                <ResourceDictionary Source="Resources/BrushResource.xaml" />
+                <ResourceDictionary Source="Resources/ConverterResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

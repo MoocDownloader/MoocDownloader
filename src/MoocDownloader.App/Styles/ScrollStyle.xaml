@@ -61,7 +61,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-      <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
+    <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
         <Setter Property="Background" Value="Transparent" />
@@ -234,9 +234,9 @@
         </Setter>
     </Style>
 
-    <!--  默认ScrollBar  -->
+    <!--  ScrollBar  -->
     <Style BasedOn="{StaticResource ScrollBarStyle}" TargetType="ScrollBar" />
 
-    <!--  默认ScrollView  -->
+    <!--  ScrollViewer  -->
     <Style BasedOn="{StaticResource ScrollViewerStyle}" TargetType="ScrollViewer" />
 </ResourceDictionary>
