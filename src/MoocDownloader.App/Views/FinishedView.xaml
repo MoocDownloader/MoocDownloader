@@ -4,6 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MoocDownloader.App.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MoocDownloader.App.ViewModels"
+             d:DataContext="{d:DesignInstance vm:MainViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
              mc:Ignorable="d">
@@ -53,5 +55,37 @@
                 </StackPanel>
             </Grid>
         </Border>
+
+        <ListBox Grid.Row="1"
+                 HorizontalContentAlignment="Stretch"
+                 BorderThickness="0"
+                 ItemsSource="{Binding Finishes}"
+                 Template="{StaticResource ListBoxControlTemplate}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <local:FinishedItem x:Name="FinishedItem" />
+
+                                <ControlTemplate.Resources>
+                                    <Style TargetType="local:FinishedItem">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </ControlTemplate.Resources>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="FinishedItem" Property="Background" Value="{StaticResource ListItemSecondBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="Selector.IsSelected" Value="true">
+                                        <Setter TargetName="FinishedItem" Property="Background" Value="{StaticResource ListItemPrimaryBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -74,6 +74,7 @@
                               VerticalAlignment="Top"
                               Background="Transparent"
                               FontSize="13"
+                              ToolTip="开始"
                               Foreground="#B3B3B3"
                               Icon="ArrowDown" />
         </Grid>

@@ -10,7 +10,9 @@ namespace MoocDownloader.App.ViewModels;
 /// </summary>
 public class MainViewModel : BindableBase
 {
-    public ObservableCollection<CourseModel> Courses { get; set; } = new();
+    public ObservableCollection<CourseModel> Queues   { get; } = new();
+    public ObservableCollection<CourseModel> Finishes { get; } = new();
+    public ObservableCollection<CourseModel> Trashes  { get; } = new();
 
     public MainViewModel()
     {
@@ -19,6 +21,8 @@ public class MainViewModel : BindableBase
 
     void Init()
     {
-        Courses.AddRange(Enumerable.Repeat(new CourseModel(), 20));
+        Queues.AddRange(Enumerable.Repeat(new CourseModel(), 20));
+        Finishes.AddRange(Enumerable.Repeat(new CourseModel(), 20));
+        Trashes.AddRange(Enumerable.Repeat(new CourseModel(), 20));
     }
 }

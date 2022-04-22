@@ -57,9 +57,11 @@
             </Grid>
         </Border>
 
-        <ListBox  Grid.Row="1" HorizontalContentAlignment="Stretch"
-                  BorderThickness="0"
-                  ItemsSource="{Binding Courses}">
+        <ListBox Grid.Row="1"
+                 HorizontalContentAlignment="Stretch"
+                 BorderThickness="0"
+                 ItemsSource="{Binding Queues}"
+                 Template="{StaticResource ListBoxControlTemplate}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">
@@ -85,14 +87,6 @@
                     </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
-
-            <ListBox.Template>
-                <ControlTemplate>
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ListBox.Template>
         </ListBox>
     </Grid>
 </UserControl>

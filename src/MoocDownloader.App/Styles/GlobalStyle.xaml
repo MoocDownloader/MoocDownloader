@@ -112,4 +112,10 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
+
+    <ControlTemplate x:Key="ListBoxControlTemplate">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <ItemsPresenter />
+        </ScrollViewer>
+    </ControlTemplate>
 </ResourceDictionary>
