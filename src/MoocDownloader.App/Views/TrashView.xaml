@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MoocDownloader.App.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="450"
              d:DesignWidth="300"
@@ -12,14 +13,46 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="0"
+                Padding="5"
+                BorderBrush="#F2F2F2"
+                BorderThickness="0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="local:IconButton">
+                        <Setter Property="Padding" Value="5" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="#7A7F8A" />
+                        <Setter Property="Margin" Value="10,0" />
+                    </Style>
+                </Grid.Resources>
 
-            <StackPanel Grid.Column="0" />
-            <StackPanel Grid.Column="1" />
-        </Grid>
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <local:IconTextButton Padding="5"
+                                          Background="#E7EFFB"
+                                          FontSize="11"
+                                          Foreground="#3F85FE"
+                                          Icon="Plus"
+                                          Text="新建"
+                                          ToolTip="新建下载任务" />
+                    <local:IconButton Icon="HistoryAlt" ToolTip="还原" />
+                    <local:IconButton Icon="Multiply" ToolTip="彻底删除" />
+                    <local:IconButton Icon="TrashAlt" ToolTip="清空列表" />
+                </StackPanel>
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <local:IconButton Margin="0"
+                                      Icon="EllipsisV"
+                                      ToolTip="更多" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
