@@ -5,8 +5,8 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/xixixixixiao/mooc-downloader)
 ![GitHub issues](https://img.shields.io/github/issues/xixixixixiao/mooc-downloader)
 ![OS](https://img.shields.io/badge/OS-Windows%2010-blue)
-![dot NET Framework](https://img.shields.io/badge/.NET%20Framework-4.6-blue)
-![IDE](https://img.shields.io/badge/IDE-Visual%20Studio%202019-blue)
+![dot NET 6](https://img.shields.io/badge/.NET-6.0-blue)
+![IDE](https://img.shields.io/badge/IDE-Visual%20Studio%202022-blue)
 
 An icourse163.org MOOC downloader implemented by .NET.
 
