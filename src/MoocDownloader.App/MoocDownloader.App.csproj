@@ -23,7 +23,7 @@
     <PackageReference Include="MahApps.Metro.IconPacks.Unicons" Version="4.11.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
-    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
   </ItemGroup>
 

@@ -35,7 +35,9 @@
                 Background="White"
                 CornerRadius="5"
                 Effect="{StaticResource EffectShadow2}">
-            <TextBox BorderThickness="1" />
+            <Grid>
+                <TextBox BorderThickness="0" TextWrapping="Wrap" />
+            </Grid>
         </Border>
 
         <local:IconTextButton Grid.Row="2"

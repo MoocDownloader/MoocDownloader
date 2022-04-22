@@ -32,4 +32,84 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="TabControlStyle" TargetType="TabControl">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <UniformGrid Grid.Row="0"
+                                     Panel.ZIndex="1"
+                                     IsItemsHost="True"
+                                     KeyboardNavigation.TabIndex="1"
+                                     Rows="1" />
+                        <Border Grid.Row="1">
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              Margin="0"
+                                              Content="{TemplateBinding SelectedContent}"
+                                              ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TabItemStyle" TargetType="TabItem">
+        <Setter Property="Foreground" Value="#727272" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Grid Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                            <Style TargetType="icon:PackIconUnicons">
+                                <Setter Property="Width" Value="12" />
+                                <Setter Property="Height" Value="12" />
+                                <Setter Property="Margin" Value="0,0,10,0" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </Grid.Resources>
+                        <Border Padding="10" Cursor="Hand">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <icon:PackIconUnicons Foreground="{TemplateBinding Foreground}" Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}" />
+                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Header}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="#478AFF" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="#FF75A7FF" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

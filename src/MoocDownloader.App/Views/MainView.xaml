@@ -2,9 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:MoocDownloader.App.Controls"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:MoocDownloader.App.Views"
+        xmlns:v="clr-namespace:MoocDownloader.App.Views"
         xmlns:vm="clr-namespace:MoocDownloader.App.ViewModels"
         Title="慕课精灵"
         Width="1000"
@@ -71,36 +70,24 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0" Background="#FAFAFA">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <local:IconTextTabHeader Grid.Column="0"
-                                             GroupName="DownloadGroup"
-                                             Icon="ArrowToBottom"
-                                             IsChecked="True"
-                                             Text="下载中" />
-                    <local:IconTextTabHeader Grid.Column="1"
-                                             GroupName="DownloadGroup"
-                                             Icon="Check"
-                                             Text="已完成" />
-                    <local:IconTextTabHeader Grid.Column="2"
-                                             GroupName="DownloadGroup"
-                                             Icon="TrashAlt"
-                                             Text="回收站" />
-                </Grid>
-
-                <Grid Grid.Row="1">
-                    <views:QueueView />
-                </Grid>
+                <TabControl Style="{StaticResource TabControlStyle}">
+                    <TabItem Header="下载中"
+                             IsSelected="True"
+                             Style="{StaticResource TabItemStyle}"
+                             Tag="ArrowToBottom">
+                        <v:QueueView />
+                    </TabItem>
+                    <TabItem Header="已完成"
+                             Style="{StaticResource TabItemStyle}"
+                             Tag="Check">
+                        <v:FinishedView />
+                    </TabItem>
+                    <TabItem Header="回收站"
+                             Style="{StaticResource TabItemStyle}"
+                             Tag="TrashAlt">
+                        <v:TrashView />
+                    </TabItem>
+                </TabControl>
             </Grid>
             <Grid Grid.Column="1" />
         </Grid>
