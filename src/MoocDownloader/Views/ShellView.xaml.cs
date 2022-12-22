@@ -4,17 +4,19 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using static MahApps.Metro.IconPacks.PackIconUniconsKind;
+using static MoocDownloader.Helpers.WindowHelper;
 
 namespace MoocDownloader.Views;
 
 /// <summary>
 /// The main view.
 /// </summary>
-public partial class MainView
+public partial class ShellView
 {
-    public MainView()
+    public ShellView()
     {
         InitializeComponent();
+        SetWindowCornerStyle(GetWindow(this));
     }
 
     /// <summary>

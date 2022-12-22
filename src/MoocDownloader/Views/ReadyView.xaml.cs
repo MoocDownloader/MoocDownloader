@@ -1,11 +1,11 @@
 ﻿namespace MoocDownloader.Views;
 
 /// <summary>
-/// Interaction logic for FinishedView.xaml
+/// Interaction logic for ReadyView.xaml
 /// </summary>
-public partial class FinishedView
+public partial class ReadyView
 {
-    public FinishedView()
+    public ReadyView()
     {
         InitializeComponent();
     }

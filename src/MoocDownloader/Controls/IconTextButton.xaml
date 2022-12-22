@@ -4,15 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        d:DesignHeight="50"
-        d:DesignWidth="100"
+        Height="24"
+        d:DesignWidth="50"
         Cursor="Hand"
         mc:Ignorable="d">
     <Button.Resources>
         <Style TargetType="Border">
             <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Padding}" />
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Background}" />
-            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="CornerRadius" Value="2" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=IsMouseOver}" Value="True">
                     <Setter Property="Background" Value="#EEEFF1" />
@@ -25,7 +25,7 @@
         <Style TargetType="icon:PackIconUnicons">
             <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=FontSize}" />
             <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=FontSize}" />
-            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="Margin" Value="0,0,4,0" />
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Foreground}" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -38,7 +38,7 @@
     </Button.Resources>
     <Button.Template>
         <ControlTemplate TargetType="Button">
-            <Border>
+            <Border Padding="8,0">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <icon:PackIconUnicons Kind="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Icon}" />
                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Text}" />

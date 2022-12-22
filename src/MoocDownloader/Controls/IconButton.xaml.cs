@@ -19,7 +19,7 @@ public partial class IconButton
 
     public static readonly DependencyProperty IconProperty = DependencyProperty.Register
     (
-        "Icon", typeof(PackIconUniconsKind), typeof(IconButton), new PropertyMetadata(PackIconUniconsKind.None)
+        nameof(Icon), typeof(PackIconUniconsKind), typeof(IconButton), new PropertyMetadata(PackIconUniconsKind.None)
     );
 
     public IconButton()

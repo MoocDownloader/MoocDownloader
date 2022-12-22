@@ -5,12 +5,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/GlobalStyle.xaml" />
-                <ResourceDictionary Source="Styles/ScrollStyle.xaml" />
+                <ResourceDictionary Source="/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="/HandyControl;component/Themes/Theme.xaml"/>
 
-                <ResourceDictionary Source="Resources/BrushResource.xaml" />
+                <ResourceDictionary Source="Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="Resources/ConverterResource.xaml" />
-                <ResourceDictionary Source="Resources/EffectResource.xaml" />
+                <ResourceDictionary Source="Resources/BrushResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

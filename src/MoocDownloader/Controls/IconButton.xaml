@@ -6,13 +6,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         d:DesignHeight="100"
         d:DesignWidth="100"
+        Height="24"
+        Width="24"
         Cursor="Hand"
         mc:Ignorable="d">
     <Button.Resources>
         <Style TargetType="Border">
             <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Padding}" />
             <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Background}" />
-            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="CornerRadius" Value="2" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=IsMouseOver}" Value="True">
                     <Setter Property="Background" Value="#EEEFF1" />

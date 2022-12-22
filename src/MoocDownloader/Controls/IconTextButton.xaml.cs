@@ -28,12 +28,12 @@ public partial class IconTextButton
 
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register
     (
-        "Text", typeof(string), typeof(IconTextButton), new PropertyMetadata(string.Empty)
+        nameof(Text), typeof(string), typeof(IconTextButton), new PropertyMetadata(string.Empty)
     );
 
     public static readonly DependencyProperty IconProperty = DependencyProperty.Register
     (
-        "Icon", typeof(PackIconUniconsKind), typeof(IconTextButton), new PropertyMetadata(PackIconUniconsKind.None)
+        nameof(Icon), typeof(PackIconUniconsKind), typeof(IconTextButton), new PropertyMetadata(PackIconUniconsKind.None)
     );
 
     public IconTextButton()

@@ -15,5 +15,5 @@ public partial class App
     }
 
     /// <inheritdoc />
-    protected override Window CreateShell() => Container.Resolve<MainView>();
+    protected override Window CreateShell() => Container.Resolve<ShellView>();
 }

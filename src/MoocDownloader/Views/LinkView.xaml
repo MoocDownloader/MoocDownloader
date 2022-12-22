@@ -33,7 +33,7 @@
                 Margin="0,20"
                 Padding="10"
                 Background="White"
-                CornerRadius="5"
+                CornerRadius="4"
                 Effect="{StaticResource EffectShadow2}">
             <Grid>
                 <TextBox BorderThickness="0" TextWrapping="Wrap" />

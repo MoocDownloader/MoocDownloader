@@ -19,7 +19,7 @@
                 Height="60"
                 BorderBrush="#FFE5E5E5"
                 BorderThickness="1"
-                CornerRadius="5">
+                CornerRadius="4">
             <Border.Background>
                 <ImageBrush ImageSource="{Binding Path=CoverImage, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
             </Border.Background>
@@ -27,7 +27,7 @@
 
         <Grid Grid.Column="1"
               Height="55"
-              Margin="5,0">
+              Margin="4,0">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />

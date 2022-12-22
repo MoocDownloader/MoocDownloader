@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
-             d:DataContext="{d:DesignInstance vm:MainViewModel}"
+             d:DataContext="{d:DesignInstance vm:TrashViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
              mc:Ignorable="d">
@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Padding="5"
-                BorderBrush="#F2F2F2"
+                Padding="4"
+                BorderBrush="{DynamicResource SecondaryBorderBrush}"
                 BorderThickness="0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -26,20 +26,18 @@
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="local:IconButton">
-                        <Setter Property="Padding" Value="5" />
                         <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Foreground" Value="#7A7F8A" />
-                        <Setter Property="Margin" Value="10,0" />
+                        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+                        <Setter Property="Margin" Value="4,0" />
                     </Style>
                 </Grid.Resources>
 
                 <StackPanel Grid.Column="0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <local:IconTextButton Padding="5"
-                                          Background="#E7EFFB"
+                    <local:IconTextButton Background="{DynamicResource SecondaryTitleBrush}"
                                           FontSize="11"
-                                          Foreground="#3F85FE"
+                                          Foreground="{DynamicResource PrimaryBrush}"
                                           Icon="Plus"
                                           Text="新建"
                                           ToolTip="新建下载任务" />
@@ -60,8 +58,7 @@
         <ListBox Grid.Row="1"
                  HorizontalContentAlignment="Stretch"
                  BorderThickness="0"
-                 ItemsSource="{Binding Trashes}"
-                 Template="{StaticResource ListBoxControlTemplate}">
+                 ItemsSource="{Binding Trashes}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">
@@ -76,10 +73,10 @@
                                 </ControlTemplate.Resources>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="TrashItem" Property="Background" Value="{StaticResource ListItemSecondBrush}" />
+                                        <Setter TargetName="TrashItem" Property="Background" Value="{DynamicResource BackgroundBrush}" />
                                     </Trigger>
                                     <Trigger Property="Selector.IsSelected" Value="true">
-                                        <Setter TargetName="TrashItem" Property="Background" Value="{StaticResource ListItemPrimaryBrush}" />
+                                        <Setter TargetName="TrashItem" Property="Background" Value="{DynamicResource BackgroundBrush}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
