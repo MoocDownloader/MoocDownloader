@@ -46,7 +46,7 @@
                                           ToolTip="新建下载任务" />
                     <local:IconButton Icon="Play" ToolTip="开始下载" />
                     <local:IconButton Icon="Pause" ToolTip="暂停下载" />
-                    <local:IconButton Icon="Trash" ToolTip="删除下载任务" />
+                    <local:IconButton Icon="TrashAlt" ToolTip="删除下载任务" />
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"

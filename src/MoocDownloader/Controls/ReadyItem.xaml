@@ -2,32 +2,28 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
-             d:DesignHeight="80"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Padding="8"
              d:DesignWidth="300"
              mc:Ignorable="d">
-    <Grid Margin="10">
+    <Grid Height="55">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
-                Width="110"
-                Height="60"
-                BorderBrush="#FFE5E5E5"
+                BorderBrush="{DynamicResource SecondaryBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="4">
             <Border.Background>
-                <ImageBrush ImageSource="{Binding Path=CoverImage, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+                <ImageBrush ImageSource="../Assets/Images/676ebc38ef534767a05ab31472cd5374.jpg" />
             </Border.Background>
         </Border>
 
-        <Grid Grid.Column="1"
-              Height="55"
-              Margin="4,0">
+        <Grid Grid.Column="1" Margin="8,4">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
@@ -38,39 +34,27 @@
                        VerticalAlignment="Top"
                        FontSize="12"
                        FontWeight="Bold"
-                       Foreground="#4D4D4D"
-                       Text="{Binding Path=CourseName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                       TextWrapping="WrapWithOverflow" />
+                       Foreground="{DynamicResource PrimaryTextBrush}"
+                       Text="{Binding Path=Course.CourseName, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}}" />
 
-            <Grid Grid.Row="1" Margin="0,0,0,2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0"
-                           FontSize="11"
-                           Foreground="#B3B3B3">
-                    <Run Text="{Binding Path=DownloadedFiles, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
-                    <Run Text="/" />
-                    <Run Text="{Binding Path=TotalFiles, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
-                </TextBlock>
-                <TextBlock Grid.Column="1"
-                           FontSize="11"
-                           Foreground="#B3B3B3"
-                           Text="{Binding Path=Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
-            </Grid>
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        TextBlock.FontSize="11"
+                        TextBlock.Foreground="{DynamicResource SecondaryTextBrush}">
+                <TextBlock Text="{Binding Path=Course.FinishedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
+                <TextBlock Margin="8,0,0,0" Text="{Binding Path=Course.TotalSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, Converter={StaticResource FormatSizeConverter}}" />
+            </StackPanel>
         </Grid>
 
-        <Grid Grid.Column="2" Height="60">
+        <Grid Grid.Column="2">
             <local:IconButton Padding="4"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Top"
                               Background="Transparent"
                               FontSize="13"
-                              ToolTip="打开所在文件夹"
-                              Foreground="#B3B3B3"
-                              Icon="FolderOpen" />
+                              Foreground="{DynamicResource SecondaryTextBrush}"
+                              Icon="FolderOpen"
+                              ToolTip="打开所在文件夹" />
         </Grid>
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
@@ -59,31 +60,43 @@
                  HorizontalContentAlignment="Stretch"
                  BorderThickness="0"
                  ItemsSource="{Binding Trashes}">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <local:TrashItem x:Name="TrashItem" />
-
-                                <ControlTemplate.Resources>
-                                    <Style TargetType="local:TrashItem">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
-                                </ControlTemplate.Resources>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter TargetName="TrashItem" Property="Background" Value="{DynamicResource BackgroundBrush}" />
-                                    </Trigger>
-                                    <Trigger Property="Selector.IsSelected" Value="true">
-                                        <Setter TargetName="TrashItem" Property="Background" Value="{DynamicResource BackgroundBrush}" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Resources>
+                        <Style BasedOn="{StaticResource MenuItemIconStyle}" TargetType="icon:PackIconUnicons" />
+                    </ContextMenu.Resources>
+                    <MenuItem Header="还原">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="HistoryAlt" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="清空">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="FileTimesAlt" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="打开文件夹">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="FolderOpen" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="彻底删除">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="TimesCircle" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="重新下载">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="CornerDownLeft" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="复制下载链接">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="LinkAlt" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
         </ListBox>
     </Grid>
 </UserControl>

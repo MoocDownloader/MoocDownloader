@@ -4,19 +4,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Padding="8"
              d:DesignHeight="80"
              d:DesignWidth="300"
              mc:Ignorable="d">
-    <Grid Margin="10">
+    <Grid Height="55">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
-                Width="110"
-                Height="60"
                 BorderBrush="{DynamicResource SecondaryBorderBrush}"
                 BorderThickness="1"
                 CornerRadius="4">
@@ -25,9 +24,7 @@
             </Border.Background>
         </Border>
 
-        <Grid Grid.Column="1"
-              Height="55"
-              Margin="4,0">
+        <Grid Grid.Column="1" Margin="8,4">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
@@ -36,27 +33,24 @@
 
             <TextBlock Grid.Row="0"
                        VerticalAlignment="Top"
-                       FontWeight="Bold"
                        Foreground="{DynamicResource PrimaryTextBrush}"
-                       Text="{Binding Path=Course.CourseName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}"
-                       TextWrapping="Wrap" />
+                       Text="{Binding Path=Course.CourseName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
 
-            <Grid Grid.Row="1" Margin="0,0,0,2">
+            <Grid Grid.Row="1"
+                  Margin="0,0,0,2"
+                  TextBlock.Foreground="{DynamicResource SecondaryTextBrush}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0"
-                           FontSize="11"
-                           Foreground="{DynamicResource SecondaryTextBrush}">
+                <TextBlock Grid.Column="0" FontSize="11">
                     <Run Text="{Binding Path=Course.CompletedCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
                     <Run Text="/" />
                     <Run Text="{Binding Path=Course.TotalCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
                 </TextBlock>
                 <TextBlock Grid.Column="1"
                            FontSize="11"
-                           Foreground="{DynamicResource SecondaryTextBrush}"
                            Text="{Binding Path=Course.CourseState, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
             </Grid>
 

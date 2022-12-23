@@ -15,6 +15,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.37.0" />
     <PackageReference Include="HandyControl" Version="3.4.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="MahApps.Metro.IconPacks.Unicons" Version="4.11.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />

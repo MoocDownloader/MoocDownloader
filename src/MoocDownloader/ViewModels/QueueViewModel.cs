@@ -26,7 +26,7 @@ public partial class QueueViewModel
                 FinishedTime = DateTime.Now,
                 CourseState = CourseState.Downloading,
                 Introduction = "该课程于2020年11月被教育部认定为国家级精品在线开放课程（高职）",
-                CompletedCount = 0,
+                CompletedCount = 10,
                 TotalCount = 55,
                 TotalSize = 10240000,
             });

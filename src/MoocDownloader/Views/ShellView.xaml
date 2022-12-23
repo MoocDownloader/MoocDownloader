@@ -30,7 +30,7 @@
         <!--  View title  -->
         <Grid Grid.Row="0"
               Height="45"
-              Background="{DynamicResource BackgroundBrush}"
+              Background="{DynamicResource SecondaryRegionBrush}"
               MouseLeftButtonDown="DragMove">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -61,7 +61,7 @@
         </Grid>
 
         <!--  View content  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="{DynamicResource ThirdlyRegionBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"
                                   MinWidth="300"
@@ -70,7 +70,7 @@
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" Background="{DynamicResource ThirdlyRegionBrush}">
+            <Grid Grid.Column="0">
                 <TabControl Style="{StaticResource DownloadListTabControlStyle}">
                     <TabItem Header="下载中"
                              IsSelected="True"
@@ -91,7 +91,7 @@
                 </TabControl>
             </Grid>
             <GridSplitter Grid.Column="1"
-                          Width="3"
+                          Width="1"
                           HorizontalAlignment="Stretch"
                           Background="{DynamicResource SecondaryBorderBrush}" />
             <Grid Grid.Column="2" />
