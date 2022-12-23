@@ -42,17 +42,14 @@
                                           FontSize="11"
                                           Foreground="{DynamicResource PrimaryBrush}"
                                           Icon="Plus"
-                                          Text="新建"
-                                          ToolTip="新建下载任务" />
-                    <local:IconButton Icon="FolderOpen" ToolTip="打开文件夹" />
-                    <local:IconButton Icon="TrashAlt" ToolTip="删除" />
+                                          Text="{DynamicResource Text.Ready.Create}"
+                                          ToolTip="{DynamicResource Text.Ready.Create.Tip}" />
+                    <local:IconButton Icon="FolderOpen" ToolTip="{DynamicResource Text.Ready.Open.Tip}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <local:IconButton Margin="0"
-                                      Icon="EllipsisV"
-                                      ToolTip="更多" />
+                    <local:IconButton Margin="0" Icon="EllipsisV" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -70,22 +67,22 @@
                     <ContextMenu.Resources>
                         <Style BasedOn="{StaticResource MenuItemIconStyle}" TargetType="icon:PackIconUnicons" />
                     </ContextMenu.Resources>
-                    <MenuItem Header="打开文件夹">
+                    <MenuItem Header="{DynamicResource Text.Ready.Menu.Open}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="FolderOpen" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="删除">
+                    <MenuItem Header="{DynamicResource Text.Ready.Menu.Remove}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="TrashAlt" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="彻底删除">
+                    <MenuItem Header="{DynamicResource Text.Ready.Menu.Delete}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="TimesCircle" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="复制下载链接">
+                    <MenuItem Header="{DynamicResource Text.Ready.Menu.Copy}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="LinkAlt" />
                         </MenuItem.Icon>

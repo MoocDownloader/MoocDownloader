@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <sys:String x:Key="Text.Title">MOOC Downloader</sys:String>
+
+    <sys:String x:Key="Text.List.Queue">下载中</sys:String>
+    <sys:String x:Key="Text.List.Ready">已完成</sys:String>
+    <sys:String x:Key="Text.List.Trash">回收站</sys:String>
+
+    <sys:String x:Key="Text.Queue.Create">新建</sys:String>
+    <sys:String x:Key="Text.Queue.Create.Tip">新建下载任务</sys:String>
+    <sys:String x:Key="Text.Queue.Start.Tip">开始下载</sys:String>
+    <sys:String x:Key="Text.Queue.Pause.Tip">暂停下载</sys:String>
+    <sys:String x:Key="Text.Queue.Delete.Tip">删除下载任务</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Start">开始</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Open">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Remove">删除</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Delete">彻底删除</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Copy">复制下载链接</sys:String>
+
+    <sys:String x:Key="Text.Ready.Create">新建</sys:String>
+    <sys:String x:Key="Text.Ready.Create.Tip">新建下载任务</sys:String>
+    <sys:String x:Key="Text.Ready.Open.Tip">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Ready.Menu.Open">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Ready.Menu.Remove">删除</sys:String>
+    <sys:String x:Key="Text.Ready.Menu.Delete">彻底删除</sys:String>
+    <sys:String x:Key="Text.Ready.Menu.Copy">复制下载链接</sys:String>
+
+    <sys:String x:Key="Text.Trash.Create">新建</sys:String>
+    <sys:String x:Key="Text.Trash.Create.Tip">新建下载任务</sys:String>
+    <sys:String x:Key="Text.Trash.Restore.Tip">还原</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Restore">还原</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Open">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Clear">清空</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Delete">彻底删除</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Redo">重新下载</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Copy">复制下载链接</sys:String>
+</ResourceDictionary>

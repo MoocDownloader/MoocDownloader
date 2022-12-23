@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:v="clr-namespace:MoocDownloader.Views"
-        Title="MOOC Downloader"
+        Title="{DynamicResource Text.Title}"
         Width="1000"
         Height="600"
         MinWidth="600"
@@ -45,7 +45,7 @@
                        Source="../Assets/Images/kanna.png" />
                 <TextBlock FontSize="16"
                            Foreground="{DynamicResource PrimaryTextBrush}"
-                           Text="MOOC Downloader" />
+                           Text="{DynamicResource Text.Title}" />
             </StackPanel>
 
             <!--  Control buttons of the view  -->
@@ -72,18 +72,18 @@
 
             <Grid Grid.Column="0">
                 <TabControl Style="{StaticResource DownloadListTabControlStyle}">
-                    <TabItem Header="下载中"
+                    <TabItem Header="{DynamicResource Text.List.Queue}"
                              IsSelected="True"
                              Style="{StaticResource DownloadListTabItemStyle}"
                              Tag="ArrowToBottom">
                         <v:QueueView />
                     </TabItem>
-                    <TabItem Header="已完成"
+                    <TabItem Header="{DynamicResource Text.List.Ready}"
                              Style="{StaticResource DownloadListTabItemStyle}"
                              Tag="Check">
                         <v:ReadyView />
                     </TabItem>
-                    <TabItem Header="回收站"
+                    <TabItem Header="{DynamicResource Text.List.Trash}"
                              Style="{StaticResource DownloadListTabItemStyle}"
                              Tag="TrashAlt">
                         <v:TrashView />

@@ -42,18 +42,14 @@
                                           FontSize="11"
                                           Foreground="{DynamicResource PrimaryBrush}"
                                           Icon="Plus"
-                                          Text="新建"
-                                          ToolTip="新建下载任务" />
-                    <local:IconButton Icon="HistoryAlt" ToolTip="还原" />
-                    <local:IconButton Icon="Multiply" ToolTip="彻底删除" />
-                    <local:IconButton Icon="TrashAlt" ToolTip="清空列表" />
+                                          Text="{DynamicResource Text.Trash.Create}"
+                                          ToolTip="{DynamicResource Text.Trash.Create.Tip}" />
+                    <local:IconButton Icon="HistoryAlt" ToolTip="{DynamicResource Text.Trash.Restore.Tip}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <local:IconButton Margin="0"
-                                      Icon="EllipsisV"
-                                      ToolTip="更多" />
+                    <local:IconButton Margin="0" Icon="EllipsisV" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -70,32 +66,32 @@
                     <ContextMenu.Resources>
                         <Style BasedOn="{StaticResource MenuItemIconStyle}" TargetType="icon:PackIconUnicons" />
                     </ContextMenu.Resources>
-                    <MenuItem Header="还原">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Restore}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="HistoryAlt" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="清空">
-                        <MenuItem.Icon>
-                            <icon:PackIconUnicons Kind="FileTimesAlt" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="打开文件夹">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Open}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="FolderOpen" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="彻底删除">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Clear}">
+                        <MenuItem.Icon>
+                            <icon:PackIconUnicons Kind="FileTimesAlt" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Delete}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="TimesCircle" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="重新下载">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Redo}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="CornerDownLeft" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="复制下载链接">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Copy}">
                         <MenuItem.Icon>
                             <icon:PackIconUnicons Kind="LinkAlt" />
                         </MenuItem.Icon>

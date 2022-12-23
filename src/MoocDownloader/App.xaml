@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Styles/GlobalStyle.xaml" />
                 <ResourceDictionary Source="Resources/ConverterResource.xaml" />
                 <ResourceDictionary Source="Resources/BrushResource.xaml" />
+                <ResourceDictionary Source="/Languages/zh-CN.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
