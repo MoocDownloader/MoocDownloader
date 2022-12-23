@@ -5,10 +5,12 @@
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrashViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -57,9 +59,12 @@
         </Border>
 
         <ListBox Grid.Row="1"
-                 HorizontalContentAlignment="Stretch"
                  BorderThickness="0"
-                 ItemsSource="{Binding Trashes}">
+                 ItemContainerStyle="{StaticResource TrashListStyle}"
+                 ItemTemplate="{StaticResource TrashDataTemplate}"
+                 ItemsPanel="{StaticResource TrashPanelTemplate}"
+                 ItemsSource="{Binding Trashes}"
+                 Template="{StaticResource TrashTemplate}">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <ContextMenu.Resources>

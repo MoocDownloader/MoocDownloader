@@ -120,6 +120,11 @@
     <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type models:Course}">
         <controls:QueueItem x:Name="QueueItem" Course="{Binding}" />
 
+        <DataTemplate.Resources>
+            <Style TargetType="controls:QueueItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
                 <Setter TargetName="QueueItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
@@ -155,6 +160,11 @@
     <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type models:Course}">
         <controls:ReadyItem x:Name="ReadyItem" Course="{Binding}" />
 
+        <DataTemplate.Resources>
+            <Style TargetType="controls:ReadyItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
                 <Setter TargetName="ReadyItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
@@ -188,8 +198,13 @@
 
     <!--  Trash List  -->
     <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type models:Course}">
-        <controls:TrashItem x:Name="TrashItem" />
+        <controls:TrashItem x:Name="TrashItem" Course="{Binding}" />
 
+        <DataTemplate.Resources>
+            <Style TargetType="controls:TrashItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
                 <Setter TargetName="TrashItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
