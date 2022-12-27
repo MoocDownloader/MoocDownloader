@@ -1,15 +1,167 @@
 ﻿<UserControl x:Class="MoocDownloader.Views.DetailView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MoocDownloader.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="400"
              d:DesignWidth="500"
              mc:Ignorable="d">
     <Grid>
-        <TabControl  Style="{StaticResource DetailTabControlStyle}">
-            <TabItem Header="详情" Style="{StaticResource DetailTabItemStyle}" Tag="FolderInfo" />
-            <TabItem Header="文件" Style="{StaticResource DetailTabItemStyle}" Tag="Books"/>
+        <TabControl Style="{StaticResource DetailTabControlStyle}">
+            <TabItem Header="{DynamicResource Text.Detail.Info}"
+                     Style="{StaticResource DetailTabItemStyle}"
+                     Tag="FolderInfo">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockSubTitle}"
+                               Text="课程介绍" />
+                    <TextBox Grid.Row="1"
+                             Margin="0,10,0,0"
+                             Padding="0"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap">
+                        <TextBox.Text>
+                            Photoshop软件是目前世界最受大众喜爱的图像处理软件之一，有着广泛的使用领域。
+                            《Photoshop图形图像处理技术》课程主要介绍了Photoshop软件在视觉传达设计领域的应用，
+                            该教程以图形图像处理为主线，以PhotoshopCS6软件的应用为基础，
+                            精选了众多图像合成案例、人像后期处理、产品包装设计、产品海报招贴设计等多个真实设计项目为载体，
+                            深入浅出的讲解了多个软件实操作中的难点理论知识，
+                            将理论教学与实践训练融为一体。
+                            系统地介绍了Photoshop基本的使用方法和技巧。
+                            通过学习本课程，同学们可以轻松面对学习与生活中图像后期处理的各种任务和一些平面设计的相关知识。
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Grid.Row="2"
+                               Margin="0,20,0,0"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockSubTitle}"
+                               Text="授课教师" />
+                    <WrapPanel Grid.Row="3"
+                               Margin="0,10,0,0"
+                               Orientation="Horizontal">
+                        <hc:Shield Margin="5,2"
+                                   Status="贾嘉"
+                                   Subject="副教授" />
+                        <hc:Shield Margin="5,2"
+                                   Status="卢帅"
+                                   Subject="特聘讲师" />
+                        <hc:Shield Margin="5,2"
+                                   Status="阮靖萍"
+                                   Subject="特聘讲师" />
+                        <hc:Shield Margin="5,2"
+                                   Status="黄铂"
+                                   Subject="副教授" />
+                        <hc:Shield Margin="5,2"
+                                   Status="谭明霞"
+                                   Subject="副教授" />
+                        <hc:Shield Margin="5,2"
+                                   Status="李颖"
+                                   Subject="讲师" />
+                        <hc:Shield Margin="5,2"
+                                   Status="梁娜"
+                                   Subject="讲师" />
+                        <hc:Shield Margin="5,2"
+                                   Status="严明"
+                                   Subject="讲师" />
+                        <hc:Shield Margin="5,2"
+                                   Status="徐佳佳"
+                                   Subject="讲师" />
+                    </WrapPanel>
+                    <TextBlock Grid.Row="4"
+                               Margin="0,20,0,0"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockSubTitle}"
+                               Text="下载信息" />
+                    <Grid Grid.Row="5" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25" />
+                            <RowDefinition Height="25" />
+                            <RowDefinition Height="25" />
+                            <RowDefinition Height="25" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefault}"
+                                   Text="下载链接" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefault}"
+                                   Text="保存目录" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefault}"
+                                   Text="创建时间" />
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="0"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefault}"
+                                   Text="下载历时" />
+
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefaultSecLight}"
+                                   Text="https://www.icourse163.org/course/WSPC-1002698010?tid=1467126645" />
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="2"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefaultSecLight}"
+                                   Text="D:\Repositories" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefaultSecLight}"
+                                   Text="2022-12-22 08:08:20" />
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="2"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefaultSecLight}"
+                                   Text="08:08:20" />
+
+                        <controls:IconButton Grid.Row="0"
+                                             Grid.Column="4"
+                                             Background="Transparent"
+                                             FontSize="11"
+                                             Foreground="{DynamicResource SecondaryTextBrush}"
+                                             Icon="Copy"
+                                             ToolTip="复制下载链接" />
+                        <controls:IconButton Grid.Row="1"
+                                             Grid.Column="4"
+                                             Background="Transparent"
+                                             FontSize="11"
+                                             Foreground="{DynamicResource SecondaryTextBrush}"
+                                             Icon="FolderOpen"
+                                             ToolTip="打开文件夹" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource Text.Detail.List}"
+                     Style="{StaticResource DetailTabItemStyle}"
+                     Tag="Books" />
         </TabControl>
     </Grid>
 </UserControl>

@@ -43,10 +43,10 @@ public partial class ShellView
         {
             WindowState = kind switch
             {
-                Minus    => WindowState.Minimized,
-                Square   => WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal,
+                Minus => WindowState.Minimized,
+                Square => WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal,
                 Multiply => WindowState.Minimized,
-                _        => WindowState
+                _ => WindowState
             };
         }
     }
@@ -56,7 +56,7 @@ public partial class ShellView
     {
         base.OnClosing(e);
 
-        e.Cancel    = true;
+        e.Cancel = true;
         WindowState = WindowState.Minimized;
     }
 }
