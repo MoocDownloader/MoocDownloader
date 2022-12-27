@@ -5,12 +5,12 @@
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:prism="http://prismlibrary.com/"
+             xmlns:mvvm="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
              d:DataContext="{d:DesignInstance vm:QueueViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
-             prism:ViewModelLocator.AutoWireViewModel="True"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
         <Border Grid.Row="0"
                 Padding="4"
                 BorderBrush="{DynamicResource SecondaryBorderBrush}"
-                BorderThickness="0,1">
+                BorderThickness="0, 0 0 1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -47,6 +47,8 @@
                     <local:IconButton Icon="Play" ToolTip="{DynamicResource Text.Queue.Start.Tip}" />
                     <local:IconButton Icon="Pause" ToolTip="{DynamicResource Text.Queue.Pause.Tip}" />
                     <local:IconButton Icon="TrashAlt" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
+                    <local:IconButton Icon="FolderOpen" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
+                    <local:IconButton Icon="Link" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
@@ -88,9 +90,9 @@
                             <icon:PackIconUnicons Kind="TimesCircle" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{DynamicResource Text.Queue.Menu.Copy}">
+                    <MenuItem Header="{DynamicResource Text.Queue.Menu.Link}">
                         <MenuItem.Icon>
-                            <icon:PackIconUnicons Kind="LinkAlt" />
+                            <icon:PackIconUnicons Kind="Link" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

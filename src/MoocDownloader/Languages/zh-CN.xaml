@@ -12,27 +12,35 @@
     <sys:String x:Key="Text.Queue.Start.Tip">开始下载</sys:String>
     <sys:String x:Key="Text.Queue.Pause.Tip">暂停下载</sys:String>
     <sys:String x:Key="Text.Queue.Delete.Tip">删除下载任务</sys:String>
+    <sys:String x:Key="Text.Queue.Open.Tip">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Queue.Link.Tip">复制下载链接</sys:String>
     <sys:String x:Key="Text.Queue.Menu.Start">开始</sys:String>
     <sys:String x:Key="Text.Queue.Menu.Open">打开文件夹</sys:String>
     <sys:String x:Key="Text.Queue.Menu.Remove">删除</sys:String>
     <sys:String x:Key="Text.Queue.Menu.Delete">彻底删除</sys:String>
-    <sys:String x:Key="Text.Queue.Menu.Copy">复制下载链接</sys:String>
+    <sys:String x:Key="Text.Queue.Menu.Link">复制下载链接</sys:String>
 
     <sys:String x:Key="Text.Ready.Create">新建</sys:String>
     <sys:String x:Key="Text.Ready.Create.Tip">新建下载任务</sys:String>
     <sys:String x:Key="Text.Ready.Open.Tip">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Ready.Remove.Tip">删除下载任务</sys:String>
+    <sys:String x:Key="Text.Ready.Link.Tip">复制下载链接</sys:String>
     <sys:String x:Key="Text.Ready.Menu.Open">打开文件夹</sys:String>
     <sys:String x:Key="Text.Ready.Menu.Remove">删除</sys:String>
     <sys:String x:Key="Text.Ready.Menu.Delete">彻底删除</sys:String>
-    <sys:String x:Key="Text.Ready.Menu.Copy">复制下载链接</sys:String>
+    <sys:String x:Key="Text.Ready.Menu.Link">复制下载链接</sys:String>
 
     <sys:String x:Key="Text.Trash.Create">新建</sys:String>
     <sys:String x:Key="Text.Trash.Create.Tip">新建下载任务</sys:String>
     <sys:String x:Key="Text.Trash.Restore.Tip">还原</sys:String>
+    <sys:String x:Key="Text.Trash.Open.Tip">打开文件夹</sys:String>
+    <sys:String x:Key="Text.Trash.Clear.Tip">清空</sys:String>
+    <sys:String x:Key="Text.Trash.Redo.Tip">重新下载</sys:String>
+    <sys:String x:Key="Text.Trash.Link.Tip">复制下载链接</sys:String>
     <sys:String x:Key="Text.Trash.Menu.Restore">还原</sys:String>
     <sys:String x:Key="Text.Trash.Menu.Open">打开文件夹</sys:String>
     <sys:String x:Key="Text.Trash.Menu.Clear">清空</sys:String>
     <sys:String x:Key="Text.Trash.Menu.Delete">彻底删除</sys:String>
     <sys:String x:Key="Text.Trash.Menu.Redo">重新下载</sys:String>
-    <sys:String x:Key="Text.Trash.Menu.Copy">复制下载链接</sys:String>
+    <sys:String x:Key="Text.Trash.Menu.Link">复制下载链接</sys:String>
 </ResourceDictionary>

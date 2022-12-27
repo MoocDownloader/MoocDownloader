@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="MoocDownloader.Views.DetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="400"
+             d:DesignWidth="500"
+             mc:Ignorable="d">
+    <Grid>
+        <TabControl  Style="{StaticResource DetailTabControlStyle}">
+            <TabItem Header="详情" Style="{StaticResource DetailTabItemStyle}" Tag="FolderInfo" />
+            <TabItem Header="文件" Style="{StaticResource DetailTabItemStyle}" Tag="Books"/>
+        </TabControl>
+    </Grid>
+</UserControl>

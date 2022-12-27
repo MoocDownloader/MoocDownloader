@@ -5,12 +5,12 @@
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:prism="http://prismlibrary.com/"
+             xmlns:mvvm="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrashViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
-             prism:ViewModelLocator.AutoWireViewModel="True"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -21,7 +21,7 @@
         <Border Grid.Row="0"
                 Padding="4"
                 BorderBrush="{DynamicResource SecondaryBorderBrush}"
-                BorderThickness="0,1">
+                BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -45,6 +45,10 @@
                                           Text="{DynamicResource Text.Trash.Create}"
                                           ToolTip="{DynamicResource Text.Trash.Create.Tip}" />
                     <local:IconButton Icon="HistoryAlt" ToolTip="{DynamicResource Text.Trash.Restore.Tip}" />
+                    <local:IconButton Icon="FolderOpen" ToolTip="{DynamicResource Text.Trash.Open.Tip}" />
+                    <local:IconButton Icon="FileTimesAlt" ToolTip="{DynamicResource Text.Trash.Clear.Tip}" />
+                    <local:IconButton Icon="CornerDownLeft" ToolTip="{DynamicResource Text.Trash.Redo.Tip}" />
+                    <local:IconButton Icon="Link" ToolTip="{DynamicResource Text.Trash.Link.Tip}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             VerticalAlignment="Center"
@@ -91,9 +95,9 @@
                             <icon:PackIconUnicons Kind="CornerDownLeft" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Copy}">
+                    <MenuItem Header="{DynamicResource Text.Trash.Menu.Link}">
                         <MenuItem.Icon>
-                            <icon:PackIconUnicons Kind="LinkAlt" />
+                            <icon:PackIconUnicons Kind="Link" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

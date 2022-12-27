@@ -49,12 +49,15 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <Border Grid.Row="0"
+                                BorderBrush="{DynamicResource SecondaryBorderBrush}"
+                                BorderThickness="0,0,0,1">
+                            <UniformGrid Panel.ZIndex="1"
+                                         IsItemsHost="True"
+                                         KeyboardNavigation.TabIndex="1"
+                                         Rows="1" />
+                        </Border>
 
-                        <UniformGrid Grid.Row="0"
-                                     Panel.ZIndex="1"
-                                     IsItemsHost="True"
-                                     KeyboardNavigation.TabIndex="1"
-                                     Rows="1" />
                         <Border Grid.Row="1">
                             <ContentPresenter x:Name="PART_SelectedContentHost"
                                               Margin="0"
@@ -81,6 +84,89 @@
                             </Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                            <Style TargetType="icon:PackIconUnicons">
+                                <Setter Property="Width" Value="12" />
+                                <Setter Property="Height" Value="12" />
+                                <Setter Property="Margin" Value="0,0,10,0" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </Grid.Resources>
+                        <Border Padding="10" Cursor="Hand">
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <icon:PackIconUnicons Foreground="{TemplateBinding Foreground}" Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}" />
+                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Header}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="{DynamicResource InfoBrush}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--  Detail Tab  -->
+    <Style x:Key="DetailTabControlStyle" TargetType="TabControl">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0"
+                                BorderBrush="{DynamicResource SecondaryBorderBrush}"
+                                BorderThickness="0,0,0,1">
+                            <UniformGrid Panel.ZIndex="1"
+                                         IsItemsHost="True"
+                                         KeyboardNavigation.TabIndex="1"
+                                         Rows="1" />
+                        </Border>
+                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          Grid.Row="1"
+                                          Margin="0"
+                                          Content="{TemplateBinding SelectedContent}"
+                                          ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                          ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DetailTabItemStyle" TargetType="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Grid Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                             <Style TargetType="icon:PackIconUnicons">
                                 <Setter Property="Width" Value="12" />
@@ -177,7 +263,7 @@
 
     <ControlTemplate x:Key="ReadyTemplate">
         <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <ItemsPresenter />
         </ScrollViewer>
@@ -217,7 +303,7 @@
 
     <ControlTemplate x:Key="TrashTemplate">
         <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <ItemsPresenter />
         </ScrollViewer>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:v="clr-namespace:MoocDownloader.Views"
         Title="{DynamicResource Text.Title}"
-        Width="1000"
+        Width="900"
         Height="600"
         MinWidth="600"
         MinHeight="400"
@@ -63,11 +63,9 @@
         <!--  View content  -->
         <Grid Grid.Row="1" Background="{DynamicResource ThirdlyRegionBrush}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"
-                                  MinWidth="300"
-                                  MaxWidth="500" />
+                <ColumnDefinition Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" MinWidth="300" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -90,11 +88,15 @@
                     </TabItem>
                 </TabControl>
             </Grid>
+
             <GridSplitter Grid.Column="1"
                           Width="1"
                           HorizontalAlignment="Stretch"
                           Background="{DynamicResource SecondaryBorderBrush}" />
-            <Grid Grid.Column="2" />
+
+            <Grid Grid.Column="2">
+                <v:DetailView />
+            </Grid>
         </Grid>
     </Grid>
 </Window>
