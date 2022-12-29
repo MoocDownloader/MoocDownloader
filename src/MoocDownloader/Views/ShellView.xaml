@@ -83,7 +83,7 @@
                     </TabItem>
                     <TabItem Header="{DynamicResource Text.List.Trash}"
                              Style="{StaticResource DownloadListTabItemStyle}"
-                             Tag="TrashAlt">
+                             Tag="Trash">
                         <v:TrashView />
                     </TabItem>
                 </TabControl>

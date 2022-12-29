@@ -202,6 +202,30 @@
         </Style.Triggers>
     </Style>
 
+    <!--  Detail Section  -->
+    <Style x:Key="DetailSectionStyle" TargetType="GroupBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0">
+                            <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" />
+                        </Border>
+
+                        <Border Grid.Row="1" Margin="0,10,0,0">
+                            <ContentPresenter ContentSource="Content" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--  Queue List  -->
     <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type models:Course}">
         <controls:QueueItem x:Name="QueueItem" Course="{Binding}" />
@@ -320,6 +344,46 @@
     <Style x:Key="TrashListStyle" TargetType="ListBoxItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Template" Value="{StaticResource TrashItemTemplate}" />
+    </Style>
+
+    <!--  Unit List  -->
+    <DataTemplate x:Key="UnitDataTemplate">
+        <controls:UnitItem x:Name="UnitItem" />
+
+        <DataTemplate.Resources>
+            <Style TargetType="controls:UnitItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                <Setter TargetName="UnitItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="UnitItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="UnitTemplate">
+        <ScrollViewer CanContentScroll="False"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsPresenter />
+        </ScrollViewer>
+    </ControlTemplate>
+
+    <ItemsPanelTemplate x:Key="UnitPanelTemplate">
+        <StackPanel />
+    </ItemsPanelTemplate>
+
+    <ControlTemplate x:Key="UnitItemTemplate" TargetType="ListBoxItem">
+        <ContentPresenter />
+    </ControlTemplate>
+
+    <Style x:Key="UnitListStyle" TargetType="ListBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template" Value="{StaticResource UnitItemTemplate}" />
     </Style>
 
     <!--  Context Menu  -->

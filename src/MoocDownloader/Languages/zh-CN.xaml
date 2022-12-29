@@ -45,5 +45,5 @@
     <sys:String x:Key="Text.Trash.Menu.Link">复制下载链接</sys:String>
 
     <sys:String x:Key="Text.Detail.Info">详情</sys:String>
-    <sys:String x:Key="Text.Detail.List">文件列表</sys:String>
+    <sys:String x:Key="Text.Detail.Unit">文件列表</sys:String>
 </ResourceDictionary>
