@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="MoocDownloader.Views.CreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MoocDownloader.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:CreationViewModel}"
+             d:DesignHeight="500"
+             d:DesignWidth="450"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource ThirdlyRegionBrush}"
+             FontFamily="Microsoft YaHei"
+             mc:Ignorable="d">
+    <mvvm:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Width" Value="450" />
+            <Setter Property="Height" Value="500" />
+            <Setter Property="MinWidth" Value="350" />
+            <Setter Property="MinHeight" Value="400" />
+            <Setter Property="Title" Value="新建下载" />
+            <Setter Property="Icon" Value="../Assets/Images/kanna.png" />
+        </Style>
+    </mvvm:Dialog.WindowStyle>
+
+    <Grid>
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="添加链接" />
+            <TextBox Grid.Row="1"
+                     Margin="0,10,0,20"
+                     Background="Transparent"
+                     Text="{Binding Link, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
+            <TextBlock Grid.Row="2"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="文件列表" />
+            <Grid Grid.Row="3">
+                <DataGrid Margin="0,10,0,20"
+                          hc:DataGridAttach.CanUnselectAllWithBlankArea="False"
+                          hc:DataGridAttach.ShowRowNumber="True"
+                          AutoGenerateColumns="False"
+                          Background="Transparent"
+                          BorderThickness="1"
+                          CellStyle="{StaticResource DefaultDataGridCellStyle}"
+                          HeadersVisibility="All"
+                          ItemsSource="{Binding}"
+                          RowHeaderWidth="50"
+                          RowStyle="{StaticResource DefaultDataGridRowStyle}"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn MinWidth="40"
+                                                CanUserSort="False"
+                                                IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="11" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <hc:LoadingCircle Foreground="#9400d3" />
+            </Grid>
+            <TextBlock Grid.Row="4"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="保存位置" />
+            <Grid Grid.Row="5" Margin="0,10,0,20">
+                <TextBox Background="Transparent" Text="{Binding Path}" />
+                <controls:IconButton Margin="0,0,3,0"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Background="Transparent"
+                                     Foreground="{DynamicResource SecondaryTextBrush}"
+                                     Icon="FolderOpen" />
+            </Grid>
+            <Button Grid.Row="6"
+                    Height="35"
+                    Padding="0,5"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding DownloadCommand}"
+                    Style="{StaticResource ButtonPrimary}">
+                <StackPanel Orientation="Horizontal">
+                    <icon:PackIconUnicons Width="12"
+                                          Height="12"
+                                          Margin="0,0,5,0"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Kind="CloudDownload" />
+                    <TextBlock Text="立即下载" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <StackPanel Height="45"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <Button Command="{Binding CloseCommand}"
+                    Style="{StaticResource WindowButtonStyle}"
+                    Tag="Multiply" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,4 +1,6 @@
-﻿using MoocDownloader.Views;
+﻿using MoocDownloader.Controls;
+using MoocDownloader.ViewModels;
+using MoocDownloader.Views;
 using Prism.Ioc;
 using System.Windows;
 
@@ -12,6 +14,8 @@ public partial class App
     /// <inheritdoc />
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        containerRegistry.RegisterDialogWindow<BorderlessWindow>();
+        containerRegistry.RegisterDialog<CreationView, CreationViewModel>();
     }
 
     /// <inheritdoc />

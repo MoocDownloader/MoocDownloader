@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
 using static MahApps.Metro.IconPacks.PackIconUniconsKind;
 using static MoocDownloader.Helpers.WindowHelper;
 
@@ -16,22 +15,7 @@ public partial class ShellView
     public ShellView()
     {
         InitializeComponent();
-        SetWindowCornerStyle(GetWindow(this));
-    }
-
-    /// <summary>
-    /// Drag move the view.
-    /// </summary>
-    private void DragMove(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ClickCount == 2)
-        {
-            WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
-        }
-        else
-        {
-            DragMove();
-        }
+        SetWindowCornerStyle(GetWindow(this)!);
     }
 
     /// <summary>

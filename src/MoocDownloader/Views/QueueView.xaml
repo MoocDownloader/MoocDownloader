@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mvvm="http://prismlibrary.com/"
-             xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
-             d:DataContext="{d:DesignInstance vm:QueueViewModel}"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:QueueViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
              mvvm:ViewModelLocator.AutoWireViewModel="True"
@@ -39,6 +39,7 @@
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                     <local:IconTextButton Background="{DynamicResource SecondaryTitleBrush}"
+                                          Command="{Binding CreateCommand}"
                                           FontSize="11"
                                           Foreground="{DynamicResource PrimaryBrush}"
                                           Icon="Plus"

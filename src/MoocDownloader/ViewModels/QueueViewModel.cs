@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DryIoc;
 using MoocDownloader.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -8,12 +9,11 @@ namespace MoocDownloader.ViewModels;
 /// <summary>
 /// The view model of the queue view.
 /// </summary>
-[INotifyPropertyChanged]
-public partial class QueueViewModel
+public partial class QueueViewModel : SharedViewModel
 {
     [ObservableProperty] private ObservableCollection<Course> _queues = new();
 
-    public QueueViewModel()
+    public QueueViewModel(IContainer container) : base(container)
     {
         for (var i = 0; i < 10; i++)
         {

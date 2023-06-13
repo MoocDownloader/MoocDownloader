@@ -13,6 +13,7 @@
         <Setter Property="Foreground" Value="#262A2F" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="45" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -418,4 +419,46 @@
         <Setter Property="Width" Value="13" />
         <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
     </Style>
+
+
+    <!--  Style of Data Grid  -->
+    <Style x:Key="DefaultDataGridCellStyle"
+           BasedOn="{StaticResource DataGridCellStyle}"
+           TargetType="DataGridCell">
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="true" />
+                    <Condition Property="Selector.IsSelectionActive" Value="false" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="DefaultDataGridRowStyle"
+           BasedOn="{StaticResource DataGridRowStyle}"
+           TargetType="DataGridRow">
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="true" />
+                    <Condition Property="Selector.IsSelectionActive" Value="false" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true" />
+                    <Condition Property="IsSelected" Value="false" />
+                </MultiTrigger.Conditions>
+
+                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

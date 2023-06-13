@@ -1,7 +1,9 @@
 ﻿<Window x:Class="MoocDownloader.Views.ShellView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:assistants="clr-namespace:MoocDownloader.Assistants"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:v="clr-namespace:MoocDownloader.Views"
         Title="{DynamicResource Text.Title}"
@@ -30,8 +32,9 @@
         <!--  View title  -->
         <Grid Grid.Row="0"
               Height="45"
-              Background="{DynamicResource SecondaryRegionBrush}"
-              MouseLeftButtonDown="DragMove">
+              assistants:WindowAssistant.CanDoubleMaximize="True"
+              hc:WindowAttach.IsDragElement="True"
+              Background="{DynamicResource SecondaryRegionBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />

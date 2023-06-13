@@ -4,12 +4,12 @@
              xmlns:controls="clr-namespace:MoocDownloader.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:hc="https://handyorg.github.io/handycontrol"
-             xmlns:mvvm="http://prismlibrary.com/"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
-             d:DataContext="{d:DesignInstance vm:DetailViewModel}"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:DetailViewModel}"
              d:DesignWidth="500"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
         <TabControl Style="{StaticResource DetailTabControlStyle}">

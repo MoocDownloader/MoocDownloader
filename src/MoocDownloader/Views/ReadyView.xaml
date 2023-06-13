@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:MoocDownloader.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mvvm="http://prismlibrary.com/"
-             xmlns:vm="clr-namespace:MoocDownloader.ViewModels"
-             d:DataContext="{d:DesignInstance vm:ReadyViewModel}"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:ReadyViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="300"
              mvvm:ViewModelLocator.AutoWireViewModel="True"
@@ -21,7 +21,7 @@
         <Border Grid.Row="0"
                 Padding="4"
                 BorderBrush="{DynamicResource SecondaryBorderBrush}"
-                BorderThickness="0, 0 0 1">
+                BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -39,6 +39,7 @@
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                     <local:IconTextButton Background="{DynamicResource SecondaryTitleBrush}"
+                                          Command="{Binding CreateCommand}"
                                           FontSize="11"
                                           Foreground="{DynamicResource PrimaryBrush}"
                                           Icon="Plus"

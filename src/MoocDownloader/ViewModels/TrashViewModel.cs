@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DryIoc;
 using MoocDownloader.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -8,13 +9,12 @@ namespace MoocDownloader.ViewModels;
 /// <summary>
 /// The view model of the trash view.
 /// </summary>
-[INotifyPropertyChanged]
-public partial class TrashViewModel
+public partial class TrashViewModel : SharedViewModel
 {
     [ObservableProperty]
     private ObservableCollection<Course> _trashes = new();
 
-    public TrashViewModel()
+    public TrashViewModel(IContainer container) : base(container)
     {
         for (var i = 0; i < 10; i++)
         {

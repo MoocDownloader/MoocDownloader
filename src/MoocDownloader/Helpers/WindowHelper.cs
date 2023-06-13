@@ -1,7 +1,4 @@
-﻿// ReSharper disable IdentifierTypo
-// ReSharper disable InconsistentNaming
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -22,36 +19,32 @@ public enum DWM_WINDOW_CORNER_PREFERENCE
 }
 
 /// <summary>
-/// 窗体辅助.
+/// Window helper.
 /// </summary>
 public static class WindowHelper
 {
     [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
-    internal static extern void DwmSetWindowAttribute
-    (
-        IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute
-    );
+    internal static extern void DwmSetWindowAttribute(
+        IntPtr hwnd,
+        DWMWINDOWATTRIBUTE attribute,
+        ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute,
+        uint cbAttribute);
 
     /// <summary>
-    /// 设置窗体圆角样式.
+    /// Apply rounded corners in desktop apps for Windows 11.
     /// </summary>
-    /// <param name="window">窗体.</param>
-    public static void SetWindowCornerStyle(Window? window)
+    /// <param name="window">The window.</param>
+    public static void SetWindowCornerStyle(Window window)
     {
-        if (window is null)
-        {
-            return;
-        }
-
         try
         {
-            var hWnd = new WindowInteropHelper(window).EnsureHandle();
-            var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+            const DWMWINDOWATTRIBUTE attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
             var preference = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND;
+            var hWnd = new WindowInteropHelper(window).EnsureHandle();
 
             DwmSetWindowAttribute(hWnd, attribute, ref preference, sizeof(uint));
         }
-        catch (Exception)
+        catch (ArgumentException)
         {
             //
         }
