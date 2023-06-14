@@ -40,7 +40,7 @@
                         TextBlock.FontSize="11"
                         TextBlock.Foreground="{DynamicResource SecondaryTextBrush}">
                 <TextBlock Text="{Binding Path=Course.FinishedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=local:TrashItem}, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
-                <TextBlock Margin="8,0,0,0" Text="{Binding Path=Course.TotalSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:TrashItem}, Converter={StaticResource FormatSizeConverter}}" />
+                <TextBlock Margin="8,0,0,0" Text="{Binding Path=Course.TotalSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:TrashItem}, Converter={StaticResource HumanizeBytesConverter}}" />
             </StackPanel>
         </Grid>
 

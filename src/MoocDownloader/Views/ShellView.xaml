@@ -4,6 +4,7 @@
         xmlns:assistants="clr-namespace:MoocDownloader.Assistants"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:v="clr-namespace:MoocDownloader.Views"
         Title="{DynamicResource Text.Title}"
@@ -54,12 +55,33 @@
             <!--  Control buttons of the view  -->
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <StackPanel.Resources>
-                    <Style BasedOn="{StaticResource WindowButtonStyle}" TargetType="Button" />
+                    <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
                 </StackPanel.Resources>
 
-                <Button Click="ChangeWindowState" Tag="Minus" />
-                <Button Click="ChangeWindowState" Tag="Square" />
-                <Button Click="ChangeWindowState" Tag="Multiply" />
+                <Button>
+                    <icon:PackIconUnicons Kind="GithubAlt" />
+                </Button>
+                <Button>
+                    <icon:PackIconUnicons Kind="Bug" />
+                </Button>
+                <Button>
+                    <icon:PackIconUnicons Kind="KeySkeletonAlt" />
+                </Button>
+                <Button>
+                    <icon:PackIconUnicons Kind="Setting" />
+                </Button>
+
+                <Rectangle Style="{StaticResource SeparatorStyle}" />
+
+                <Button>
+                    <icon:PackIconUnicons Kind="Minus" />
+                </Button>
+                <Button>
+                    <icon:PackIconUnicons Kind="Square" />
+                </Button>
+                <Button Tag="Danger">
+                    <icon:PackIconUnicons Kind="Multiply" />
+                </Button>
             </StackPanel>
         </Grid>
 

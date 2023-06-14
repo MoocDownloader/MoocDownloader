@@ -6,9 +6,9 @@ using System.Windows.Data;
 namespace MoocDownloader.Converters;
 
 /// <summary>
-/// The converter for formatting file size.
+/// The converter for humanizing file size.
 /// </summary>
-public class FormatSizeConverter : IValueConverter
+public class HumanizeBytesConverter : IValueConverter
 {
     /// <inheritdoc />
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -7,33 +7,51 @@
     <Style TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
+    <Style TargetType="icon:PackIconUnicons">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+    </Style>
 
-    <Style x:Key="WindowButtonStyle" TargetType="Button">
+    <Style x:Key="SeparatorStyle" TargetType="Rectangle">
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Width" Value="2" />
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="Fill" Value="{DynamicResource BorderBrush}" />
+    </Style>
+
+    <Style x:Key="ControlButtonStyle" TargetType="Button">
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Foreground" Value="#262A2F" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Width" Value="45" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Padding="15,0" Background="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Background}">
-                        <icon:PackIconUnicons Width="12"
-                                              Height="12"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Kind="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" />
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource DarkDefaultBrush}" />
+                <Setter Property="Background" Value="#E8EBEF" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource DarkMaskBrush}" />
+                <Setter Property="Background" Value="#D7DCE6" />
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="Danger" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="{DynamicResource DangerBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextIconBrush}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
 

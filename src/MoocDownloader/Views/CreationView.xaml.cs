@@ -1,4 +1,7 @@
-﻿namespace MoocDownloader.Views;
+﻿using System.Windows;
+using static MoocDownloader.Helpers.WindowHelper;
+
+namespace MoocDownloader.Views;
 
 /// <summary>
 /// Interaction logic for CreationView.xaml
@@ -8,5 +11,6 @@ public partial class CreationView
     public CreationView()
     {
         InitializeComponent();
+        SetWindowCornerStyle(Window.GetWindow(this)!);
     }
 }

@@ -24,5 +24,5 @@ public partial class DownloadLink : ObservableObject
     private string _type = string.Empty;
 
     [ObservableProperty]
-    private DateTime _created = DateTime.Now;
+    private DateTime _creationTime = DateTime.Now;
 }

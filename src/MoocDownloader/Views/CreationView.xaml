@@ -46,6 +46,7 @@
             <TextBox Grid.Row="1"
                      Margin="0,10,0,20"
                      Background="Transparent"
+                     FontSize="11"
                      Text="{Binding Link, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
             <TextBlock Grid.Row="2"
                        HorizontalAlignment="Left"
@@ -79,7 +80,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <hc:LoadingCircle Foreground="#9400d3" />
+                <hc:LoadingCircle Visibility="{Binding IsResolving, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
             <TextBlock Grid.Row="4"
                        HorizontalAlignment="Left"
@@ -87,11 +88,14 @@
                        Style="{StaticResource TextBlockSubTitle}"
                        Text="保存位置" />
             <Grid Grid.Row="5" Margin="0,10,0,20">
-                <TextBox Background="Transparent" Text="{Binding Path}" />
+                <TextBox Background="Transparent"
+                         FontSize="11"
+                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged, Delay=1000}" />
                 <controls:IconButton Margin="0,0,3,0"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Center"
                                      Background="Transparent"
+                                     Command="{Binding BrowseCommand}"
                                      Foreground="{DynamicResource SecondaryTextBrush}"
                                      Icon="FolderOpen" />
             </Grid>
@@ -118,8 +122,10 @@
                     VerticalAlignment="Top"
                     Orientation="Horizontal">
             <Button Command="{Binding CloseCommand}"
-                    Style="{StaticResource WindowButtonStyle}"
-                    Tag="Multiply" />
+                    Style="{StaticResource ControlButtonStyle}"
+                    Tag="Danger">
+                <icon:PackIconUnicons Kind="Multiply" />
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>
