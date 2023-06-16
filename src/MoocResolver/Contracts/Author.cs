@@ -6,7 +6,9 @@ public class Author
 
     public string Title { get; set; } = string.Empty;
 
-    public string? ImageUrl { get; set; }
+    public string? PhotoUrl { get; set; }
+
+    public string? PhotoData { get; set; }
 
     public string? HomePage { get; set; }
 }

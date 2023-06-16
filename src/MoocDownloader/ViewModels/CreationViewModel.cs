@@ -1,11 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MoocDownloader.Models.Creations;
+using MoocResolver.Sites.ICOURSE163;
 using Prism.Services.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using MoocDownloader.Models;
 
 namespace MoocDownloader.ViewModels;
 
@@ -24,6 +30,43 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 
     [ObservableProperty]
     private bool _isResolving;
+
+    public CreationViewModel()
+    {
+        Link = "https://www.icourse163.org/course/XMU-1001771003";
+    }
+
+    [RelayCommand]
+    private async Task ResolveAsync()
+    {
+        if (string.IsNullOrEmpty(Link))
+        {
+            return;
+        }
+
+        var cookieText = await File.ReadAllTextAsync(@"C:\Users\Kaede\Downloads\www.icourse163.org.json");
+        var cookieData = JsonConvert.DeserializeObject<List<CookieModel>>(cookieText);
+        var cookies = new CookieCollection();
+
+        foreach (var model in cookieData!)
+        {
+            cookies.Add(new Cookie
+            {
+                Domain = model.Domain,
+                HttpOnly = model.HttpOnly,
+                Secure = model.Secure,
+                Path = model.Path,
+                Value = model.Value,
+                Name = model.Name ?? string.Empty,
+                Expires = DateTimeOffset.FromUnixTimeSeconds(model.ExpirationDate ?? 0).DateTime
+            });
+        }
+
+        using var resolver = new Course163Resolver(Link, cookies);
+
+        await resolver.ResolveAsync();
+        await Task.CompletedTask;
+    }
 
     [RelayCommand(CanExecute = nameof(CanDownload))]
     private void Download()
@@ -90,12 +133,6 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 
         if (e.PropertyName == nameof(Link))
         {
-            Task.Run(ResolveAsync);
         }
-    }
-
-    private async Task ResolveAsync()
-    {
-        await Task.Delay(TimeSpan.FromSeconds(10));
     }
 }

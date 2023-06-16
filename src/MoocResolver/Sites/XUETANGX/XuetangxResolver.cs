@@ -1,4 +1,5 @@
 ﻿using MoocResolver.Contracts;
+using System.Net;
 
 namespace MoocResolver.Sites.XUETANGX;
 
@@ -6,18 +7,23 @@ namespace MoocResolver.Sites.XUETANGX;
 /// Website name: 学堂在线 - 精品在线课程学习平台
 /// Website address: https://next.xuetangx.com/
 /// </summary>
-public class XuetangxResolver : IResolver
+public class XuetangxResolver : ResolverBase
 {
     public const string Domain = "next.xuetangx.com";
 
     /// <inheritdoc />
-    public bool CanResolve(string link)
+    public XuetangxResolver(string link, CookieCollection cookies) : base(link, cookies)
     {
-        return link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
-    public ResolvedResult Resolve(string link)
+    public override bool CanResolve()
+    {
+        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <inheritdoc />
+    public override Task<ResolvedResult> ResolveAsync()
     {
         throw new NotImplementedException();
     }

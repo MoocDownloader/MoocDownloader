@@ -1,4 +1,5 @@
 ﻿using MoocResolver.Contracts;
+using System.Net;
 
 namespace MoocResolver.Sites.ICOURSES;
 
@@ -6,18 +7,23 @@ namespace MoocResolver.Sites.ICOURSES;
 /// Website name: 爱课程
 /// Website address: https://www.icourses.cn/home/
 /// </summary>
-public class CoursesResolver : IResolver
+public class CoursesResolver : ResolverBase
 {
     public const string Domain = "www.icourses.cn";
 
     /// <inheritdoc />
-    public bool CanResolve(string link)
+    public CoursesResolver(string link, CookieCollection cookies) : base(link, cookies)
     {
-        return link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
-    public ResolvedResult Resolve(string link)
+    public override bool CanResolve()
+    {
+        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <inheritdoc />
+    public override Task<ResolvedResult> ResolveAsync()
     {
         throw new NotImplementedException();
     }

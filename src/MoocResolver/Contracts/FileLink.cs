@@ -1,6 +1,6 @@
 ﻿namespace MoocResolver.Contracts;
 
-public class ResolvedFileLink
+public class FileLink
 {
     public int Index { get; set; }
 

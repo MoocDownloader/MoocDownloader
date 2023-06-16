@@ -35,7 +35,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="课程介绍" />
+                                           Text="简介" />
                             </GroupBox.Header>
                             <TextBox Padding="0"
                                      Background="Transparent"
@@ -61,7 +61,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="授课教师" />
+                                           Text="作者" />
                             </GroupBox.Header>
                             <GroupBox.Resources>
                                 <Style BasedOn="{StaticResource ShieldBaseStyle}" TargetType="hc:Shield">
@@ -88,7 +88,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="下载信息" />
+                                           Text="下载" />
                             </GroupBox.Header>
                             <Grid Grid.Row="5">
                                 <Grid.ColumnDefinitions>
@@ -170,7 +170,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="课程目录" />
+                                           Text="目录" />
                             </GroupBox.Header>
 
                             <StackPanel>

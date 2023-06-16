@@ -1,9 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="cef.redist.x64" Version="114.2.10" />
+    <PackageReference Include="cef.redist.x86" Version="114.2.10" />
+    <PackageReference Include="CefSharp.Common.NETCore" Version="114.2.100" />
+    <PackageReference Include="CefSharp.OffScreen.NETCore" Version="114.2.100" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 
 </Project>

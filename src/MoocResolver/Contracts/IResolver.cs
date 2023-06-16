@@ -2,7 +2,7 @@
 
 public interface IResolver
 {
-    bool CanResolve(string link);
+    bool CanResolve();
 
-    ResolvedResult Resolve(string link);
+    Task<ResolvedResult> ResolveAsync();
 }
