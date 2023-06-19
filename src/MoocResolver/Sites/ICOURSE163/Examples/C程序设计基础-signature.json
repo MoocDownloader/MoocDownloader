@@ -1,0 +1,21 @@
+{
+    "code": 0,
+    "result": {
+        "videoSignDto": {
+            "status": 0,
+            "videoId": 1005077036,
+            "duration": 425,
+            "videoImgUrl": null,
+            "signature": "536545766d6d62683173592f48496b6d7665516b4d4d44516842454d6b6f6b69434b39373662436a4b58356872696b70595352425946356c356a6932656f51517258717236527a73525067517865344f4678624571514d476452634a32456839587941477249494e555966713956354d4b544c396f59364e774e3736786b577349384350636a4e3649662b707a754d3238514c5072513d3d",
+            "name": "算法与程序简介.mp4"
+        },
+        "learnVideoTime": 1,
+        "lessonUnitId": 1284628867,
+        "lessonUnitName": "算法与程序简介",
+        "code": 0,
+        "contentType": 1
+    },
+    "message": "",
+    "traceId": "",
+    "sampled": false
+}

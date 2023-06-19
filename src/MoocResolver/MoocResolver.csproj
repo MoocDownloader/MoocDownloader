@@ -11,7 +11,7 @@
     <PackageReference Include="cef.redist.x86" Version="114.2.10" />
     <PackageReference Include="CefSharp.Common.NETCore" Version="114.2.100" />
     <PackageReference Include="CefSharp.OffScreen.NETCore" Version="114.2.100" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
   </ItemGroup>
 
 </Project>

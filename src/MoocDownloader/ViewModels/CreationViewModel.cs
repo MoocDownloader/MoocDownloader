@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MoocDownloader.Models;
 using MoocDownloader.Models.Creations;
 using MoocResolver.Sites.ICOURSE163;
 using Prism.Services.Dialogs;
@@ -9,9 +10,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using MoocDownloader.Models;
 
 namespace MoocDownloader.ViewModels;
 
@@ -45,21 +45,25 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
         }
 
         var cookieText = await File.ReadAllTextAsync(@"C:\Users\Kaede\Downloads\www.icourse163.org.json");
-        var cookieData = JsonConvert.DeserializeObject<List<CookieModel>>(cookieText);
+        var cookieData = JsonSerializer.Deserialize<List<CookieModel>>(cookieText);
         var cookies = new CookieCollection();
 
         foreach (var model in cookieData!)
         {
-            cookies.Add(new Cookie
+            cookies.Add(new Cookie(
+                name: model.Name,
+                value: model.Value,
+                path: model.Path,
+                domain: model.Domain));
+
+            if (model.Name == "STUDY_SESS"|| model.Name == "STUDY_INFO")
             {
-                Domain = model.Domain,
-                HttpOnly = model.HttpOnly,
-                Secure = model.Secure,
-                Path = model.Path,
-                Value = model.Value,
-                Name = model.Name ?? string.Empty,
-                Expires = DateTimeOffset.FromUnixTimeSeconds(model.ExpirationDate ?? 0).DateTime
-            });
+                cookies.Add(new Cookie(
+                    name: model.Name,
+                    value: model.Value,
+                    path: model.Path,
+                    domain: "study.163.com"));
+            }
         }
 
         using var resolver = new Course163Resolver(Link, cookies);

@@ -23,9 +23,8 @@ public class Study163Resolver : ResolverBase
     }
 
     /// <inheritdoc />
-    public override Task<ResolvedResult> ResolveAsync()
+    public override Task<Playlist> ResolveAsync()
     {
-        var cookieKeys = new[] { "S_INFO", "P_INFO", "STUDY_INFO", "STUDY_SESS", "STUDY_PERSIST" };
         throw new NotImplementedException();
     }
 }

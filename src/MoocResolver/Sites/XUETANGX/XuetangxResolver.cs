@@ -23,7 +23,7 @@ public class XuetangxResolver : ResolverBase
     }
 
     /// <inheritdoc />
-    public override Task<ResolvedResult> ResolveAsync()
+    public override Task<Playlist> ResolveAsync()
     {
         throw new NotImplementedException();
     }

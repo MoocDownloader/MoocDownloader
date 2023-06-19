@@ -1,7 +1,9 @@
 ﻿namespace MoocResolver.Contracts;
 
-public class ResolvedResult
+public class Playlist
 {
+    public string Name { get; set; } = string.Empty;
+
     public string OriginalLink { get; set; } = string.Empty;
 
     public string Introduction { get; set; } = string.Empty;
@@ -16,5 +18,5 @@ public class ResolvedResult
 
     public List<Author> Authors { get; set; } = new();
 
-    public List<FileLink> FileLinks { get; set; } = new();
+    public List<Multimedia> List { get; set; } = new();
 }

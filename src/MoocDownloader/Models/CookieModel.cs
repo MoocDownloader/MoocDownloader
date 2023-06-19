@@ -1,45 +1,45 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace MoocDownloader.Models;
 
 public class CookieModel
 {
-    [JsonProperty("name")]
-    public string? Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 
-    [JsonProperty("value")]
-    public string? Value { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = string.Empty;
 
-    [JsonProperty("domain")]
+    [JsonPropertyName("domain")]
     public string? Domain { get; set; }
 
-    [JsonProperty("hostOnly")]
+    [JsonPropertyName("hostOnly")]
     public bool HostOnly { get; set; }
 
-    [JsonProperty("path")]
+    [JsonPropertyName("path")]
     public string? Path { get; set; }
 
-    [JsonProperty("secure")]
+    [JsonPropertyName("secure")]
     public bool Secure { get; set; }
 
-    [JsonProperty("httpOnly")]
+    [JsonPropertyName("httpOnly")]
     public bool HttpOnly { get; set; }
 
-    [JsonProperty("sameSite")]
+    [JsonPropertyName("sameSite")]
     public string? SameSite { get; set; }
 
-    [JsonProperty("session")]
+    [JsonPropertyName("session")]
     public bool Session { get; set; }
 
-    [JsonProperty("firstPartyDomain")]
+    [JsonPropertyName("firstPartyDomain")]
     public string? FirstPartyDomain { get; set; }
 
-    [JsonProperty("partitionKey")]
+    [JsonPropertyName("partitionKey")]
     public string? PartitionKey { get; set; }
 
-    [JsonProperty("expirationDate")]
+    [JsonPropertyName("expirationDate")]
     public long? ExpirationDate { get; set; }
 
-    [JsonProperty("storeId")]
+    [JsonPropertyName("storeId")]
     public string? StoreId { get; set; }
 }

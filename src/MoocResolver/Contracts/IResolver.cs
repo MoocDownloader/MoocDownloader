@@ -4,5 +4,5 @@ public interface IResolver
 {
     bool CanResolve();
 
-    Task<ResolvedResult> ResolveAsync();
+    Task<Playlist> ResolveAsync();
 }
