@@ -8,7 +8,7 @@ public class CoursewareTokenResult
     public CoursewareVideoSign? VideoSign { get; set; }
 
     [JsonPropertyName("learnVideoTime")]
-    public long LearnVideoTimestamp { get; set; }
+    public long? LearnVideoTimestamp { get; set; }
 
     [JsonPropertyName("lessonUnitId")]
     public long LessonUnitId { get; set; }

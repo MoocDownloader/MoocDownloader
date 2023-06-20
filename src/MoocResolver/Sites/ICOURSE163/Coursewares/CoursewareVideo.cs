@@ -8,7 +8,7 @@ public class CoursewareVideo
     public int Quality { get; set; }
 
     [JsonPropertyName("size")]
-    public long Size { get; set; }
+    public long? Size { get; set; }
 
     [JsonPropertyName("videoUrl")]
     public string? VideoUrl { get; set; }

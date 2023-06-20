@@ -11,6 +11,7 @@ namespace MoocResolver.Contracts;
 public abstract class ResolverBase : IResolver, IDisposable
 {
     public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0";
+    public const string BlankPage = "chrome://version";
 
     protected HttpClient? HttpClient { get; set; }
     protected ChromiumWebBrowser? Browser { get; set; }
@@ -107,9 +108,9 @@ public abstract class ResolverBase : IResolver, IDisposable
         browserSettings.ImageLoading = disableImage ? CefState.Disabled : CefState.Default;
 
         Browser = new ChromiumWebBrowser(
+            address: BlankPage,
             browserSettings: browserSettings,
-            onAfterBrowserCreated: OnAfterBrowserCreated,
-            html: new HtmlString("<h1>hello</h1>"));
+            onAfterBrowserCreated: OnAfterBrowserCreated);
 
         Browser.LoadingStateChanged += BrowserOnLoadingStateChanged;
         Browser.AddressChanged += BrowserOnAddressChanged;
@@ -157,6 +158,13 @@ public abstract class ResolverBase : IResolver, IDisposable
     }
 
     #endregion
+
+    protected virtual long GetTimestamp(bool isMilliseconds = true)
+    {
+        return isMilliseconds
+            ? DateTimeOffset.Now.ToUnixTimeMilliseconds()
+            : DateTimeOffset.Now.ToUnixTimeSeconds();
+    }
 
     /// <inheritdoc />
     public virtual void Dispose()

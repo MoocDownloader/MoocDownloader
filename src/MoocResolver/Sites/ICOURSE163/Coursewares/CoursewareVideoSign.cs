@@ -8,10 +8,10 @@ public class CoursewareVideoSign
     public int Status { get; set; }
 
     [JsonPropertyName("videoId")]
-    public long VideoId { get; set; }
+    public long? VideoId { get; set; }
 
     [JsonPropertyName("duration")]
-    public long Duration { get; set; }
+    public long? Duration { get; set; }
 
     [JsonPropertyName("videoImgUrl")]
     public string? VideoImageurl { get; set; }
