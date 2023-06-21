@@ -1,7 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Core;
 using CefSharp.OffScreen;
-using CefSharp.Web;
+using MoocResolver.Exceptions;
 using Serilog;
 using System.Net;
 using System.Net.Http.Headers;
@@ -45,7 +45,7 @@ public abstract class ResolverBase : IResolver, IDisposable
         return cookieContainer;
     }
 
-    protected virtual void InitialHttpClient(bool useCookies = true, TimeSpan timeout = new())
+    protected virtual void InitializeHttpClient(bool useCookies = true, TimeSpan timeout = new())
     {
         var httpClientHandler = new HttpClientHandler()
         {
@@ -80,7 +80,7 @@ public abstract class ResolverBase : IResolver, IDisposable
         request.Headers.Add("User-Agent", UserAgent);
     }
 
-    protected virtual async Task InitialBrowserAsync(bool disableImage = true)
+    protected virtual async Task InitializeBrowserAsync(bool disableImage = true)
     {
         var localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var cachePath = Path.Combine(localData, @"MoocDownloader\Cache");
@@ -120,7 +120,7 @@ public abstract class ResolverBase : IResolver, IDisposable
 
         if (!response.Success)
         {
-            throw new ApplicationException();
+            throw new ResolveFailedException(ErrorCodes.Browser.InitializationFailed);
         }
     }
 

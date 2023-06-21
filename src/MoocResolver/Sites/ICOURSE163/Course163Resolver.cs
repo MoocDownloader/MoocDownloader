@@ -1,13 +1,13 @@
 ﻿using CefSharp;
 using MoocResolver.Contracts;
+using MoocResolver.Exceptions;
 using MoocResolver.Sites.ICOURSE163.Courses;
 using MoocResolver.Sites.ICOURSE163.Coursewares;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Authentication;
-using System.Text.Encodings.Web;
+using System.Text;
 using System.Text.Json;
-using System.Text.Unicode;
+using System.Web;
 
 namespace MoocResolver.Sites.ICOURSE163;
 
@@ -47,18 +47,24 @@ public class Course163Resolver : ResolverBase
         ParseCourseId();
 
         // 2. Spider course.
-        await InitialBrowserAsync();
+        await InitializeBrowserAsync();
         await SpiderCourseAsync();
+
+        if (string.IsNullOrEmpty(_courseInfo?.Id) || string.IsNullOrEmpty(_courseTerm?.TermId))
+        {
+            throw new ResolveFailedException(ErrorCodes.ICOURSE163.CannotParseCourseId);
+        }
 
         _playlist.Name = _courseInfo!.Name;
 
         // 3. Spider courseware.
-        InitialHttpClient();
+        InitializeHttpClient();
         await SpiaderCoursewareAsync();
 
         // 4. Spider file links.
         await SpiderMultimediaAsync();
 
+        // 5. Construct playlist.
         foreach (var courseCategory in _courseCategories)
         {
             _playlist.Categories.Add(new Category
@@ -78,25 +84,18 @@ public class Course163Resolver : ResolverBase
             });
         }
 
-        var playlistData = JsonSerializer.Serialize(_playlist, new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-        });
-
-        await File.WriteAllTextAsync("playlist.json", playlistData);
-
         return _playlist;
     }
 
-    private string GetCsrfToken()
+    private string GetHttpSessionId()
     {
         const string csrfTokenKey = "NTESSTUDYSI";
         var cookie = Cookies.FirstOrDefault(cookie => cookie.Name == csrfTokenKey);
 
         if (cookie is null)
         {
-            // Credential is wrong.
-            throw new AuthenticationException();
+            // Credentials have wrong.
+            throw new ResolveFailedException(ErrorCodes.Resolver.WrongCredentials);
         }
 
         return cookie.Value;
@@ -117,7 +116,7 @@ public class Course163Resolver : ResolverBase
 
         if (string.IsNullOrEmpty(courseId))
         {
-            throw new ArgumentException(nameof(courseId));
+            throw new ResolveFailedException(ErrorCodes.ICOURSE163.CannotParseCourseId);
         }
 
         _courseId = courseId;
@@ -130,8 +129,7 @@ public class Course163Resolver : ResolverBase
 
         if (!response.Success)
         {
-            throw new ApplicationException(
-                $"Page load failed with ErrorCode:{response.ErrorCode}, HttpStatusCode:{response.HttpStatusCode}");
+            throw new ResolveFailedException(ErrorCodes.Resolver.CannotAccessPage);
         }
 
         var courseInfoResponse = await Browser.EvaluateScriptAsync("JSON.stringify(window.courseDto)");
@@ -197,8 +195,9 @@ public class Course163Resolver : ResolverBase
     {
         const string coursewareUrl = "https://www.icourse163.org/web/j/courseBean.getLastLearnedMocTermDto.rpc";
 
-        var csrfToke = GetCsrfToken();
-        using var request = new HttpRequestMessage(HttpMethod.Post, coursewareUrl + $"?csrfKey={csrfToke}")
+        var httpSessionId = GetHttpSessionId();
+        var requestUrl = coursewareUrl + $"?csrfKey={httpSessionId}";
+        using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)
         {
             Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
             {
@@ -208,7 +207,7 @@ public class Course163Resolver : ResolverBase
 
         AddHttpHeaders(request, new NameValueHeaderValue[]
         {
-            new("edu-script-token", csrfToke),
+            new("edu-script-token", httpSessionId),
             new("Referer", Link)
         });
 
@@ -216,10 +215,10 @@ public class Course163Resolver : ResolverBase
         await using var stream = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<CoursewareResult<CoursewareTermResult>>(stream);
 
-        if (result?.Result is null) // TODO
+        if (result?.Result is null) // TODO: https://www.icourse163.org/course/ZJU-93001?tid=1003997005
         {
-            // Credential has expired.
-            throw new AuthenticationException();
+            // Credentials have expired.
+            throw new ResolveFailedException(ErrorCodes.Resolver.WrongCredentials);
         }
 
         _coursewareTerm = result.Result.Term;
@@ -255,35 +254,42 @@ public class Course163Resolver : ResolverBase
                     var unit = lesson.Units[k];
 
                     var index = i * 100 + j * 10 + k;
-                    var relativePath =
-                        $"{_courseSchool?.Name}/{i:00}_{chapter.ChapterName}/{i:00}.{j:00}_{lesson.LessonName}";
+                    var relativePath = GetRelativePath(i, chapter, j, lesson);
                     var groupName = chapter.ChapterName;
 
-                    var list = unit.ContentType switch
+                    if (unit.ContentType == CoursewareContentType.Video)
                     {
-                        CoursewareContentType.Video =>
-                            await SpiderVideoAsync(unit, index, relativePath, groupName),
-                        CoursewareContentType.Document =>
-                            await SpiderDocumentAsync(unit, index, relativePath, groupName),
-                        _ => new List<Multimedia>()
-                    };
+                        var videos = await SpiderVideoAsync(unit);
 
-                    if (!list.Any()) // List is empty.
-                    {
-                        continue;
+                        foreach (var video in videos)
+                        {
+                            video.Index = index;
+                            video.RelativePath = relativePath;
+                            video.GroupName = groupName;
+                        }
+
+                        _playlist.List.AddRange(videos);
                     }
 
-                    _playlist.List.AddRange(list);
+                    if (unit.ContentType == CoursewareContentType.Document)
+                    {
+                        var document = await SpiderDocumentAsync(unit);
+
+                        if (document is not null)
+                        {
+                            document.Index = index;
+                            document.RelativePath = relativePath;
+                            document.GroupName = groupName;
+
+                            _playlist.List.Add(document);
+                        }
+                    }
                 }
             }
         }
     }
 
-    private async Task<List<Multimedia>> SpiderVideoAsync(
-        CoursewareUnit coursewareUnit,
-        int index,
-        string relativePath,
-        string groupName)
+    private async Task<List<Multimedia>> SpiderVideoAsync(CoursewareUnit coursewareUnit)
     {
         var list = new List<Multimedia>();
 
@@ -307,21 +313,23 @@ public class Course163Resolver : ResolverBase
         await using var videoStream = await videoResponse.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
         var videoResult = await JsonSerializer.DeserializeAsync<CoursewareResult<CoursewareVideoResult>>(videoStream);
 
-        var videos = videoResult?.Result?.Videos;
+        var videos = videoResult?.Result?.Videos
+            ?.Where(v1 => v1.Quality == videoResult.Result?.Videos.Max(v2 => v2.Quality))
+            .ToList();
         var captions = videoResult?.Result?.Captions;
 
+        // Spider the subtitle file corresponding to the video.
         if (captions?.Any() ?? false)
         {
+            const string captionFormat = "srt";
+            var videoFileName = Path.GetFileNameWithoutExtension(videoName);
             foreach (var coursewareCaption in captions)
             {
                 var multimedia = new Multimedia
                 {
-                    Index = index,
-                    FileName = $"{videoName}_{coursewareCaption.Code}",
+                    FileName = $"{videoFileName}.{coursewareCaption.Code}.{captionFormat}",
                     DownloadUrl = coursewareCaption.Url,
-                    MediaFormat = "srt",
-                    RelativePath = relativePath,
-                    GroupName = groupName,
+                    MediaFormat = captionFormat,
                 };
                 list.Add(multimedia);
             }
@@ -332,11 +340,11 @@ public class Course163Resolver : ResolverBase
             return list;
         }
 
+        // Spider the video.
         // Priority:
         // 1. quality: 3 > 2 > 1.
         // 2. format: mp4 > hls > flv.
         const StringComparison ignoreCase = StringComparison.CurrentCultureIgnoreCase;
-        videos = videos.Where(v1 => v1.Quality == videos.Max(v2 => v2.Quality)).ToList();
         var video = videos.FirstOrDefault(video => string.Equals(video.Format, "mp4", ignoreCase)) ??
                     videos.FirstOrDefault(video => string.Equals(video.Format, "hls", ignoreCase)) ??
                     videos.FirstOrDefault(video => string.Equals(video.Format, "flv", ignoreCase));
@@ -348,13 +356,10 @@ public class Course163Resolver : ResolverBase
 
         list.Add(new Multimedia
         {
-            Index = index,
             FileName = videoName,
             DownloadUrl = video.VideoUrl,
             ImageUrl = videoResult?.Result?.VideoImageUrl,
             MediaFormat = video.Format,
-            RelativePath = relativePath,
-            GroupName = groupName,
         });
 
         return list;
@@ -364,8 +369,8 @@ public class Course163Resolver : ResolverBase
     {
         const string tokenUrl = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
 
-        var csrfToke = GetCsrfToken();
-        using var tokenRequest = new HttpRequestMessage(HttpMethod.Post, tokenUrl + $"?csrfKey={csrfToke}")
+        var httpSessionId = GetHttpSessionId();
+        using var tokenRequest = new HttpRequestMessage(HttpMethod.Post, tokenUrl + $"?csrfKey={httpSessionId}")
         {
             Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
             {
@@ -376,7 +381,7 @@ public class Course163Resolver : ResolverBase
         };
         AddHttpHeaders(tokenRequest, new NameValueHeaderValue[]
         {
-            new("edu-script-token", csrfToke),
+            new("edu-script-token", httpSessionId),
             new("Referer", Link)
         });
         using var tokenResponse = await HttpClient!.SendAsync(tokenRequest);
@@ -386,18 +391,14 @@ public class Course163Resolver : ResolverBase
         return tokenResult?.Result?.VideoSign;
     }
 
-    private async Task<List<Multimedia>> SpiderDocumentAsync(
-        CoursewareUnit coursewareUnit,
-        int index,
-        string relativePath,
-        string groupName)
+    private async Task<Multimedia?> SpiderDocumentAsync(CoursewareUnit coursewareUnit)
     {
         const string documentUrl = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
         const string serializeFun = "function serialize(){return JSON.stringify(arguments[2])}\r\n";
         const string callFunName = "dwr.engine._remoteHandleCallback";
         const string targetFunName = "serialize";
 
-        var csrfToke = GetCsrfToken();
+        var httpSessionId = GetHttpSessionId();
 
         using var documentRequest = new HttpRequestMessage(HttpMethod.Post, documentUrl)
         {
@@ -405,7 +406,7 @@ public class Course163Resolver : ResolverBase
             {
                 new("callCount", "1"),
                 new("scriptSessionId", "${scriptSessionId}190"),
-                new("httpSessionId", csrfToke),
+                new("httpSessionId", httpSessionId),
                 new("c0-scriptName", "CourseBean"),
                 new("c0-methodName", "getLessonUnitLearnVo"),
                 new("c0-id", "0"),
@@ -418,7 +419,7 @@ public class Course163Resolver : ResolverBase
         };
         AddHttpHeaders(documentRequest, new NameValueHeaderValue[]
         {
-            new("edu-script-token", csrfToke),
+            new("edu-script-token", httpSessionId),
             new("Referer", Link)
         });
         using var response = await HttpClient!.SendAsync(documentRequest);
@@ -427,36 +428,72 @@ public class Course163Resolver : ResolverBase
 
         var loadedResponse = await Browser!.LoadUrlAsync(BlankPage);
 
-        var list = new List<Multimedia>();
-
         if (!loadedResponse.Success)
         {
-            return list;
+            return null;
         }
 
         var evaluatedResponse = await Browser!.EvaluateScriptAsync(javascriptCode);
 
         if (!evaluatedResponse.Success)
         {
-            return list;
+            return null;
         }
 
         if (evaluatedResponse.Result is not string evaluatedResult)
         {
-            return list;
+            return null;
         }
 
         var remoteResult = JsonSerializer.Deserialize<CoursewareRemoteResult>(evaluatedResult);
+        var originalUrl = remoteResult?.TextOriginalUrl;
+
+        if (string.IsNullOrEmpty(originalUrl))
+        {
+            return null;
+        }
+
         var multimedia = new Multimedia
         {
-            Index = index,
-            FileName = "",
-            DownloadUrl = remoteResult?.TextOriginalUrl,
-            RelativePath = relativePath,
-            GroupName = groupName,
+            FileName = coursewareUnit.UnitName,
+            DownloadUrl = originalUrl,
         };
+        var decodeUrl = new Uri(HttpUtility.UrlDecode(originalUrl));
+        var queries = HttpUtility.ParseQueryString(decodeUrl.Query);
 
-        list.Add(multimedia);
-        return list;
+        if (queries.HasKeys() && queries.AllKeys.Contains("download"))
+        {
+            var fileName = queries["download"];
+
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return multimedia;
+            }
+
+            multimedia.FileName = queries["download"];
+            multimedia.MediaFormat = new FileInfo(fileName).Extension.TrimStart('.');
+        }
+
+        return multimedia;
+    }
+
+    private string GetRelativePath(
+        int chapterIndex,
+        CoursewareChapter chapter,
+        int lessonIndex,
+        CoursewareLesson lesson)
+    {
+        var pathBuilder = new StringBuilder();
+
+        // Example:
+        // [School]CourseName/00_ChapterName/00.00_LessonName
+        pathBuilder
+            .Append($"[{_courseSchool?.Name}]{_courseInfo?.Name}")
+            .Append("/")
+            .Append($"{chapterIndex + 1:00}_{chapter.ChapterName}")
+            .Append("/")
+            .Append($"{chapterIndex + 1:00}.{lessonIndex + 1:00}_{lesson.LessonName}");
+
+        return pathBuilder.ToString();
     }
 }

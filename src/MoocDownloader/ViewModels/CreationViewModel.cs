@@ -69,7 +69,6 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
         using var resolver = new Course163Resolver(Link, cookies);
 
         await resolver.ResolveAsync();
-        await Task.CompletedTask;
     }
 
     [RelayCommand(CanExecute = nameof(CanDownload))]
