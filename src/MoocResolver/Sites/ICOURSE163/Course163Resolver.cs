@@ -3,7 +3,6 @@ using MoocResolver.Contracts;
 using MoocResolver.Exceptions;
 using MoocResolver.Sites.ICOURSE163.Courses;
 using MoocResolver.Sites.ICOURSE163.Coursewares;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -24,13 +23,14 @@ public class Course163Resolver : ResolverBase
     private readonly List<CourseLector> _courseLectors = new();
 
     private string? _courseId;
+    private string? _courseIntro;
     private CourseInfo? _courseInfo;
     private CourseSchool? _courseSchool;
     private CourseTerm? _courseTerm;
     private CoursewareTerm? _coursewareTerm;
 
     /// <inheritdoc />
-    public Course163Resolver(string link, CookieCollection cookies) : base(link, cookies)
+    public Course163Resolver(string link) : base(link)
     {
     }
 
@@ -39,7 +39,6 @@ public class Course163Resolver : ResolverBase
     {
         return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
-
     /// <inheritdoc />
     public override async Task<Playlist> ResolveAsync()
     {
@@ -55,11 +54,14 @@ public class Course163Resolver : ResolverBase
             throw new ResolveFailedException(ErrorCodes.ICOURSE163.CannotParseCourseId);
         }
 
-        _playlist.Name = _courseInfo!.Name;
+        _playlist.Name = _courseInfo?.Name;
+        _playlist.Introduction = _courseIntro;
+        _playlist.CoverImageUrl = _courseTerm?.PhotoUrl;
+        _playlist.OriginalLink = Link;
 
         // 3. Spider courseware.
         InitializeHttpClient();
-        await SpiaderCoursewareAsync();
+        await SpiderCoursewareAsync();
 
         // 4. Spider file links.
         await SpiderMultimediaAsync();
@@ -89,8 +91,8 @@ public class Course163Resolver : ResolverBase
 
     private string GetHttpSessionId()
     {
-        const string csrfTokenKey = "NTESSTUDYSI";
-        var cookie = Cookies.FirstOrDefault(cookie => cookie.Name == csrfTokenKey);
+        const string sessionKey = "NTESSTUDYSI";
+        var cookie = Cookies.GetAllCookies().FirstOrDefault(cookie => cookie.Name == sessionKey);
 
         if (cookie is null)
         {
@@ -124,6 +126,8 @@ public class Course163Resolver : ResolverBase
 
     private async Task SpiderCourseAsync()
     {
+        const string getIntroJavaScriptCode = "document.getElementsByClassName('course-heading-intro')[0].innerText";
+
         var pageUrl = $"https://www.icourse163.org/course/{_courseId}";
         var response = await Browser!.LoadUrlAsync(pageUrl);
 
@@ -138,6 +142,7 @@ public class Course163Resolver : ResolverBase
         var chiefLectorResponse = await Browser.EvaluateScriptAsync("JSON.stringify(window.chiefLector)");
         var staffLectorsResponse = await Browser.EvaluateScriptAsync("JSON.stringify(window.staffLectors)");
         var categoriesResponse = await Browser.EvaluateScriptAsync("JSON.stringify(window.categories)");
+        var introductionResponse = await Browser.EvaluateScriptAsync(getIntroJavaScriptCode);
 
         // Get Course info.
         if (courseInfoResponse.Success && courseInfoResponse.Result is string courseInfoData)
@@ -189,9 +194,15 @@ public class Course163Resolver : ResolverBase
                 _courseLectors.AddRange(staffLectors);
             }
         }
+
+        // Get introduction.
+        if (introductionResponse.Success && introductionResponse.Result is string introData)
+        {
+            _courseIntro = introData;
+        }
     }
 
-    private async Task SpiaderCoursewareAsync()
+    private async Task SpiderCoursewareAsync()
     {
         const string coursewareUrl = "https://www.icourse163.org/web/j/courseBean.getLastLearnedMocTermDto.rpc";
 
@@ -313,6 +324,9 @@ public class Course163Resolver : ResolverBase
         await using var videoStream = await videoResponse.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
         var videoResult = await JsonSerializer.DeserializeAsync<CoursewareResult<CoursewareVideoResult>>(videoStream);
 
+        // Priority of videos:
+        // 1. quality: 3 > 2 > 1.
+        // 2. format: mp4 > hls > flv.
         var videos = videoResult?.Result?.Videos
             ?.Where(v1 => v1.Quality == videoResult.Result?.Videos.Max(v2 => v2.Quality))
             .ToList();
@@ -341,9 +355,6 @@ public class Course163Resolver : ResolverBase
         }
 
         // Spider the video.
-        // Priority:
-        // 1. quality: 3 > 2 > 1.
-        // 2. format: mp4 > hls > flv.
         const StringComparison ignoreCase = StringComparison.CurrentCultureIgnoreCase;
         var video = videos.FirstOrDefault(video => string.Equals(video.Format, "mp4", ignoreCase)) ??
                     videos.FirstOrDefault(video => string.Equals(video.Format, "hls", ignoreCase)) ??
