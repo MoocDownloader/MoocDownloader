@@ -8,56 +8,47 @@ using System.Net.Http.Headers;
 
 namespace MoocResolver.Contracts;
 
-public abstract class ResolverBase : IResolver, IDisposable
+public abstract class ResolverBase : IResolver
 {
     public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0";
-    public const string BlankPage = "chrome://version";
+    public const string StartPage = "chrome://version";
 
     protected HttpClient? HttpClient { get; set; }
     protected ChromiumWebBrowser? Browser { get; set; }
 
-    protected readonly string Link;
-    protected readonly CookieCollection Cookies;
     protected readonly ILogger Logger;
+    protected readonly ResolverOption Option;
 
-    protected ResolverBase(string link, CookieCollection cookies)
+    protected ResolverBase(ResolverOption option)
     {
-        Link = link;
-        Cookies = cookies;
+        Option = option;
         Logger = Log.ForContext(typeof(ResolverBase));
     }
 
     /// <inheritdoc />
-    public abstract bool CanResolve();
-
-    /// <inheritdoc />
     public abstract Task<Playlist> ResolveAsync();
 
-    protected virtual CookieContainer GetCookieContainer()
+    protected virtual HttpClientHandler GetHttpClientHandler(bool useCookies, bool autoRedirect = false)
     {
-        var cookieContainer = new CookieContainer();
-
-        foreach (System.Net.Cookie cookie in Cookies)
-        {
-            cookieContainer.Add(cookie);
-        }
-
-        return cookieContainer;
-    }
-
-    protected virtual void InitializeHttpClient(bool useCookies = true, TimeSpan timeout = new())
-    {
-        var httpClientHandler = new HttpClientHandler()
+        return new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            AllowAutoRedirect = false,
+            AllowAutoRedirect = autoRedirect,
             UseCookies = useCookies,
-            CookieContainer = GetCookieContainer(),
+            CookieContainer = Cookies,
         };
+    }
+
+    protected virtual void InitializeHttpClient(
+        bool useCookies = true,
+        bool autoRedirect = false,
+        TimeSpan timeout = new())
+    {
+        var httpClientHandler = GetHttpClientHandler(useCookies, autoRedirect);
 
         HttpClient = new HttpClient(httpClientHandler)
         {
-            Timeout = timeout == TimeSpan.Zero ? TimeSpan.FromMilliseconds(int.MaxValue) : timeout
+            Timeout = timeout == TimeSpan.Zero ? TimeSpan.FromMilliseconds(int.MaxValue) : timeout,
         };
     }
 
@@ -108,7 +99,7 @@ public abstract class ResolverBase : IResolver, IDisposable
         browserSettings.ImageLoading = disableImage ? CefState.Disabled : CefState.Default;
 
         Browser = new ChromiumWebBrowser(
-            address: BlankPage,
+            address: StartPage,
             browserSettings: browserSettings,
             onAfterBrowserCreated: OnAfterBrowserCreated);
 
@@ -159,12 +150,16 @@ public abstract class ResolverBase : IResolver, IDisposable
 
     #endregion
 
-    protected virtual long GetTimestamp(bool isMilliseconds = true)
-    {
-        return isMilliseconds
+    protected virtual long CurrentTimestamp(bool isMilliseconds = true) =>
+        isMilliseconds
             ? DateTimeOffset.Now.ToUnixTimeMilliseconds()
             : DateTimeOffset.Now.ToUnixTimeSeconds();
-    }
+
+    protected virtual ResolverCredential Credential => Option.Credential;
+
+    protected virtual CookieContainer Cookies => Credential.Cookies;
+
+    protected virtual ResolverNetworkProxy NetworkProxy => Option.NetworkProxy;
 
     /// <inheritdoc />
     public virtual void Dispose()

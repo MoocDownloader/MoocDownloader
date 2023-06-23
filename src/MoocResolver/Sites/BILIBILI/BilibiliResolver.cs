@@ -1,5 +1,4 @@
 ﻿using MoocResolver.Contracts;
-using System.Net;
 
 namespace MoocResolver.Sites.BILIBILI;
 
@@ -9,17 +8,11 @@ namespace MoocResolver.Sites.BILIBILI;
 /// </summary>
 public class BilibiliResolver : ResolverBase
 {
-    public const string Domain = "www.bilibili.com";
+    public const string Pattern = @"^(https:\/\/)?www.bilibili.com\/";
 
     /// <inheritdoc />
-    public BilibiliResolver(string link, CookieCollection cookies) : base(link, cookies)
+    public BilibiliResolver(ResolverOption option) : base(option)
     {
-    }
-
-    /// <inheritdoc />
-    public override bool CanResolve()
-    {
-        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />

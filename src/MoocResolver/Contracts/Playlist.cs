@@ -2,11 +2,11 @@
 
 public class Playlist
 {
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; } = string.Empty;
 
     public string OriginalLink { get; set; } = string.Empty;
 
-    public string Introduction { get; set; } = string.Empty;
+    public string? Introduction { get; set; } = string.Empty;
 
     public string? CoverImageUrl { get; set; }
 

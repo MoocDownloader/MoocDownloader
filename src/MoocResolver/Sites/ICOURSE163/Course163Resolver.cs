@@ -1,8 +1,10 @@
 ﻿using CefSharp;
 using MoocResolver.Contracts;
 using MoocResolver.Exceptions;
+using MoocResolver.Helpers;
 using MoocResolver.Sites.ICOURSE163.Courses;
 using MoocResolver.Sites.ICOURSE163.Coursewares;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +18,8 @@ namespace MoocResolver.Sites.ICOURSE163;
 /// </summary>
 public class Course163Resolver : ResolverBase
 {
-    public const string Domain = "www.icourse163.org";
+    public const string Pattern = @"^(https:\/\/)?www.icourse163.org\/(course|learn)";
+    private const string SessionKey = "NTESSTUDYSI";
 
     private readonly Playlist _playlist = new();
     private readonly List<CourseCategory> _courseCategories = new();
@@ -30,15 +33,10 @@ public class Course163Resolver : ResolverBase
     private CoursewareTerm? _coursewareTerm;
 
     /// <inheritdoc />
-    public Course163Resolver(string link) : base(link)
+    public Course163Resolver(ResolverOption option) : base(option)
     {
     }
 
-    /// <inheritdoc />
-    public override bool CanResolve()
-    {
-        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
-    }
     /// <inheritdoc />
     public override async Task<Playlist> ResolveAsync()
     {
@@ -57,16 +55,21 @@ public class Course163Resolver : ResolverBase
         _playlist.Name = _courseInfo?.Name;
         _playlist.Introduction = _courseIntro;
         _playlist.CoverImageUrl = _courseTerm?.PhotoUrl;
-        _playlist.OriginalLink = Link;
+        _playlist.OriginalLink = Option.Link;
 
-        // 3. Spider courseware.
+        // Initialize HTTP Client.
         InitializeHttpClient();
+
+        // 3. Authentication.
+        await LoginAsync();
+
+        // 4. Spider courseware.
         await SpiderCoursewareAsync();
 
-        // 4. Spider file links.
+        // 5. Spider file links.
         await SpiderMultimediaAsync();
 
-        // 5. Construct playlist.
+        // 6. Construct playlist.
         foreach (var courseCategory in _courseCategories)
         {
             _playlist.Categories.Add(new Category
@@ -89,10 +92,72 @@ public class Course163Resolver : ResolverBase
         return _playlist;
     }
 
+    private async Task LoginAsync()
+    {
+        // 1. Check whether the user has already logged in.
+        if (Cookies.GetAllCookies().Any(cookie => cookie.Name == SessionKey))
+        {
+            return;
+        }
+
+        // 2. Authenticate the user if the user has not logged in.
+        const string homeUrl = "https://www.icourse163.org/";
+        const string loginUrl = homeUrl + "passport/reg/icourseLogin.do";
+        const string returnUrl = homeUrl + "/member/login.htm#/webLoginIndex";
+        const string failUrl = homeUrl + "/member/login.htm?emailEncoded=";
+
+        using var homeRequest = new HttpRequestMessage(HttpMethod.Get, homeUrl);
+        using var homeResponse = await HttpClient!.SendAsync(homeRequest);
+
+        if (!homeResponse.IsSuccessStatusCode)
+        {
+            throw new ResolveFailedException(ErrorCodes.Resolver.UnableToAccessPage);
+        }
+
+        using var loginRequest = new HttpRequestMessage(HttpMethod.Post, loginUrl)
+        {
+            Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
+            {
+                new("returnUrl", Encode(returnUrl)),
+                new("failUrl", Encode(failUrl + Encode(Credential.Username))),
+                new("saveLogin", "true"),
+                new("oauthType", ""),
+                new("username", Credential.Username),
+                new("passwd", Credential.Password),
+            })
+        };
+        AddHttpHeaders(loginRequest, Array.Empty<NameValueHeaderValue>());
+        using var loginResponse = await HttpClient!.SendAsync(loginRequest);
+
+        // 3. Checking result logged.
+        switch (loginResponse.StatusCode)
+        {
+            case HttpStatusCode.OK:
+                // Login successful.
+                const string study163Domain = "study.163.com";
+
+                foreach (var cookie in Cookies.GetAllCookies().Cast<System.Net.Cookie>())
+                {
+                    Cookies.Add(new System.Net.Cookie(
+                        name: cookie.Name,
+                        value: cookie.Value,
+                        path: cookie.Path,
+                        domain: study163Domain));
+                }
+
+                break;
+            case HttpStatusCode.Redirect:
+                // Wrong username or password.
+                throw new ResolveFailedException(ErrorCodes.Resolver.WrongCredentials);
+            default:
+                // Login failed.
+                throw new ResolveFailedException(ErrorCodes.Resolver.LoginFailed);
+        }
+    }
+
     private string GetHttpSessionId()
     {
-        const string sessionKey = "NTESSTUDYSI";
-        var cookie = Cookies.GetAllCookies().FirstOrDefault(cookie => cookie.Name == sessionKey);
+        var cookie = Cookies.GetAllCookies().FirstOrDefault(cookie => cookie.Name == SessionKey);
 
         if (cookie is null)
         {
@@ -114,7 +179,7 @@ public class Course163Resolver : ResolverBase
         // 2. https://www.icourse163.org/learn/XMU-1001771003?tid=1470076448#/learn/announce
         //
         // Course ID: XMU-1001771003
-        var courseId = new Uri(Link).Segments.LastOrDefault();
+        var courseId = new Uri(Option.Link).Segments.LastOrDefault();
 
         if (string.IsNullOrEmpty(courseId))
         {
@@ -133,7 +198,7 @@ public class Course163Resolver : ResolverBase
 
         if (!response.Success)
         {
-            throw new ResolveFailedException(ErrorCodes.Resolver.CannotAccessPage);
+            throw new ResolveFailedException(ErrorCodes.Resolver.UnableToAccessPage);
         }
 
         var courseInfoResponse = await Browser.EvaluateScriptAsync("JSON.stringify(window.courseDto)");
@@ -219,7 +284,7 @@ public class Course163Resolver : ResolverBase
         AddHttpHeaders(request, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Link)
+            new("Referer", Option.Link)
         });
 
         using var response = await HttpClient!.SendAsync(request);
@@ -239,7 +304,7 @@ public class Course163Resolver : ResolverBase
     {
         if (_coursewareTerm?.Chapters is null)
         {
-            throw new ArgumentNullException();
+            throw new ResolveFailedException(ErrorCodes.Resolver.CannotResolve);
         }
 
         for (var i = 0; i < _coursewareTerm.Chapters.Count; i++)
@@ -270,16 +335,16 @@ public class Course163Resolver : ResolverBase
 
                     if (unit.ContentType == CoursewareContentType.Video)
                     {
-                        var videos = await SpiderVideoAsync(unit);
+                        var multimediaList = await SpiderVideoAsync(unit);
 
-                        foreach (var video in videos)
+                        foreach (var multimedia in multimediaList)
                         {
-                            video.Index = index;
-                            video.RelativePath = relativePath;
-                            video.GroupName = groupName;
+                            multimedia.Index = index;
+                            multimedia.RelativePath = relativePath;
+                            multimedia.GroupName = groupName;
                         }
 
-                        _playlist.List.AddRange(videos);
+                        _playlist.List.AddRange(multimediaList);
                     }
 
                     if (unit.ContentType == CoursewareContentType.Document)
@@ -393,7 +458,7 @@ public class Course163Resolver : ResolverBase
         AddHttpHeaders(tokenRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Link)
+            new("Referer", Option.Link)
         });
         using var tokenResponse = await HttpClient!.SendAsync(tokenRequest);
         await using var tokenStream = await tokenResponse.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
@@ -425,19 +490,19 @@ public class Course163Resolver : ResolverBase
                 new("c0-param1", "number:3"),
                 new("c0-param2", "number:0"),
                 new("c0-param3", $"number:{coursewareUnit.UnitId}"),
-                new("batchId", $"{GetTimestamp()}"), // Timestamp of the current time.
+                new("batchId", $"{CurrentTimestamp()}"), // Timestamp of the current time.
             })
         };
         AddHttpHeaders(documentRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Link)
+            new("Referer", Option.Link)
         });
         using var response = await HttpClient!.SendAsync(documentRequest);
         var content = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
         var javascriptCode = serializeFun + content.Replace(callFunName, targetFunName);
 
-        var loadedResponse = await Browser!.LoadUrlAsync(BlankPage);
+        var loadedResponse = await Browser!.LoadUrlAsync(StartPage);
 
         if (!loadedResponse.Success)
         {
@@ -507,4 +572,6 @@ public class Course163Resolver : ResolverBase
 
         return pathBuilder.ToString();
     }
+
+    private static string Encode(string plainText) => Base64Helper.Encode(plainText);
 }

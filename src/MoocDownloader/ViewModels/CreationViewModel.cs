@@ -1,16 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MoocDownloader.Models;
 using MoocDownloader.Models.Creations;
-using MoocResolver.Sites.ICOURSE163;
+using MoocResolver.Contracts;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MoocDownloader.ViewModels;
@@ -44,31 +39,17 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
             return;
         }
 
-        var cookieText = await File.ReadAllTextAsync(@"C:\Users\Kaede\Downloads\www.icourse163.org.json");
-        var cookieData = JsonSerializer.Deserialize<List<CookieModel>>(cookieText);
-        var cookies = new CookieCollection();
-
-        foreach (var model in cookieData!)
+        using var resolver = new ResolverBuilder().MatchLink(Link).Build(new ResolverOption
         {
-            cookies.Add(new Cookie(
-                name: model.Name,
-                value: model.Value,
-                path: model.Path,
-                domain: model.Domain));
-
-            if (model.Name == "STUDY_SESS"|| model.Name == "STUDY_INFO")
+            Link = Link,
+            Credential = new ResolverCredential
             {
-                cookies.Add(new Cookie(
-                    name: model.Name,
-                    value: model.Value,
-                    path: model.Path,
-                    domain: "study.163.com"));
+                Username = "",
+                Password = "",
+                Cookies = new CookieContainer(),
             }
-        }
-
-        using var resolver = new Course163Resolver(Link, cookies);
-
-        await resolver.ResolveAsync();
+        });
+        var _ = await resolver.ResolveAsync();
     }
 
     [RelayCommand(CanExecute = nameof(CanDownload))]
@@ -128,14 +109,4 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 
     /// <inheritdoc />
     public event Action<IDialogResult>? RequestClose;
-
-    /// <inheritdoc />
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(Link))
-        {
-        }
-    }
 }

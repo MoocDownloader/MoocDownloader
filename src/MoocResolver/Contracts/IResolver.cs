@@ -1,8 +1,6 @@
 ﻿namespace MoocResolver.Contracts;
 
-public interface IResolver
+public interface IResolver : IDisposable
 {
-    bool CanResolve();
-
     Task<Playlist> ResolveAsync();
 }

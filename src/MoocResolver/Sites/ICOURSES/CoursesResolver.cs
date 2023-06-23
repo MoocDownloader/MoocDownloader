@@ -1,5 +1,4 @@
 ﻿using MoocResolver.Contracts;
-using System.Net;
 
 namespace MoocResolver.Sites.ICOURSES;
 
@@ -9,17 +8,11 @@ namespace MoocResolver.Sites.ICOURSES;
 /// </summary>
 public class CoursesResolver : ResolverBase
 {
-    public const string Domain = "www.icourses.cn";
+    public const string Pattern = @"^(https:\/\/)?www.icourses.cn\/";
 
     /// <inheritdoc />
-    public CoursesResolver(string link, CookieCollection cookies) : base(link, cookies)
+    public CoursesResolver(ResolverOption option) : base(option)
     {
-    }
-
-    /// <inheritdoc />
-    public override bool CanResolve()
-    {
-        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />

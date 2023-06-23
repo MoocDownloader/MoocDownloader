@@ -1,5 +1,4 @@
 ﻿using MoocResolver.Contracts;
-using System.Net;
 
 namespace MoocResolver.Sites.XUETANGX;
 
@@ -9,17 +8,11 @@ namespace MoocResolver.Sites.XUETANGX;
 /// </summary>
 public class XuetangxResolver : ResolverBase
 {
-    public const string Domain = "next.xuetangx.com";
+    public const string Pattern = @"^(https:\/\/)?next.xuetangx.com\/";
 
     /// <inheritdoc />
-    public XuetangxResolver(string link, CookieCollection cookies) : base(link, cookies)
+    public XuetangxResolver(ResolverOption option) : base(option)
     {
-    }
-
-    /// <inheritdoc />
-    public override bool CanResolve()
-    {
-        return Link.Contains(Domain, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
