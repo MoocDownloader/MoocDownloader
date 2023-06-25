@@ -16,6 +16,9 @@ public partial class App
     {
         containerRegistry.RegisterDialogWindow<BorderlessWindow>();
         containerRegistry.RegisterDialog<CreationView, CreationViewModel>();
+        containerRegistry.RegisterDialog<CredentialView, CredentialViewModel>();
+        containerRegistry.RegisterDialog<AboutView, AboutViewModel>();
+        containerRegistry.RegisterDialog<PreferenceView, PreferenceViewModel>();
     }
 
     /// <inheritdoc />

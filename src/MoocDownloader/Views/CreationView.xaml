@@ -22,7 +22,6 @@
             <Setter Property="MinWidth" Value="350" />
             <Setter Property="MinHeight" Value="400" />
             <Setter Property="Title" Value="新建下载" />
-            <Setter Property="Icon" Value="../Assets/Images/kanna.png" />
         </Style>
     </mvvm:Dialog.WindowStyle>
 

@@ -6,12 +6,16 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mvvm="http://prismlibrary.com/"
         xmlns:v="clr-namespace:MoocDownloader.Views"
+        xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
         Title="{DynamicResource Text.Title}"
         Width="900"
         Height="600"
         MinWidth="600"
         MinHeight="400"
+        d:DataContext="{d:DesignInstance viewModels:ShellViewModel}"
+        mvvm:ViewModelLocator.AutoWireViewModel="True"
         FontFamily="Microsoft YaHei"
         Icon="../Assets/Images/kanna.png"
         WindowStartupLocation="CenterScreen"
@@ -58,28 +62,34 @@
                     <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
                 </StackPanel.Resources>
 
-                <Button>
+                <Button Command="{Binding VisitGitHubCommand}" ToolTip="GitHub 主页">
                     <icon:PackIconUnicons Kind="GithubAlt" />
                 </Button>
-                <Button>
+                <Button Command="{Binding NewIssueCommand}" ToolTip="软件有问题，我要报告 Bug！">
                     <icon:PackIconUnicons Kind="Bug" />
                 </Button>
-                <Button>
+                <Button Command="{Binding AboutMeCommand}" ToolTip="关于本应用程序">
+                    <icon:PackIconUnicons Kind="InfoCircle" />
+                </Button>
+
+                <Rectangle Style="{StaticResource SeparatorStyle}" />
+
+                <Button Command="{Binding ManageCredentialCommand}" ToolTip="凭证管理">
                     <icon:PackIconUnicons Kind="KeySkeletonAlt" />
                 </Button>
-                <Button>
+                <Button Command="{Binding ChangePreferenceCommand}" ToolTip="偏好设定">
                     <icon:PackIconUnicons Kind="Setting" />
                 </Button>
 
                 <Rectangle Style="{StaticResource SeparatorStyle}" />
 
-                <Button>
+                <Button ToolTip="最小化">
                     <icon:PackIconUnicons Kind="Minus" />
                 </Button>
-                <Button>
+                <Button ToolTip="最大化">
                     <icon:PackIconUnicons Kind="Square" />
                 </Button>
-                <Button Tag="Danger">
+                <Button Tag="Danger" ToolTip="关闭">
                     <icon:PackIconUnicons Kind="Multiply" />
                 </Button>
             </StackPanel>
@@ -94,21 +104,16 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <TabControl Style="{StaticResource DownloadListTabControlStyle}">
+                <TabControl>
                     <TabItem Header="{DynamicResource Text.List.Queue}"
                              IsSelected="True"
-                             Style="{StaticResource DownloadListTabItemStyle}"
                              Tag="ArrowToBottom">
                         <v:QueueView />
                     </TabItem>
-                    <TabItem Header="{DynamicResource Text.List.Ready}"
-                             Style="{StaticResource DownloadListTabItemStyle}"
-                             Tag="Check">
+                    <TabItem Header="{DynamicResource Text.List.Ready}" Tag="Check">
                         <v:ReadyView />
                     </TabItem>
-                    <TabItem Header="{DynamicResource Text.List.Trash}"
-                             Style="{StaticResource DownloadListTabItemStyle}"
-                             Tag="Trash">
+                    <TabItem Header="{DynamicResource Text.List.Trash}" Tag="Trash">
                         <v:TrashView />
                     </TabItem>
                 </TabControl>

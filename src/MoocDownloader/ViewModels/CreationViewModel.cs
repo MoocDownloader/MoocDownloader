@@ -44,8 +44,8 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
             Link = Link,
             Credential = new ResolverCredential
             {
-                Username = "",
-                Password = "",
+                Username = "xiaofeng_tan@live.com", // TODO
+                Password = "kami5203@IC", // TODO
                 Cookies = new CookieContainer(),
             }
         });

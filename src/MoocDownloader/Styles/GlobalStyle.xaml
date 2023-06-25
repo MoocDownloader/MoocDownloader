@@ -55,8 +55,8 @@
         </Style.Triggers>
     </Style>
 
-    <!--  Download List Tab  -->
-    <Style x:Key="DownloadListTabControlStyle" TargetType="TabControl">
+    <!--  Tab Control  -->
+    <Style TargetType="TabControl">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -68,90 +68,6 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0"
-                                BorderBrush="{DynamicResource SecondaryBorderBrush}"
-                                BorderThickness="0,0,0,1">
-                            <UniformGrid Panel.ZIndex="1"
-                                         IsItemsHost="True"
-                                         KeyboardNavigation.TabIndex="1"
-                                         Rows="1" />
-                        </Border>
-
-                        <Border Grid.Row="1">
-                            <ContentPresenter x:Name="PART_SelectedContentHost"
-                                              Margin="0"
-                                              Content="{TemplateBinding SelectedContent}"
-                                              ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
-                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="DownloadListTabItemStyle" TargetType="TabItem">
-        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TabItem">
-                    <Grid Background="Transparent" SnapsToDevicePixels="True">
-                        <Grid.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="Background" Value="Transparent" />
-                            </Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                            <Style TargetType="icon:PackIconUnicons">
-                                <Setter Property="Width" Value="12" />
-                                <Setter Property="Height" Value="12" />
-                                <Setter Property="Margin" Value="0,0,10,0" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </Grid.Resources>
-                        <Border Padding="10" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                <icon:PackIconUnicons Foreground="{TemplateBinding Foreground}" Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}" />
-                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Header}" />
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
-            </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsSelected" Value="False" />
-                    <Condition Property="IsMouseOver" Value="True" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.Setters>
-                    <Setter Property="Foreground" Value="{DynamicResource InfoBrush}" />
-                </MultiTrigger.Setters>
-            </MultiTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <!--  Detail Tab  -->
-    <Style x:Key="DetailTabControlStyle" TargetType="TabControl">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TabControl">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
                         <Border Grid.Row="0"
                                 BorderBrush="{DynamicResource SecondaryBorderBrush}"
                                 BorderThickness="0,0,0,1">
@@ -173,7 +89,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="DetailTabItemStyle" TargetType="TabItem">
+    <Style TargetType="TabItem">
         <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -405,6 +321,46 @@
         <Setter Property="Template" Value="{StaticResource UnitItemTemplate}" />
     </Style>
 
+    <!--  Credential List  -->
+    <DataTemplate x:Key="CredentialDataTemplate">
+        <controls:CredentialItem x:Name="CredentialItem" />
+
+        <DataTemplate.Resources>
+            <Style TargetType="controls:CredentialItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                <Setter TargetName="CredentialItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="CredentialItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="CredentialTemplate">
+        <ScrollViewer CanContentScroll="False"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsPresenter />
+        </ScrollViewer>
+    </ControlTemplate>
+
+    <ItemsPanelTemplate x:Key="CredentialPanelTemplate">
+        <StackPanel />
+    </ItemsPanelTemplate>
+
+    <ControlTemplate x:Key="CredentialItemTemplate" TargetType="ListBoxItem">
+        <ContentPresenter />
+    </ControlTemplate>
+
+    <Style x:Key="CredentialListStyle" TargetType="ListBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template" Value="{StaticResource CredentialItemTemplate}" />
+    </Style>
+
     <!--  Context Menu  -->
     <Style BasedOn="{StaticResource MenuItemBaseStyle}" TargetType="MenuItem">
         <Setter Property="Template">
@@ -437,7 +393,6 @@
         <Setter Property="Width" Value="13" />
         <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
     </Style>
-
 
     <!--  Style of Data Grid  -->
     <Style x:Key="DefaultDataGridCellStyle"

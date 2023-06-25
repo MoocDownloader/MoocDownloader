@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="MoocDownloader.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:AboutViewModel}"
+             d:DesignHeight="350"
+             d:DesignWidth="250"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource ThirdlyRegionBrush}"
+             FontFamily="Microsoft YaHei"
+             mc:Ignorable="d">
+    <mvvm:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Width" Value="250" />
+            <Setter Property="Height" Value="350" />
+            <Setter Property="MinWidth" Value="250" />
+            <Setter Property="MinHeight" Value="350" />
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="Title" Value="关于" />
+        </Style>
+    </mvvm:Dialog.WindowStyle>
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <Image Width="80"
+                   Height="80"
+                   Margin="0,0,0,20"
+                   Source="../Assets/Images/kanna.png" />
+            <TextBlock Margin="0,0,0,20"
+                       FontSize="20"
+                       Style="{StaticResource TextBlockTitle}"
+                       Text="MOOC Downloader" />
+            <TextBlock Margin="0,0,0,10"
+                       Style="{StaticResource TextBlockDefault}"
+                       Text="版本 1.0.0.1" />
+            <TextBlock Margin="0,0,0,20"
+                       Style="{StaticResource TextBlockDefaultPrimary}"
+                       Text="www.mooc.download" />
+            <TextBlock Margin="0,0,0,10"
+                       Style="{StaticResource TextBlockDefaultSecLight}"
+                       Text="贡献者" />
+            <WrapPanel Margin="0,0,0,20" HorizontalAlignment="Center">
+                <TextBlock Style="{StaticResource TextBlockDefault}" Text="@xixixixixiao" />
+                <TextBlock Margin="5,0,0,0"
+                           Style="{StaticResource TextBlockDefault}"
+                           Text="@liamwang" />
+                <TextBlock Margin="5,0,0,0"
+                           Style="{StaticResource TextBlockDefault}"
+                           Text="@sulexiu" />
+            </WrapPanel>
+            <TextBlock Style="{StaticResource TextBlockDefaultSecLight}" Text="MIT license" />
+        </StackPanel>
+        <StackPanel Height="45"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
+            </StackPanel.Resources>
+            <Button Command="{Binding CloseCommand}" Tag="Danger">
+                <icon:PackIconUnicons Kind="Multiply" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -6,8 +6,7 @@ namespace MoocDownloader.Models;
 /// <summary>
 /// The model of the course.
 /// </summary>
-[INotifyPropertyChanged]
-public partial class Course
+public partial class Course : ObservableObject
 {
     /// <summary>
     /// Name of the course.

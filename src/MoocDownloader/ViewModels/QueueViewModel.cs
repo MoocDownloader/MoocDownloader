@@ -11,7 +11,8 @@ namespace MoocDownloader.ViewModels;
 /// </summary>
 public partial class QueueViewModel : SharedViewModel
 {
-    [ObservableProperty] private ObservableCollection<Course> _queues = new();
+    [ObservableProperty]
+    private ObservableCollection<Course> _queues = new();
 
     public QueueViewModel(IContainer container) : base(container)
     {

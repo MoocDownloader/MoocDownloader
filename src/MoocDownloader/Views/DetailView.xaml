@@ -12,12 +12,9 @@
              mvvm:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d">
     <Grid>
-        <TabControl Style="{StaticResource DetailTabControlStyle}">
-
+        <TabControl>
             <!--  Info  -->
-            <TabItem Header="{DynamicResource Text.Detail.Info}"
-                     Style="{StaticResource DetailTabItemStyle}"
-                     Tag="FolderInfo">
+            <TabItem Header="{DynamicResource Text.Detail.Info}" Tag="FolderInfo">
                 <ScrollViewer Margin="10"
                               Padding="10"
                               CanContentScroll="False"
@@ -222,9 +219,7 @@
             </TabItem>
 
             <!--  Unit List  -->
-            <TabItem Header="{DynamicResource Text.Detail.Unit}"
-                     Style="{StaticResource DetailTabItemStyle}"
-                     Tag="Books">
+            <TabItem Header="{DynamicResource Text.Detail.Unit}" Tag="Books">
                 <ListBox BorderThickness="0"
                          ItemContainerStyle="{StaticResource UnitListStyle}"
                          ItemTemplate="{StaticResource UnitDataTemplate}"
