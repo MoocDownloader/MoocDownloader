@@ -407,7 +407,7 @@ public class Course163Resolver : ResolverBase
                 var multimedia = new Multimedia
                 {
                     FileName = $"{videoFileName}.{coursewareCaption.Code}.{captionFormat}",
-                    DownloadUrl = coursewareCaption.Url,
+                    FileUrl = coursewareCaption.Url,
                     MediaFormat = captionFormat,
                 };
                 list.Add(multimedia);
@@ -433,7 +433,8 @@ public class Course163Resolver : ResolverBase
         list.Add(new Multimedia
         {
             FileName = videoName,
-            DownloadUrl = video.VideoUrl,
+            FileUrl = video.VideoUrl,
+            FileSize = video.Size,
             ImageUrl = videoResult?.Result?.VideoImageUrl,
             MediaFormat = video.Format,
         });
@@ -532,7 +533,7 @@ public class Course163Resolver : ResolverBase
         var multimedia = new Multimedia
         {
             FileName = coursewareUnit.UnitName,
-            DownloadUrl = originalUrl,
+            FileUrl = originalUrl,
         };
         var decodeUrl = new Uri(HttpUtility.UrlDecode(originalUrl));
         var queries = HttpUtility.ParseQueryString(decodeUrl.Query);

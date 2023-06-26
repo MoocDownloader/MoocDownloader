@@ -21,7 +21,7 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
     private string _path = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<DownloadLink> _links = new();
+    private ObservableCollection<MultimediaModel> _models = new();
 
     [ObservableProperty]
     private bool _isResolving;
@@ -29,6 +29,11 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
     public CreationViewModel()
     {
         Link = "https://www.icourse163.org/course/XMU-1001771003";
+
+        for (var i = 0; i < 10; i++)
+        {
+            Models.Add(new MultimediaModel());
+        }
     }
 
     [RelayCommand]
@@ -44,8 +49,8 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
             Link = Link,
             Credential = new ResolverCredential
             {
-                Username = "xiaofeng_tan@live.com", // TODO
-                Password = "kami5203@IC", // TODO
+                Username = "", // TODO
+                Password = "", // TODO
                 Cookies = new CookieContainer(),
             }
         });
