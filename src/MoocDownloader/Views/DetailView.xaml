@@ -38,18 +38,8 @@
                                      Background="Transparent"
                                      BorderThickness="0"
                                      IsReadOnly="True"
-                                     TextWrapping="Wrap">
-                                <TextBox.Text>
-                                    Photoshop软件是目前世界最受大众喜爱的图像处理软件之一，有着广泛的使用领域。
-                                    《Photoshop图形图像处理技术》课程主要介绍了Photoshop软件在视觉传达设计领域的应用，
-                                    该教程以图形图像处理为主线，以PhotoshopCS6软件的应用为基础，
-                                    精选了众多图像合成案例、人像后期处理、产品包装设计、产品海报招贴设计等多个真实设计项目为载体，
-                                    深入浅出的讲解了多个软件实操作中的难点理论知识，
-                                    将理论教学与实践训练融为一体。
-                                    系统地介绍了Photoshop基本的使用方法和技巧。
-                                    通过学习本课程，同学们可以轻松面对学习与生活中图像后期处理的各种任务和一些平面设计的相关知识。
-                                </TextBox.Text>
-                            </TextBox>
+                                     Text="{Binding Playlist.Introduction}"
+                                     TextWrapping="Wrap" />
                         </GroupBox>
 
                         <GroupBox Grid.Row="1"
@@ -65,18 +55,22 @@
                                     <Setter Property="Margin" Value="5,2" />
                                 </Style>
                             </GroupBox.Resources>
-
-                            <WrapPanel>
-                                <hc:Shield Status="贾嘉" Subject="副教授" />
-                                <hc:Shield Status="卢帅" Subject="特聘讲师" />
-                                <hc:Shield Status="阮靖萍" Subject="特聘讲师" />
-                                <hc:Shield Status="黄铂" Subject="副教授" />
-                                <hc:Shield Status="谭明霞" Subject="副教授" />
-                                <hc:Shield Status="李颖" Subject="讲师" />
-                                <hc:Shield Status="梁娜" Subject="讲师" />
-                                <hc:Shield Status="严明" Subject="讲师" />
-                                <hc:Shield Status="徐佳佳" Subject="讲师" />
-                            </WrapPanel>
+                            <ItemsControl Background="Transparent"
+                                          BorderThickness="0"
+                                          ItemsSource="{Binding Playlist.Authors}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <hc:Shield Status="{Binding Name}" Subject="{Binding Title}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <WrapPanel>
+                                            <ItemsPresenter />
+                                        </WrapPanel>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                            </ItemsControl>
                         </GroupBox>
 
                         <GroupBox Grid.Row="2"
@@ -96,6 +90,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="25" />
                                     <RowDefinition Height="25" />
                                     <RowDefinition Height="25" />
                                     <RowDefinition Height="25" />
@@ -121,28 +116,38 @@
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
+                                           Text="完成时间" />
+                                <TextBlock Grid.Row="4"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
                                            Text="下载历时" />
 
                                 <TextBlock Grid.Row="0"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="https://www.icourse163.org/course/WSPC-1002698010?tid=1467126645" />
+                                           Text="{Binding Playlist.Url}" />
                                 <TextBlock Grid.Row="1"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="D:\Repositories" />
+                                           Text="{Binding Playlist.Path}" />
                                 <TextBlock Grid.Row="2"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="2022-12-22 08:08:20" />
+                                           Text="{Binding Playlist.CreationTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                                 <TextBlock Grid.Row="3"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="08:08:20" />
+                                           Text="{Binding Playlist.CompletionTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <TextBlock Grid.Row="4"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.ElapsedTime}" />
 
                                 <controls:IconButton Grid.Row="0"
                                                      Grid.Column="4"
@@ -218,14 +223,14 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!--  Unit List  -->
-            <TabItem Header="{DynamicResource Text.Detail.Unit}" Tag="Books">
+            <!--  Media List  -->
+            <TabItem Header="{DynamicResource Text.Detail.Media}" Tag="Books">
                 <ListBox BorderThickness="0"
-                         ItemContainerStyle="{StaticResource UnitListStyle}"
-                         ItemTemplate="{StaticResource UnitDataTemplate}"
-                         ItemsPanel="{StaticResource UnitPanelTemplate}"
-                         ItemsSource="{Binding Units}"
-                         Template="{StaticResource UnitTemplate}" />
+                         ItemContainerStyle="{StaticResource MediaListStyle}"
+                         ItemTemplate="{StaticResource MediaDataTemplate}"
+                         ItemsPanel="{StaticResource MediaPanelTemplate}"
+                         ItemsSource="{Binding Playlist.Medias}"
+                         Template="{StaticResource MediaTemplate}" />
             </TabItem>
         </TabControl>
     </Grid>

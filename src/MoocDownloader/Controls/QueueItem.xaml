@@ -20,7 +20,7 @@
                 BorderThickness="1"
                 CornerRadius="4">
             <Border.Background>
-                <ImageBrush ImageSource="../Assets/Images/676ebc38ef534767a05ab31472cd5374.jpg" />
+                <ImageBrush ImageSource="{Binding Path=Playlist.CoverImage, RelativeSource={RelativeSource FindAncestor, AncestorType=local:QueueItem}}" />
             </Border.Background>
         </Border>
 
@@ -34,7 +34,7 @@
             <TextBlock Grid.Row="0"
                        VerticalAlignment="Top"
                        Foreground="{DynamicResource PrimaryTextBrush}"
-                       Text="{Binding Path=Course.CourseName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
+                       Text="{Binding Path=Playlist.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
 
             <Grid Grid.Row="1"
                   Margin="0,0,0,2"
@@ -45,13 +45,13 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" FontSize="11">
-                    <Run Text="{Binding Path=Course.CompletedCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
+                    <Run Text="{Binding Path=Playlist.CompletedCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
                     <Run Text="/" />
-                    <Run Text="{Binding Path=Course.TotalCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
+                    <Run Text="{Binding Path=Playlist.TotalCount, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}, Mode=OneWay}" />
                 </TextBlock>
                 <TextBlock Grid.Column="1"
                            FontSize="11"
-                           Text="{Binding Path=Course.CourseState, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
+                           Text="{Binding Path=Playlist.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
             </Grid>
 
             <ProgressBar Grid.Row="2"
@@ -59,7 +59,7 @@
                          BorderThickness="0"
                          Foreground="{DynamicResource InfoBrush}"
                          Style="{x:Null}"
-                         Value="{Binding Path=Course.CurrentProgress, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}}" />
+                         Value="{Binding Path=Playlist.CurrentProgress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}, Mode=OneWay, FallbackValue=0}" />
         </Grid>
 
         <Grid Grid.Column="2" Height="60">

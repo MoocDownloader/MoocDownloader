@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DryIoc;
-using System.Collections.ObjectModel;
+using MoocDownloader.Models.Playlists;
 
 namespace MoocDownloader.ViewModels;
 
@@ -10,14 +10,10 @@ namespace MoocDownloader.ViewModels;
 public partial class DetailViewModel : SharedViewModel
 {
     [ObservableProperty]
-    private ObservableCollection<int> _units = new();
+    private Playlist _playlist = new();
 
     /// <inheritdoc />
     public DetailViewModel(IContainer container) : base(container)
     {
-        for (var i = 0; i < 10; i++)
-        {
-            Units.Add(i);
-        }
     }
 }

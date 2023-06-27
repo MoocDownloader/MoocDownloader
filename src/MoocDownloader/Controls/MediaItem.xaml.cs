@@ -1,11 +1,11 @@
 ﻿namespace MoocDownloader.Controls;
 
 /// <summary>
-/// Interaction logic for UnitItem.xaml
+/// Interaction logic for MediaItem.xaml
 /// </summary>
-public partial class UnitItem
+public partial class MediaItem
 {
-    public UnitItem()
+    public MediaItem()
     {
         InitializeComponent();
     }

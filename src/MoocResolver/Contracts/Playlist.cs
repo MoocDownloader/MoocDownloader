@@ -4,7 +4,7 @@ public class Playlist
 {
     public string? Name { get; set; } = string.Empty;
 
-    public string OriginalLink { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
 
     public string? Introduction { get; set; } = string.Empty;
 
@@ -18,5 +18,5 @@ public class Playlist
 
     public List<Author> Authors { get; set; } = new();
 
-    public List<Multimedia> List { get; set; } = new();
+    public List<Media> Medias { get; set; } = new();
 }

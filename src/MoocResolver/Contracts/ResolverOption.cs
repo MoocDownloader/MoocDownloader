@@ -4,7 +4,7 @@ namespace MoocResolver.Contracts;
 
 public class ResolverOption
 {
-    public required string Link { get; set; }
+    public required string Url { get; set; }
 
     public ResolverCredential Credential { get; set; } = new();
 

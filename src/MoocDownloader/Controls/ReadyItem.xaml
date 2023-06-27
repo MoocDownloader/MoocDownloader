@@ -19,7 +19,7 @@
                 BorderThickness="1"
                 CornerRadius="4">
             <Border.Background>
-                <ImageBrush ImageSource="../Assets/Images/676ebc38ef534767a05ab31472cd5374.jpg" />
+                <ImageBrush ImageSource="{Binding Path=Playlist.CoverImage, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}}" />
             </Border.Background>
         </Border>
 
@@ -34,14 +34,14 @@
                        FontSize="12"
                        FontWeight="Bold"
                        Foreground="{DynamicResource PrimaryTextBrush}"
-                       Text="{Binding Path=Course.CourseName, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}}" />
+                       Text="{Binding Path=Playlist.Name, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}}" />
 
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
                         TextBlock.FontSize="11"
                         TextBlock.Foreground="{DynamicResource SecondaryTextBrush}">
-                <TextBlock Text="{Binding Path=Course.FinishedTime, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
-                <TextBlock Margin="8,0,0,0" Text="{Binding Path=Course.TotalSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, Converter={StaticResource HumanizeBytesConverter}}" />
+                <TextBlock Text="{Binding Path=Playlist.CompletionTime, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, StringFormat={}{0:yyyy-MM-dd HH:mm}}" />
+                <TextBlock Margin="8,0,0,0" Text="{Binding Path=Playlist.TotalSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:ReadyItem}, Converter={StaticResource HumanizeBytesConverter}}" />
             </StackPanel>
         </Grid>
 

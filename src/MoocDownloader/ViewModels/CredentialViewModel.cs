@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MoocDownloader.Models;
+using MoocDownloader.Models.Credentials;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;

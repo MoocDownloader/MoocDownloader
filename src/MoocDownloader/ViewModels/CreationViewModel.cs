@@ -14,39 +14,39 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 {
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
-    private string _link = string.Empty;
+    private string _url = string.Empty;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
     private string _path = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<MultimediaModel> _models = new();
+    private ObservableCollection<MediaPreview> _mediaPreviews = new();
 
     [ObservableProperty]
     private bool _isResolving;
 
     public CreationViewModel()
     {
-        Link = "https://www.icourse163.org/course/XMU-1001771003";
+        Url = "https://www.icourse163.org/course/XMU-1001771003";
 
         for (var i = 0; i < 10; i++)
         {
-            Models.Add(new MultimediaModel());
+            MediaPreviews.Add(new MediaPreview());
         }
     }
 
     [RelayCommand]
     private async Task ResolveAsync()
     {
-        if (string.IsNullOrEmpty(Link))
+        if (string.IsNullOrEmpty(Url))
         {
             return;
         }
 
-        using var resolver = new ResolverBuilder().MatchLink(Link).Build(new ResolverOption
+        using var resolver = new ResolverBuilder().MatchLink(Url).Build(new ResolverOption
         {
-            Link = Link,
+            Url = Url,
             Credential = new ResolverCredential
             {
                 Username = "", // TODO
@@ -66,7 +66,7 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 
     private bool CanDownload()
     {
-        return !string.IsNullOrEmpty(Link) && !string.IsNullOrEmpty(Path);
+        return !string.IsNullOrEmpty(Url) && !string.IsNullOrEmpty(Path);
     }
 
     [RelayCommand]

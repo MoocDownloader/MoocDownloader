@@ -64,7 +64,7 @@
                  ItemContainerStyle="{StaticResource TrashListStyle}"
                  ItemTemplate="{StaticResource TrashDataTemplate}"
                  ItemsPanel="{StaticResource TrashPanelTemplate}"
-                 ItemsSource="{Binding Trashes}"
+                 ItemsSource="{Binding Playlists}"
                  Template="{StaticResource TrashTemplate}">
             <ListBox.ContextMenu>
                 <ContextMenu>

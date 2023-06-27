@@ -63,7 +63,7 @@
                  ItemContainerStyle="{StaticResource ReadyListStyle}"
                  ItemTemplate="{StaticResource ReadyDataTemplate}"
                  ItemsPanel="{StaticResource ReadyPanelTemplate}"
-                 ItemsSource="{Binding Readies}"
+                 ItemsSource="{Binding Playlists}"
                  Template="{StaticResource ReadyTemplate}">
             <ListBox.ContextMenu>
                 <ContextMenu>

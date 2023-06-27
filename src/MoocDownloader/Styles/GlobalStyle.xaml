@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:MoocDownloader.Controls"
                     xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                    xmlns:models="clr-namespace:MoocDownloader.Models">
+                    xmlns:playlists="clr-namespace:MoocDownloader.Models.Playlists">
     <!--  Common  -->
     <Style TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -162,8 +162,8 @@
     </Style>
 
     <!--  Queue List  -->
-    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type models:Course}">
-        <controls:QueueItem x:Name="QueueItem" Course="{Binding}" />
+    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type playlists:Playlist}">
+        <controls:QueueItem x:Name="QueueItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
             <Style TargetType="controls:QueueItem">
@@ -202,8 +202,8 @@
     </Style>
 
     <!--  Ready List  -->
-    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type models:Course}">
-        <controls:ReadyItem x:Name="ReadyItem" Course="{Binding}" />
+    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type playlists:Playlist}">
+        <controls:ReadyItem x:Name="ReadyItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
             <Style TargetType="controls:ReadyItem">
@@ -242,8 +242,8 @@
     </Style>
 
     <!--  Trash List  -->
-    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type models:Course}">
-        <controls:TrashItem x:Name="TrashItem" Course="{Binding}" />
+    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type playlists:Playlist}">
+        <controls:TrashItem x:Name="TrashItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
             <Style TargetType="controls:TrashItem">
@@ -281,26 +281,26 @@
         <Setter Property="Template" Value="{StaticResource TrashItemTemplate}" />
     </Style>
 
-    <!--  Unit List  -->
-    <DataTemplate x:Key="UnitDataTemplate">
-        <controls:UnitItem x:Name="UnitItem" />
+    <!--  Media List  -->
+    <DataTemplate x:Key="MediaDataTemplate">
+        <controls:MediaItem x:Name="MediaItem" />
 
         <DataTemplate.Resources>
-            <Style TargetType="controls:UnitItem">
+            <Style TargetType="controls:MediaItem">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
         </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
-                <Setter TargetName="UnitItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+                <Setter TargetName="MediaItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="UnitItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+                <Setter TargetName="MediaItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <ControlTemplate x:Key="UnitTemplate">
+    <ControlTemplate x:Key="MediaTemplate">
         <ScrollViewer CanContentScroll="False"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
@@ -308,17 +308,17 @@
         </ScrollViewer>
     </ControlTemplate>
 
-    <ItemsPanelTemplate x:Key="UnitPanelTemplate">
+    <ItemsPanelTemplate x:Key="MediaPanelTemplate">
         <StackPanel />
     </ItemsPanelTemplate>
 
-    <ControlTemplate x:Key="UnitItemTemplate" TargetType="ListBoxItem">
+    <ControlTemplate x:Key="MediaItemTemplate" TargetType="ListBoxItem">
         <ContentPresenter />
     </ControlTemplate>
 
-    <Style x:Key="UnitListStyle" TargetType="ListBoxItem">
+    <Style x:Key="MediaListStyle" TargetType="ListBoxItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource UnitItemTemplate}" />
+        <Setter Property="Template" Value="{StaticResource MediaItemTemplate}" />
     </Style>
 
     <!--  Creation List  -->

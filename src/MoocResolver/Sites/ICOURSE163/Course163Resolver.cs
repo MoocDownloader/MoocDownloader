@@ -55,7 +55,7 @@ public class Course163Resolver : ResolverBase
         _playlist.Name = _courseInfo?.Name;
         _playlist.Introduction = _courseIntro;
         _playlist.CoverImageUrl = _courseTerm?.PhotoUrl;
-        _playlist.OriginalLink = Option.Link;
+        _playlist.Url = Option.Url;
 
         // Initialize HTTP Client.
         InitializeHttpClient();
@@ -179,7 +179,7 @@ public class Course163Resolver : ResolverBase
         // 2. https://www.icourse163.org/learn/XMU-1001771003?tid=1470076448#/learn/announce
         //
         // Course ID: XMU-1001771003
-        var courseId = new Uri(Option.Link).Segments.LastOrDefault();
+        var courseId = new Uri(Option.Url).Segments.LastOrDefault();
 
         if (string.IsNullOrEmpty(courseId))
         {
@@ -284,7 +284,7 @@ public class Course163Resolver : ResolverBase
         AddHttpHeaders(request, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Option.Link)
+            new("Referer", Option.Url)
         });
 
         using var response = await HttpClient!.SendAsync(request);
@@ -335,16 +335,16 @@ public class Course163Resolver : ResolverBase
 
                     if (unit.ContentType == CoursewareContentType.Video)
                     {
-                        var multimediaList = await SpiderVideoAsync(unit);
+                        var medias = await SpiderVideoAsync(unit);
 
-                        foreach (var multimedia in multimediaList)
+                        foreach (var media in medias)
                         {
-                            multimedia.Index = index;
-                            multimedia.RelativePath = relativePath;
-                            multimedia.GroupName = groupName;
+                            media.Index = index;
+                            media.RelativePath = relativePath;
+                            media.GroupName = groupName;
                         }
 
-                        _playlist.List.AddRange(multimediaList);
+                        _playlist.Medias.AddRange(medias);
                     }
 
                     if (unit.ContentType == CoursewareContentType.Document)
@@ -357,7 +357,7 @@ public class Course163Resolver : ResolverBase
                             document.RelativePath = relativePath;
                             document.GroupName = groupName;
 
-                            _playlist.List.Add(document);
+                            _playlist.Medias.Add(document);
                         }
                     }
                 }
@@ -365,9 +365,9 @@ public class Course163Resolver : ResolverBase
         }
     }
 
-    private async Task<List<Multimedia>> SpiderVideoAsync(CoursewareUnit coursewareUnit)
+    private async Task<List<Media>> SpiderVideoAsync(CoursewareUnit coursewareUnit)
     {
-        var list = new List<Multimedia>();
+        var list = new List<Media>();
 
         var videoSign = await GetVideoSignAsync(coursewareUnit);
         var videoId = videoSign?.VideoId;
@@ -404,7 +404,7 @@ public class Course163Resolver : ResolverBase
             var videoFileName = Path.GetFileNameWithoutExtension(videoName);
             foreach (var coursewareCaption in captions)
             {
-                var multimedia = new Multimedia
+                var multimedia = new Media
                 {
                     FileName = $"{videoFileName}.{coursewareCaption.Code}.{captionFormat}",
                     FileUrl = coursewareCaption.Url,
@@ -430,7 +430,7 @@ public class Course163Resolver : ResolverBase
             return list;
         }
 
-        list.Add(new Multimedia
+        list.Add(new Media
         {
             FileName = videoName,
             FileUrl = video.VideoUrl,
@@ -459,7 +459,7 @@ public class Course163Resolver : ResolverBase
         AddHttpHeaders(tokenRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Option.Link)
+            new("Referer", Option.Url)
         });
         using var tokenResponse = await HttpClient!.SendAsync(tokenRequest);
         await using var tokenStream = await tokenResponse.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
@@ -468,7 +468,7 @@ public class Course163Resolver : ResolverBase
         return tokenResult?.Result?.VideoSign;
     }
 
-    private async Task<Multimedia?> SpiderDocumentAsync(CoursewareUnit coursewareUnit)
+    private async Task<Media?> SpiderDocumentAsync(CoursewareUnit coursewareUnit)
     {
         const string documentUrl = "https://www.icourse163.org/dwr/call/plaincall/CourseBean.getLessonUnitLearnVo.dwr";
         const string serializeFun = "function serialize(){return JSON.stringify(arguments[2])}\r\n";
@@ -497,7 +497,7 @@ public class Course163Resolver : ResolverBase
         AddHttpHeaders(documentRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
-            new("Referer", Option.Link)
+            new("Referer", Option.Url)
         });
         using var response = await HttpClient!.SendAsync(documentRequest);
         var content = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
@@ -530,7 +530,7 @@ public class Course163Resolver : ResolverBase
             return null;
         }
 
-        var multimedia = new Multimedia
+        var multimedia = new Media
         {
             FileName = coursewareUnit.UnitName,
             FileUrl = originalUrl,

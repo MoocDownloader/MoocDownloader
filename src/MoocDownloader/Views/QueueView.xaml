@@ -64,7 +64,7 @@
                  ItemContainerStyle="{StaticResource QueueListStyle}"
                  ItemTemplate="{StaticResource QueueDataTemplate}"
                  ItemsPanel="{StaticResource QueuePanelTemplate}"
-                 ItemsSource="{Binding Queues}"
+                 ItemsSource="{Binding Playlists}"
                  Template="{StaticResource QueueTemplate}">
             <ListBox.ContextMenu>
                 <ContextMenu>

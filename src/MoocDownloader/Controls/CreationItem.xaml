@@ -26,16 +26,16 @@
                    HorizontalAlignment="Stretch"
                    FontSize="11"
                    Style="{StaticResource TextBlockDefault}"
-                   Text="使用scanf与printf的注意事项1021.mp4" />
+                   Text="{Binding MediaPreview.FileName, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CreationItem}}" />
         <TextBlock Grid.Column="2"
                    HorizontalAlignment="Stretch"
                    FontSize="10"
                    Style="{StaticResource TextBlockDefault}"
-                   Text="mp4" />
+                   Text="{Binding MediaPreview.MediaFormat, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CreationItem}}" />
         <TextBlock Grid.Column="3"
                    HorizontalAlignment="Stretch"
                    FontSize="10"
                    Style="{StaticResource TextBlockDefault}"
-                   Text="150.72MB" />
+                   Text="{Binding MediaPreview.FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CreationItem}}" />
     </Grid>
 </UserControl>

@@ -1,6 +1,6 @@
 ﻿namespace MoocResolver.Contracts;
 
-public class Multimedia
+public class Media
 {
     public int Index { get; set; }
 
