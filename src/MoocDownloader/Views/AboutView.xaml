@@ -17,8 +17,6 @@
         <Style TargetType="Window">
             <Setter Property="Width" Value="250" />
             <Setter Property="Height" Value="350" />
-            <Setter Property="MinWidth" Value="250" />
-            <Setter Property="MinHeight" Value="350" />
             <Setter Property="ResizeMode" Value="NoResize" />
             <Setter Property="Title" Value="关于" />
         </Style>
@@ -44,12 +42,6 @@
                        Text="贡献者" />
             <WrapPanel Margin="0,0,0,20" HorizontalAlignment="Center">
                 <TextBlock Style="{StaticResource TextBlockDefault}" Text="@xixixixixiao" />
-                <TextBlock Margin="5,0,0,0"
-                           Style="{StaticResource TextBlockDefault}"
-                           Text="@liamwang" />
-                <TextBlock Margin="5,0,0,0"
-                           Style="{StaticResource TextBlockDefault}"
-                           Text="@sulexiu" />
             </WrapPanel>
             <TextBlock Style="{StaticResource TextBlockDefaultSecLight}" Text="MIT license" />
         </StackPanel>

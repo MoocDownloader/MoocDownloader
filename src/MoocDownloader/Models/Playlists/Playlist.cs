@@ -32,9 +32,12 @@ public partial class Playlist : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Author> _authors = new();
 
+    [ObservableProperty]
+    private ObservableCollection<Index> _indices = new();
+
     [NotifyPropertyChangedFor(nameof(TotalCount))]
     [NotifyPropertyChangedFor(nameof(TotalSize))]
-    [NotifyPropertyChangedFor(nameof(CurrentProgress))]
+    [NotifyPropertyChangedFor(nameof(Progress))]
     [ObservableProperty]
     private ObservableCollection<Media> _medias = new();
 
@@ -47,7 +50,7 @@ public partial class Playlist : ObservableObject
     [ObservableProperty]
     private TimeSpan _elapsedTime = TimeSpan.Zero;
 
-    [NotifyPropertyChangedFor(nameof(CurrentProgress))]
+    [NotifyPropertyChangedFor(nameof(Progress))]
     [ObservableProperty]
     private int _completedCount;
 
@@ -55,5 +58,5 @@ public partial class Playlist : ObservableObject
 
     public long TotalSize => Medias.Sum(media => media.FileSize ?? 0);
 
-    public double CurrentProgress => Medias.Count == 0 ? 0 : (double)CompletedCount / TotalCount * 100;
+    public double Progress => Medias.Count == 0 ? 0 : (double)CompletedCount / TotalCount * 100;
 }

@@ -55,6 +55,41 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="controls:SwitchPanel">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:SwitchPanel">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <ContentPresenter Name="CheckedContentPresenter" Content="{TemplateBinding CheckedContent}" />
+                        <ContentPresenter Name="UncheckedContentPresenter" Content="{TemplateBinding UncheckedContent}" />
+                        <ContentPresenter Name="IndeterminateContentPresenter" Content="{TemplateBinding IndeterminateContent}" />
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!--  IsChecked is True  -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckedContentPresenter" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="UncheckedContentPresenter" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IndeterminateContentPresenter" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <!--  IsChecked is False  -->
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="CheckedContentPresenter" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="UncheckedContentPresenter" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="IndeterminateContentPresenter" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <!--  IsChecked is Null  -->
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="CheckedContentPresenter" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="UncheckedContentPresenter" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IndeterminateContentPresenter" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--  Tab Control  -->
     <Style TargetType="TabControl">
         <Setter Property="BorderThickness" Value="0" />
@@ -161,6 +196,28 @@
         </Setter>
     </Style>
 
+    <!--  Listbox  -->
+    <ControlTemplate x:Key="CleanItemTemplate" TargetType="ListBoxItem">
+        <ContentPresenter />
+    </ControlTemplate>
+
+    <Style x:Key="CleanItemContainerStyle" TargetType="ListBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template" Value="{StaticResource CleanItemTemplate}" />
+    </Style>
+
+    <ItemsPanelTemplate x:Key="CleanItemsPanelTemplate">
+        <StackPanel />
+    </ItemsPanelTemplate>
+
+    <ControlTemplate x:Key="CleanListBoxTemplate">
+        <ScrollViewer CanContentScroll="False"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsPresenter />
+        </ScrollViewer>
+    </ControlTemplate>
+
     <!--  Queue List  -->
     <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type playlists:Playlist}">
         <controls:QueueItem x:Name="QueueItem" Playlist="{Binding}" />
@@ -179,27 +236,6 @@
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-
-    <ControlTemplate x:Key="QueueTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
-
-    <ItemsPanelTemplate x:Key="QueuePanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="QueueItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="QueueListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource QueueItemTemplate}" />
-    </Style>
 
     <!--  Ready List  -->
     <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type playlists:Playlist}">
@@ -220,27 +256,6 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <ControlTemplate x:Key="ReadyTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
-
-    <ItemsPanelTemplate x:Key="ReadyPanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="ReadyItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="ReadyListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource ReadyItemTemplate}" />
-    </Style>
-
     <!--  Trash List  -->
     <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type playlists:Playlist}">
         <controls:TrashItem x:Name="TrashItem" Playlist="{Binding}" />
@@ -259,27 +274,6 @@
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-
-    <ControlTemplate x:Key="TrashTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
-
-    <ItemsPanelTemplate x:Key="TrashPanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="TrashItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="TrashListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource TrashItemTemplate}" />
-    </Style>
 
     <!--  Media List  -->
     <DataTemplate x:Key="MediaDataTemplate">
@@ -300,27 +294,6 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <ControlTemplate x:Key="MediaTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
-
-    <ItemsPanelTemplate x:Key="MediaPanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="MediaItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="MediaListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource MediaItemTemplate}" />
-    </Style>
-
     <!--  Creation List  -->
     <DataTemplate x:Key="CreationDataTemplate">
         <controls:CreationItem x:Name="CreationItem" />
@@ -339,27 +312,6 @@
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-
-    <ControlTemplate x:Key="CreationTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
-
-    <ItemsPanelTemplate x:Key="CreationPanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="CreationItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="CreationListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource CreationItemTemplate}" />
-    </Style>
 
     <!--  Credential List  -->
     <DataTemplate x:Key="CredentialDataTemplate">
@@ -380,26 +332,24 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <ControlTemplate x:Key="CredentialTemplate">
-        <ScrollViewer CanContentScroll="False"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ItemsPresenter />
-        </ScrollViewer>
-    </ControlTemplate>
+    <!--  Service List  -->
+    <DataTemplate x:Key="ServiceDataTemplate">
+        <controls:ServiceItem x:Name="ServiceItem" Service="{Binding}" />
 
-    <ItemsPanelTemplate x:Key="CredentialPanelTemplate">
-        <StackPanel />
-    </ItemsPanelTemplate>
-
-    <ControlTemplate x:Key="CredentialItemTemplate" TargetType="ListBoxItem">
-        <ContentPresenter />
-    </ControlTemplate>
-
-    <Style x:Key="CredentialListStyle" TargetType="ListBoxItem">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource CredentialItemTemplate}" />
-    </Style>
+        <DataTemplate.Resources>
+            <Style TargetType="controls:ServiceItem">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </DataTemplate.Resources>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
+                <Setter TargetName="ServiceItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="ServiceItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <!--  Context Menu  -->
     <Style BasedOn="{StaticResource MenuItemBaseStyle}" TargetType="MenuItem">

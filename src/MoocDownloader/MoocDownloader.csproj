@@ -30,7 +30,12 @@
 
   <ItemGroup>
     <Resource Include="Assets\Images\0217014347153339.jpg" />
+    <Resource Include="Assets\Images\kanna.heart.png" />
     <Resource Include="Assets\Images\kanna.png" />
+    <Resource Include="Assets\Others\bilibili.png" />
+    <Resource Include="Assets\Others\icourse163.png" />
+    <Resource Include="Assets\Others\icourses.png" />
+    <Resource Include="Assets\Others\xuetangx.png" />
   </ItemGroup>
 
 </Project>

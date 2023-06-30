@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Playlists;
 using System.Collections.ObjectModel;
@@ -15,9 +16,15 @@ public partial class QueueViewModel : SharedViewModel
 
     public QueueViewModel(IContainer container) : base(container)
     {
-        for (var i = 0; i < 10; i++)
-        {
-            Playlists.Add(new Playlist());
-        }
+    }
+
+    [RelayCommand]
+    private void Select(Playlist playlist)
+    {
+    }
+
+    [RelayCommand]
+    private void Toggle(Playlist playlist)
+    {
     }
 }

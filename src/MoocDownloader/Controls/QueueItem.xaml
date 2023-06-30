@@ -59,7 +59,7 @@
                          BorderThickness="0"
                          Foreground="{DynamicResource InfoBrush}"
                          Style="{x:Null}"
-                         Value="{Binding Path=Playlist.CurrentProgress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}, Mode=OneWay, FallbackValue=0}" />
+                         Value="{Binding Path=Playlist.Progress, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:QueueItem}, Mode=OneWay, FallbackValue=0}" />
         </Grid>
 
         <Grid Grid.Column="2" Height="60">

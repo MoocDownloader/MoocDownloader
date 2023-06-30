@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DryIoc;
-using System.Collections.ObjectModel;
 using MoocDownloader.Models.Playlists;
+using System.Collections.ObjectModel;
 
 namespace MoocDownloader.ViewModels;
 
@@ -15,9 +16,15 @@ public partial class ReadyViewModel : SharedViewModel
 
     public ReadyViewModel(IContainer container) : base(container)
     {
-        for (var i = 0; i < 10; i++)
-        {
-            Playlists.Add(new Playlist());
-        }
+    }
+
+    [RelayCommand]
+    private void Select(Playlist playlist)
+    {
+    }
+
+    [RelayCommand]
+    private void Open(Playlist playlist)
+    {
     }
 }

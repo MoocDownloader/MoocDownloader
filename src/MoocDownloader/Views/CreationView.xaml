@@ -67,11 +67,11 @@
                     CornerRadius="5">
                 <Grid>
                     <ListBox Background="Transparent"
-                             ItemContainerStyle="{StaticResource CreationListStyle}"
+                             ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
                              ItemTemplate="{StaticResource CreationDataTemplate}"
-                             ItemsPanel="{StaticResource CreationPanelTemplate}"
+                             ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
                              ItemsSource="{Binding MediaPreviews}"
-                             Template="{StaticResource CreationTemplate}" />
+                             Template="{StaticResource CleanListBoxTemplate}" />
 
                     <hc:LoadingCircle Visibility="{Binding IsResolving, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>

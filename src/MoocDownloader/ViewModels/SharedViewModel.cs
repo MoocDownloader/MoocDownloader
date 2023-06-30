@@ -20,7 +20,7 @@ public abstract partial class SharedViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    private async Task Create()
+    protected virtual async Task Create()
     {
         DialogService.ShowDialog(
             name: nameof(CreationView),

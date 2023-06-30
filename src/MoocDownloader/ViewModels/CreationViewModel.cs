@@ -26,16 +26,6 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
     [ObservableProperty]
     private bool _isResolving;
 
-    public CreationViewModel()
-    {
-        Url = "https://www.icourse163.org/course/XMU-1001771003";
-
-        for (var i = 0; i < 10; i++)
-        {
-            MediaPreviews.Add(new MediaPreview());
-        }
-    }
-
     [RelayCommand]
     private async Task ResolveAsync()
     {

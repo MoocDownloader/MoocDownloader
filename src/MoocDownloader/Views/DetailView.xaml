@@ -175,49 +175,22 @@
                                            Text="目录" />
                             </GroupBox.Header>
 
-                            <StackPanel>
-                                <TextBlock Margin="0,4"
-                                           FontSize="14"
-                                           Foreground="{DynamicResource PrimaryTextBrush}"
-                                           Text="基础模块——项目1、了解PS的专业术语" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.1 认识像素、分辨率、位图和矢量图" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.2 什么是颜色模式？" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.4 认识图像的 通道、蒙版和路径" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.5 巧用混合模式完成产品LOGO的合成" />
-
-                                <TextBlock Margin="0,4"
-                                           FontSize="14"
-                                           Foreground="{DynamicResource PrimaryTextBrush}"
-                                           Text="基础模块——项目1、了解PS的专业术语" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.1 认识像素、分辨率、位图和矢量图" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.2 什么是颜色模式？" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.4 认识图像的 通道、蒙版和路径" />
-                                <TextBlock Margin="4,2"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SecondaryTextBrush}"
-                                           Text="任务1.5 巧用混合模式完成产品LOGO的合成" />
-                            </StackPanel>
+                            <ItemsControl Background="Transparent"
+                                          BorderThickness="0"
+                                          ItemsSource="{Binding Playlist.Indices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:IndexItem Index="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <StackPanel>
+                                            <ItemsPresenter />
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                            </ItemsControl>
                         </GroupBox>
                     </Grid>
                 </ScrollViewer>
@@ -225,12 +198,11 @@
 
             <!--  Media List  -->
             <TabItem Header="{DynamicResource Text.Detail.Media}" Tag="Books">
-                <ListBox BorderThickness="0"
-                         ItemContainerStyle="{StaticResource MediaListStyle}"
+                <ListBox ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
                          ItemTemplate="{StaticResource MediaDataTemplate}"
-                         ItemsPanel="{StaticResource MediaPanelTemplate}"
+                         ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
                          ItemsSource="{Binding Playlist.Medias}"
-                         Template="{StaticResource MediaTemplate}" />
+                         Template="{StaticResource CleanListBoxTemplate}" />
             </TabItem>
         </TabControl>
     </Grid>

@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="MoocDownloader.Controls.Empty"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MoocDownloader.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             d:DesignHeight="400"
+             d:DesignWidth="400"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Style.Triggers>
+                <Trigger Property="Text" Value="{x:Static system:String.Empty}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel VerticalAlignment="Center">
+        <Image MaxWidth="120" Opacity="{Binding ImageOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType=local:Empty}}">
+            <Image.Source>
+                <Binding Path="ImageSource" RelativeSource="{RelativeSource FindAncestor, AncestorType=local:Empty}">
+                    <Binding.TargetNullValue>
+                        <ImageSource>../Assets/Images/kanna.png</ImageSource>
+                    </Binding.TargetNullValue>
+                </Binding>
+            </Image.Source>
+        </Image>
+        <TextBlock Name="TipTextBlock"
+                   Margin="0,10,0,0"
+                   Foreground="{DynamicResource SecondaryTextBrush}"
+                   Opacity="0.6"
+                   Text="{Binding Tip, RelativeSource={RelativeSource FindAncestor, AncestorType=local:Empty}}"
+                   TextAlignment="Center" />
+    </StackPanel>
+</UserControl>

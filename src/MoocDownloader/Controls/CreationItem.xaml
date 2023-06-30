@@ -17,10 +17,13 @@
 
         <Border Grid.Column="0"
                 Margin="5"
-                CornerRadius="15">
-            <Border.Background>
-                <ImageBrush ImageSource="../Assets/Images/0217014347153339.jpg" />
-            </Border.Background>
+                Background="CornflowerBlue"
+                CornerRadius="3">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="8"
+                       Foreground="{DynamicResource TextIconBrush}"
+                       Text="{Binding MediaPreview.MediaFormat, RelativeSource={RelativeSource FindAncestor, AncestorType=local:CreationItem}}" />
         </Border>
         <TextBlock Grid.Column="1"
                    HorizontalAlignment="Stretch"
