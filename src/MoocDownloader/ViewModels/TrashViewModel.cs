@@ -9,7 +9,7 @@ namespace MoocDownloader.ViewModels;
 /// <summary>
 /// The view model of the trash view.
 /// </summary>
-public partial class TrashViewModel : SharedViewModel
+public partial class TrashViewModel : SharedPlaylistViewModel
 {
     [ObservableProperty]
     private ObservableCollection<Playlist> _playlists = new();

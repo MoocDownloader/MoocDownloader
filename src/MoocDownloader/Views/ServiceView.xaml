@@ -83,32 +83,31 @@
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <controls:IconTextButton Margin="0,0,4,0"
-                                                 Background="{DynamicResource SecondaryTitleBrush}"
-                                                 Command="{Binding}"
-                                                 FontSize="11"
-                                                 Foreground="{DynamicResource PrimaryBrush}"
+                                                 Command="{Binding LoginCommand}"
+                                                 CommandParameter="{Binding ElementName=ServiceListBox, Path=SelectedItem}"
                                                  Icon="SignInAlt"
                                                  Text="登录"
                                                  ToolTip="登录网站获取以获取新的凭据" />
-                        <controls:IconButton Command="{Binding}"
-                                             CommandParameter="{Binding ElementName=CredentialListBox, Path=SelectedItem}"
+                        <controls:IconButton Command="{Binding VisitCommand}"
+                                             CommandParameter="{Binding ElementName=ServiceListBox, Path=SelectedItem}"
                                              Icon="Share"
                                              ToolTip="访问网站" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <TextBox Width="120"
+                        <TextBox Name="KeywordTextBox"
+                                 Width="120"
                                  Margin="0,0,4,0"
                                  VerticalAlignment="Center"
                                  hc:InfoElement.Placeholder="按域名搜索网站"
                                  Background="Transparent"
                                  FontSize="10"
-                                 Style="{StaticResource TextBoxExtend.Small}" />
-                        <controls:IconButton Command="{Binding}"
-                                             CommandParameter="{Binding ElementName=CredentialListBox, Path=SelectedItem}"
+                                 Style="{StaticResource TextBoxExtend.Small}"
+                                 Text="{Binding Keyword}" />
+                        <controls:IconButton Command="{Binding SearchCommand}"
+                                             CommandParameter="{Binding ElementName=KeywordTextBox, Path=Text}"
                                              Icon="Search"
                                              ToolTip="按名称搜索网站" />
-                        <controls:IconButton Command="{Binding}"
-                                             CommandParameter="{Binding ElementName=CredentialListBox, Path=SelectedItem}"
+                        <controls:IconButton Command="{Binding ClearCommand}"
                                              Icon="FileTimesAlt"
                                              ToolTip="清空" />
                     </StackPanel>
@@ -125,7 +124,10 @@
                      Template="{StaticResource CleanListBoxTemplate}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding}" CommandParameter="{Binding ElementName=ServiceListBox, Path=SelectedItem}" />
+                        <i:InvokeCommandAction Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=ServiceListBox, Path=SelectedItem}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectCommand}" CommandParameter="{Binding ElementName=ServiceListBox, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>

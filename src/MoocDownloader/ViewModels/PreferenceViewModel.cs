@@ -1,37 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Prism.Services.Dialogs;
-using System;
+﻿using DryIoc;
 
 namespace MoocDownloader.ViewModels;
 
-public partial class PreferenceViewModel : ObservableRecipient, IDialogAware
+public class PreferenceViewModel : SharedDialogViewModel
 {
-    [RelayCommand]
-    private void Close()
-    {
-        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
-    }
-
     /// <inheritdoc />
-    public bool CanCloseDialog()
-    {
-        return true;
-    }
-
-    /// <inheritdoc />
-    public void OnDialogClosed()
+    public PreferenceViewModel(IContainer container) : base(container)
     {
     }
-
-    /// <inheritdoc />
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-    }
-
-    /// <inheritdoc />
-    public string Title { get; set; } = string.Empty;
-
-    /// <inheritdoc />
-    public event Action<IDialogResult>? RequestClose;
 }

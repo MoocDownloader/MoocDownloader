@@ -1,80 +1,105 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DryIoc;
 using MoocDownloader.Models.Credentials;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Media.Imaging;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MoocDownloader.ViewModels;
 
-public partial class ServiceViewModel : ObservableRecipient, IDialogAware
+public partial class ServiceViewModel : SharedDialogViewModel
 {
+    [ObservableProperty]
+    private string _keyword = string.Empty;
+
     [ObservableProperty]
     private ObservableCollection<Service> _services = new();
 
-    public ServiceViewModel()
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
+    [NotifyCanExecuteChangedFor(nameof(VisitCommand))]
+    private Service? _selectedService;
+
+    /// <inheritdoc />
+    public ServiceViewModel(IContainer container) : base(container)
     {
-        Services.Add(new Service
+    }
+
+    /// <inheritdoc />
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        LoadServices();
+    }
+
+    private void LoadServices(string? keyword = null)
+    {
+        if (Resources["ServiceList"] is not Service[] services)
         {
-            Name = "哔哩哔哩 (゜-゜)つロ 干杯~",
-            Url = "https://www.bilibili.com/",
-            Image = new BitmapImage(new Uri(@"/Assets/Others/bilibili.png", UriKind.Relative)),
-            SupportBrowser = true,
-            SupportCookie = true,
-        });
-        Services.Add(new Service
+            throw new ArgumentNullException(nameof(services), "No service available.");
+        }
+
+        if (!string.IsNullOrEmpty(keyword))
         {
-            Name = "中国大学MOOC(慕课)",
-            Url = "https://www.icourse163.org/",
-            Image = new BitmapImage(new Uri(@"/Assets/Others/icourse163.png", UriKind.Relative)),
-            SupportBrowser = true,
-            SupportCookie = true,
-            SupportPassword = true,
-        });
-        Services.Add(new Service
-        {
-            Name = "爱课程",
-            Url = "https://www.icourses.cn/home/",
-            Image = new BitmapImage(new Uri(@"/Assets/Others/icourses.png", UriKind.Relative)),
-            SupportBrowser = true,
-            SupportCookie = true,
-        });
-        Services.Add(new Service
-        {
-            Name = "学堂在线",
-            Url = "https://next.xuetangx.com/",
-            Image = new BitmapImage(new Uri(@"/Assets/Others/xuetangx.png", UriKind.Relative)),
-            SupportBrowser = true,
-            SupportCookie = true,
-        });
+            services = services.Where(service => service.Url.Contains(keyword)).ToArray();
+        }
+
+        Services.Clear();
+        Services.AddRange(services);
     }
 
     [RelayCommand]
-    private void Close()
+    private void Select(Service? service)
     {
-        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
+        SelectedService = service;
     }
 
-    /// <inheritdoc />
-    public bool CanCloseDialog()
+    [RelayCommand(CanExecute = nameof(CanLogin))]
+    private void Login(Service? service)
     {
-        return true;
+        if (service is null) return;
+
+        Debug.WriteLine(service.Name);
     }
 
-    /// <inheritdoc />
-    public void OnDialogClosed()
+    private bool CanLogin(Service? service)
     {
+        return service is not null;
     }
 
-    /// <inheritdoc />
-    public void OnDialogOpened(IDialogParameters parameters)
+    [RelayCommand(CanExecute = nameof(CanVisit))]
+    private void Visit(Service? service)
     {
+        if (service is null) return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = service.Url,
+            UseShellExecute = true,
+        });
     }
 
-    /// <inheritdoc />
-    public string Title { get; set; } = string.Empty;
+    private bool CanVisit(Service? service)
+    {
+        return service is not null;
+    }
 
-    /// <inheritdoc />
-    public event Action<IDialogResult>? RequestClose;
+    [RelayCommand]
+    private void Search(string? keyword)
+    {
+        if (string.IsNullOrEmpty(keyword)) return;
+
+        LoadServices(keyword);
+    }
+
+    [RelayCommand]
+    private void Clear()
+    {
+        if (string.IsNullOrEmpty(Keyword)) return;
+
+        Keyword = string.Empty;
+        LoadServices();
+    }
 }

@@ -39,10 +39,7 @@
                 <StackPanel Grid.Column="0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <controls:IconTextButton Background="{DynamicResource SecondaryTitleBrush}"
-                                             Command="{Binding CreateCommand}"
-                                             FontSize="11"
-                                             Foreground="{DynamicResource PrimaryBrush}"
+                    <controls:IconTextButton Command="{Binding CreateCommand}"
                                              Icon="Plus"
                                              Text="{DynamicResource Text.Queue.Create}"
                                              ToolTip="{DynamicResource Text.Queue.Create.Tip}" />

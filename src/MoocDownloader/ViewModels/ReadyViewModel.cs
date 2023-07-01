@@ -9,7 +9,7 @@ namespace MoocDownloader.ViewModels;
 /// <summary>
 /// The view model of the ready view.
 /// </summary>
-public partial class ReadyViewModel : SharedViewModel
+public partial class ReadyViewModel : SharedPlaylistViewModel
 {
     [ObservableProperty]
     private ObservableCollection<Playlist> _playlists = new();

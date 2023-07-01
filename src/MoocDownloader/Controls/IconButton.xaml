@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Width="24"
+        Height="24"
         d:DesignHeight="100"
         d:DesignWidth="100"
-        Height="24"
-        Width="24"
         Cursor="Hand"
         mc:Ignorable="d">
     <Button.Resources>
@@ -30,6 +30,11 @@
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Foreground}" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=IsEnabled}" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource ThirdlyTextBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </Button.Resources>
 

@@ -90,6 +90,17 @@
         </Setter>
     </Style>
 
+    <Style TargetType="controls:IconTextButton">
+        <Setter Property="Background" Value="{DynamicResource SecondaryTitleBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}" />
+        <Setter Property="FontSize" Value="11" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource ThirdlyTextBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!--  Tab Control  -->
     <Style TargetType="TabControl">
         <Setter Property="BorderThickness" Value="0" />

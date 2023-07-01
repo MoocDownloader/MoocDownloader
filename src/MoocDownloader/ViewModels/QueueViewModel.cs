@@ -9,7 +9,7 @@ namespace MoocDownloader.ViewModels;
 /// <summary>
 /// The view model of the queue view.
 /// </summary>
-public partial class QueueViewModel : SharedViewModel
+public partial class QueueViewModel : SharedPlaylistViewModel
 {
     [ObservableProperty]
     private ObservableCollection<Playlist> _playlists = new();

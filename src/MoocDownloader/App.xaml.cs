@@ -14,6 +14,7 @@ public partial class App
     /// <inheritdoc />
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        containerRegistry.RegisterSingleton<ResourceDictionary>(() => Resources);
         containerRegistry.RegisterDialogWindow<BorderlessWindow>();
         containerRegistry.RegisterDialog<CreationView, CreationViewModel>();
         containerRegistry.RegisterDialog<CredentialView, CredentialViewModel>();

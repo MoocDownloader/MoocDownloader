@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DryIoc;
 using MoocDownloader.Models.Creations;
 using MoocResolver.Contracts;
 using Prism.Services.Dialogs;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MoocDownloader.ViewModels;
 
-public partial class CreationViewModel : ObservableRecipient, IDialogAware
+public partial class CreationViewModel : SharedDialogViewModel
 {
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
@@ -25,6 +26,11 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
 
     [ObservableProperty]
     private bool _isResolving;
+
+    /// <inheritdoc />
+    public CreationViewModel(IContainer container) : base(container)
+    {
+    }
 
     [RelayCommand]
     private async Task ResolveAsync()
@@ -51,18 +57,12 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
     private void Download()
     {
         var parameters = new DialogParameters();
-        RequestClose?.Invoke(new DialogResult(ButtonResult.OK, parameters));
+        Close(new DialogResult(ButtonResult.OK, parameters));
     }
 
     private bool CanDownload()
     {
         return !string.IsNullOrEmpty(Url) && !string.IsNullOrEmpty(Path);
-    }
-
-    [RelayCommand]
-    private void Close()
-    {
-        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
 
     [RelayCommand]
@@ -82,26 +82,4 @@ public partial class CreationViewModel : ObservableRecipient, IDialogAware
             Path = folderBrowserDialog.SelectedPath;
         }
     }
-
-    /// <inheritdoc />
-    public bool CanCloseDialog()
-    {
-        return true;
-    }
-
-    /// <inheritdoc />
-    public void OnDialogClosed()
-    {
-    }
-
-    /// <inheritdoc />
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-    }
-
-    /// <inheritdoc />
-    public string Title { get; set; } = string.Empty;
-
-    /// <inheritdoc />
-    public event Action<IDialogResult>? RequestClose;
 }

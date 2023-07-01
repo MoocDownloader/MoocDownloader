@@ -16,14 +16,11 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
-                Width="40"
-                Height="40"
-                Padding="5"
+                Width="45"
+                Height="45"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                BorderBrush="{DynamicResource SecondaryBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="5">
+                BorderThickness="0">
             <Image Source="{Binding Path=Service.Image, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ServiceItem}}" />
         </Border>
         <StackPanel Grid.Column="1"

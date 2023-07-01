@@ -39,10 +39,7 @@
                 <StackPanel Grid.Column="0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <local:IconTextButton Background="{DynamicResource SecondaryTitleBrush}"
-                                          Command="{Binding CreateCommand}"
-                                          FontSize="11"
-                                          Foreground="{DynamicResource PrimaryBrush}"
+                    <local:IconTextButton Command="{Binding CreateCommand}"
                                           Icon="Plus"
                                           Text="{DynamicResource Text.Trash.Create}"
                                           ToolTip="{DynamicResource Text.Trash.Create.Tip}" />

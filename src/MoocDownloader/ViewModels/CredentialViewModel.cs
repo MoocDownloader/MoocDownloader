@@ -1,30 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DryIoc;
 using MoocDownloader.Models.Credentials;
 using MoocDownloader.Views;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace MoocDownloader.ViewModels;
 
-public partial class CredentialViewModel : ObservableRecipient, IDialogAware
+public partial class CredentialViewModel : SharedDialogViewModel
 {
-    private readonly IDialogService _dialogService;
-
     [ObservableProperty]
     private ObservableCollection<Credential> _credentials = new();
 
-    public CredentialViewModel(IDialogService dialogService)
+    /// <inheritdoc />
+    public CredentialViewModel(IContainer container) : base(container)
     {
-        _dialogService = dialogService;
-    }
-
-    [RelayCommand]
-    private void Close()
-    {
-        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
     }
 
     [RelayCommand]
@@ -35,7 +27,7 @@ public partial class CredentialViewModel : ObservableRecipient, IDialogAware
     [RelayCommand]
     private void Create()
     {
-        _dialogService.ShowDialog(
+        DialogService.ShowDialog(
             name: nameof(ServiceView),
             callback: result => { Trace.TraceInformation(result.Result.ToString()); });
     }
@@ -49,26 +41,4 @@ public partial class CredentialViewModel : ObservableRecipient, IDialogAware
     private void Delete()
     {
     }
-
-    /// <inheritdoc />
-    public bool CanCloseDialog()
-    {
-        return true;
-    }
-
-    /// <inheritdoc />
-    public void OnDialogClosed()
-    {
-    }
-
-    /// <inheritdoc />
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-    }
-
-    /// <inheritdoc />
-    public string Title { get; set; } = string.Empty;
-
-    /// <inheritdoc />
-    public event Action<IDialogResult>? RequestClose;
 }
