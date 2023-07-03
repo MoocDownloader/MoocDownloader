@@ -1,0 +1,3 @@
+[submodule "HandyControl"]
+	path = HandyControl
+	url = https://github.com/HandyOrg/HandyControl
