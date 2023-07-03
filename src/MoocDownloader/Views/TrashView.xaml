@@ -45,7 +45,7 @@
                                           ToolTip="{DynamicResource Text.Trash.Create.Tip}" />
                     <local:IconButton Icon="HistoryAlt" ToolTip="{DynamicResource Text.Trash.Restore.Tip}" />
                     <local:IconButton Icon="FolderOpen" ToolTip="{DynamicResource Text.Trash.Open.Tip}" />
-                    <local:IconButton Icon="FileTimesAlt" ToolTip="{DynamicResource Text.Trash.Clear.Tip}" />
+                    <local:IconButton Icon="TimesCircle" ToolTip="{DynamicResource Text.Trash.Clear.Tip}" />
                     <local:IconButton Icon="CornerDownLeft" ToolTip="{DynamicResource Text.Trash.Redo.Tip}" />
                     <local:IconButton Icon="Link" ToolTip="{DynamicResource Text.Trash.Link.Tip}" />
                 </StackPanel>

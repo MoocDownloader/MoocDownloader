@@ -1,8 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Playlists;
-using System.Collections.ObjectModel;
 
 namespace MoocDownloader.ViewModels;
 
@@ -11,15 +9,7 @@ namespace MoocDownloader.ViewModels;
 /// </summary>
 public partial class QueueViewModel : SharedPlaylistViewModel
 {
-    [ObservableProperty]
-    private ObservableCollection<Playlist> _playlists = new();
-
     public QueueViewModel(IContainer container) : base(container)
-    {
-    }
-
-    [RelayCommand]
-    private void Select(Playlist playlist)
     {
     }
 
