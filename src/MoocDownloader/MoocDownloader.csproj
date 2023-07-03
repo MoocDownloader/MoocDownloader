@@ -16,7 +16,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.39.2" />
-    <PackageReference Include="HandyControl" Version="3.4.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="MahApps.Metro.IconPacks.Unicons" Version="4.11.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
@@ -26,6 +25,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MoocResolver\MoocResolver.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HandyControl">
+      <HintPath>..\..\HandyControl\build\lib\net7.0\HandyControl.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

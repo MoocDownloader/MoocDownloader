@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Credentials;
+using MoocDownloader.Views;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
@@ -62,6 +63,8 @@ public partial class ServiceViewModel : SharedDialogViewModel
         if (service is null) return;
 
         Debug.WriteLine(service.Name);
+
+        DialogService.ShowDialog(name: nameof(AuthenticationView));
     }
 
     private bool CanLogin(Service? service)

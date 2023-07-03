@@ -1,0 +1,176 @@
+﻿<UserControl x:Class="MoocDownloader.Views.AuthenticationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:AuthenticationViewModel}"
+             d:DesignWidth="350"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource ThirdlyRegionBrush}"
+             FontFamily="Microsoft YaHei"
+             mc:Ignorable="d">
+    <mvvm:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Width" Value="350" />
+            <Setter Property="SizeToContent" Value="Height" />
+            <Setter Property="Title" Value="认证" />
+        </Style>
+    </mvvm:Dialog.WindowStyle>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <Grid Grid.Row="0" Background="{DynamicResource SecondaryRegionBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <icon:PackIconUnicons Width="12"
+                                      Height="12"
+                                      Margin="15,0"
+                                      VerticalAlignment="Center"
+                                      Foreground="{DynamicResource PrimaryTextBrush}"
+                                      Kind="LockOpenAlt" />
+                <TextBlock FontSize="15"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Text="认证" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
+                </StackPanel.Resources>
+                <Button Command="{Binding CloseCommand}" Tag="Danger">
+                    <icon:PackIconUnicons Kind="Multiply" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <TabControl Grid.Row="1"
+                    Margin="10"
+                    BorderThickness="0"
+                    Style="{StaticResource TabControlSliding}">
+            <TabItem Header="账号密码" Style="{StaticResource TabItemSliding}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Text="账号：" />
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Text="密码：" />
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="5,0,0,0"
+                             VerticalAlignment="Center"
+                             Background="Transparent" />
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="5,0,0,0"
+                             VerticalAlignment="Center"
+                             Background="Transparent" />
+
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <Button Margin="0,0,5,0"
+                                Content="保存"
+                                Style="{StaticResource ButtonDefault}" />
+                        <Button Command="{Binding CloseCommand}"
+                                Content="取消"
+                                Style="{StaticResource ButtonDefault}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="网页登录">
+                <StackPanel>
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Padding="5">
+                            <Image Source="../Assets/Others/bilibili.png" />
+                        </Border>
+                        <StackPanel Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Stretch"
+                                       FontSize="13"
+                                       Style="{StaticResource TextBlockSubTitle}"
+                                       Text="哔哩哔哩 (゜-゜)つロ 干杯~" />
+                            <TextBlock Margin="0,5,0,0"
+                                       HorizontalAlignment="Stretch"
+                                       FontSize="10"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       Style="{StaticResource TextBlockDefault}"
+                                       Text="https://www.bilibili.com/" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Height="40"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <Button Margin="0,0,5,0"
+                                Content="登录"
+                                Style="{StaticResource ButtonDefault}" />
+                        <Button Command="{Binding CloseCommand}"
+                                Content="取消"
+                                Style="{StaticResource ButtonDefault}" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Cookies">
+                <StackPanel>
+                    <TextBox Height="120"
+                             Padding="5"
+                             VerticalContentAlignment="Top"
+                             AcceptsReturn="True"
+                             Background="Transparent"
+                             FontSize="10"
+                             HorizontalScrollBarVisibility="Disabled"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" />
+                    <TextBlock Margin="0,5,0,0"
+                               FontSize="10"
+                               Foreground="{DynamicResource SecondaryTextBrush}"
+                               Text="*支持 JSON 格式和 Netscape 格式。" />
+
+                    <StackPanel Height="40"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <Button Margin="0,0,5,0"
+                                Content="导入"
+                                Style="{StaticResource ButtonDefault}" />
+                        <Button Command="{Binding CloseCommand}"
+                                Content="取消"
+                                Style="{StaticResource ButtonDefault}" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
