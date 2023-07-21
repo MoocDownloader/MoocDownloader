@@ -326,7 +326,7 @@
 
     <!--  Credential List  -->
     <DataTemplate x:Key="CredentialDataTemplate">
-        <controls:CredentialItem x:Name="CredentialItem" />
+        <controls:CredentialItem x:Name="CredentialItem" Credential="{Binding}" />
 
         <DataTemplate.Resources>
             <Style TargetType="controls:CredentialItem">
@@ -339,25 +339,6 @@
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="CredentialItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
-            </Trigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>
-
-    <!--  Service List  -->
-    <DataTemplate x:Key="ServiceDataTemplate">
-        <controls:ServiceItem x:Name="ServiceItem" Service="{Binding}" />
-
-        <DataTemplate.Resources>
-            <Style TargetType="controls:ServiceItem">
-                <Setter Property="Background" Value="Transparent" />
-            </Style>
-        </DataTemplate.Resources>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
-                <Setter TargetName="ServiceItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
-            </DataTrigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="ServiceItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>

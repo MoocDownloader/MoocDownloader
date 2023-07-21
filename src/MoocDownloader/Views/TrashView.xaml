@@ -104,10 +104,10 @@
                     </ListBox.ContextMenu>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding OpenCommand}" CommandParameter="{Binding ElementName=TrashListBox, Path=SelectedItem}" />
+                            <i:InvokeCommandAction Command="{Binding OpenCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=SelectedItem}" />
                         </i:EventTrigger>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectCommand}" CommandParameter="{Binding ElementName=TrashListBox, Path=SelectedItem}" />
+                            <i:InvokeCommandAction Command="{Binding SelectCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=SelectedItem}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListBox>

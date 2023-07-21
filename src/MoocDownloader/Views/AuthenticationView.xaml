@@ -14,7 +14,7 @@
              mc:Ignorable="d">
     <mvvm:Dialog.WindowStyle>
         <Style TargetType="Window">
-            <Setter Property="Width" Value="350" />
+            <Setter Property="Width" Value="400" />
             <Setter Property="SizeToContent" Value="Height" />
             <Setter Property="Title" Value="认证" />
         </Style>
@@ -57,7 +57,134 @@
                     Margin="10"
                     BorderThickness="0"
                     Style="{StaticResource TabControlSliding}">
-            <TabItem Header="账号密码" Style="{StaticResource TabItemSliding}">
+            <TabItem Header="网页登录" IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportCookie}">
+                <StackPanel>
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Padding="5">
+                            <Image>
+                                <Image.Source>
+                                    <Binding Path="Credential.Avatar">
+                                        <Binding.FallbackValue>
+                                            <ImageSource>../Assets/Images/kanna.png</ImageSource>
+                                        </Binding.FallbackValue>
+                                    </Binding>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                        <StackPanel Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Stretch"
+                                       FontSize="13"
+                                       Style="{StaticResource TextBlockSubTitle}">
+                                <TextBlock.Text>
+                                    <Binding FallbackValue="" Path="Credential.Name" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Margin="0,5,0,0"
+                                       HorizontalAlignment="Stretch"
+                                       FontSize="10"
+                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                       Style="{StaticResource TextBlockDefault}">
+                                <TextBlock.Text>
+                                    <Binding FallbackValue="" Path="Credential.Url" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                        <Button Margin="0,0,5,0"
+                                Command="{Binding LaunchBrowserCommand}"
+                                Content="登录"
+                                Style="{StaticResource ButtonDefault}" />
+                        <Button Command="{Binding CloseCommand}"
+                                Content="取消"
+                                Style="{StaticResource ButtonDefault}" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Cookies" IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportCookie}">
+                <StackPanel>
+                    <TextBox Height="130"
+                             Padding="5"
+                             VerticalContentAlignment="Top"
+                             AcceptsReturn="True"
+                             Background="Transparent"
+                             FontSize="10"
+                             HorizontalScrollBarVisibility="Auto"
+                             VerticalScrollBarVisibility="Auto">
+                        <TextBox.Text>
+                            <Binding FallbackValue="" Path="Credential.CookieData" />
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Margin="0,10"
+                               FontSize="10"
+                               Foreground="{DynamicResource SecondaryTextBrush}"
+                               Text="* Ctrl+V 粘贴，支持 JSON 格式和 Netscape 格式" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <Button Margin="0,0,5,0"
+                                    Command="{Binding ImportCookiesCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"
+                                    Style="{StaticResource ButtonDefault}"
+                                    Tag="Edge"
+                                    ToolTip="读取 Edge 浏览器中的 Cookies">
+                                <Image Width="13"
+                                       Height="13"
+                                       Source="../Assets/Images/edge.png" />
+                            </Button>
+                            <Button Margin="0,0,5,0"
+                                    Command="{Binding ImportCookiesCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"
+                                    Style="{StaticResource ButtonDefault}"
+                                    Tag="Chrome"
+                                    ToolTip="读取 Chrome 浏览器中的 Cookies">
+                                <Image Width="13"
+                                       Height="13"
+                                       Source="../Assets/Images/chrome.png" />
+                            </Button>
+                            <Button Margin="0,0,5,0"
+                                    Style="{StaticResource ButtonDefault}"
+                                    ToolTip="粘贴 Cookies 文本">
+                                <icon:PackIconUnicons Kind="Copy" />
+                            </Button>
+                            <Button Style="{StaticResource ButtonDefault}" ToolTip="从文本中导入 Cookies">
+                                <icon:PackIconUnicons Kind="FolderOpen" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <Button Margin="0,0,5,0"
+                                    Command="{Binding SaveCookiesCommand}"
+                                    Content="保存"
+                                    Style="{StaticResource ButtonDefault}" />
+                            <Button Command="{Binding CloseCommand}"
+                                    Content="取消"
+                                    Style="{StaticResource ButtonDefault}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="账号密码"
+                     IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportPassword}"
+                     Style="{StaticResource TabItemSliding}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" MinWidth="50" />
@@ -66,7 +193,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0"
@@ -81,12 +208,20 @@
                              Grid.Column="1"
                              Margin="5,0,0,0"
                              VerticalAlignment="Center"
-                             Background="Transparent" />
+                             Background="Transparent">
+                        <TextBox.Text>
+                            <Binding FallbackValue="" Path="Credential.Username" />
+                        </TextBox.Text>
+                    </TextBox>
                     <TextBox Grid.Row="1"
                              Grid.Column="1"
                              Margin="5,0,0,0"
                              VerticalAlignment="Center"
-                             Background="Transparent" />
+                             Background="Transparent">
+                        <TextBox.Text>
+                            <Binding FallbackValue="" Path="Credential.Password" />
+                        </TextBox.Text>
+                    </TextBox>
 
                     <StackPanel Grid.Row="2"
                                 Grid.Column="1"
@@ -94,6 +229,7 @@
                                 VerticalAlignment="Center"
                                 Orientation="Horizontal">
                         <Button Margin="0,0,5,0"
+                                Command="{Binding SavePasswordCommand}"
                                 Content="保存"
                                 Style="{StaticResource ButtonDefault}" />
                         <Button Command="{Binding CloseCommand}"
@@ -101,75 +237,6 @@
                                 Style="{StaticResource ButtonDefault}" />
                     </StackPanel>
                 </Grid>
-            </TabItem>
-            <TabItem Header="网页登录">
-                <StackPanel>
-                    <Grid Height="50">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-
-                        <Border Grid.Column="0" Padding="5">
-                            <Image Source="../Assets/Others/bilibili.png" />
-                        </Border>
-                        <StackPanel Grid.Column="1"
-                                    Margin="5,0,0,0"
-                                    VerticalAlignment="Center">
-                            <TextBlock HorizontalAlignment="Stretch"
-                                       FontSize="13"
-                                       Style="{StaticResource TextBlockSubTitle}"
-                                       Text="哔哩哔哩 (゜-゜)つロ 干杯~" />
-                            <TextBlock Margin="0,5,0,0"
-                                       HorizontalAlignment="Stretch"
-                                       FontSize="10"
-                                       Foreground="{DynamicResource SecondaryTextBrush}"
-                                       Style="{StaticResource TextBlockDefault}"
-                                       Text="https://www.bilibili.com/" />
-                        </StackPanel>
-                    </Grid>
-
-                    <StackPanel Height="40"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal">
-                        <Button Margin="0,0,5,0"
-                                Content="登录"
-                                Style="{StaticResource ButtonDefault}" />
-                        <Button Command="{Binding CloseCommand}"
-                                Content="取消"
-                                Style="{StaticResource ButtonDefault}" />
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Cookies">
-                <StackPanel>
-                    <TextBox Height="120"
-                             Padding="5"
-                             VerticalContentAlignment="Top"
-                             AcceptsReturn="True"
-                             Background="Transparent"
-                             FontSize="10"
-                             HorizontalScrollBarVisibility="Disabled"
-                             TextWrapping="Wrap"
-                             VerticalScrollBarVisibility="Auto" />
-                    <TextBlock Margin="0,5,0,0"
-                               FontSize="10"
-                               Foreground="{DynamicResource SecondaryTextBrush}"
-                               Text="*支持 JSON 格式和 Netscape 格式。" />
-
-                    <StackPanel Height="40"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal">
-                        <Button Margin="0,0,5,0"
-                                Content="导入"
-                                Style="{StaticResource ButtonDefault}" />
-                        <Button Command="{Binding CloseCommand}"
-                                Content="取消"
-                                Style="{StaticResource ButtonDefault}" />
-                    </StackPanel>
-                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

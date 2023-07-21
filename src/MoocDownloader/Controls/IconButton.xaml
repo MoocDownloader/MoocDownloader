@@ -41,7 +41,9 @@
     <Button.Template>
         <ControlTemplate TargetType="Button">
             <Border>
-                <icon:PackIconUnicons Kind="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Icon}" />
+                <icon:PackIconUnicons Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=FontSize}"
+                                      Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=FontSize}"
+                                      Kind="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=Icon}" />
             </Border>
         </ControlTemplate>
     </Button.Template>

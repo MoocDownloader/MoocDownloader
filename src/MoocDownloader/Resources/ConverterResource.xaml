@@ -3,4 +3,5 @@
                     xmlns:converters="clr-namespace:MoocDownloader.Converters">
     <converters:HumanizeBytesConverter x:Key="HumanizeBytesConverter" />
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter" />
 </ResourceDictionary>

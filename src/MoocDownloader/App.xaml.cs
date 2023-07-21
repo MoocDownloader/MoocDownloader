@@ -20,7 +20,6 @@ public partial class App
         containerRegistry.RegisterDialog<CredentialView, CredentialViewModel>();
         containerRegistry.RegisterDialog<AboutView, AboutViewModel>();
         containerRegistry.RegisterDialog<PreferenceView, PreferenceViewModel>();
-        containerRegistry.RegisterDialog<ServiceView, ServiceViewModel>();
         containerRegistry.RegisterDialog<AuthenticationView, AuthenticationViewModel>();
     }
 
