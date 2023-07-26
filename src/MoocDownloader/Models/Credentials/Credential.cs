@@ -14,6 +14,9 @@ public partial class Credential : ObservableObject
     private string _url = string.Empty;
 
     [ObservableProperty]
+    private string _loginUrl = string.Empty;
+
+    [ObservableProperty]
     private CredentialStatus _status = CredentialStatus.None;
 
     [ObservableProperty]

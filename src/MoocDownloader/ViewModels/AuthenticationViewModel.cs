@@ -3,10 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Helpers;
 using MoocDownloader.Models.Credentials;
+using MoocDownloader.Views;
 using Prism.Services.Dialogs;
-using SQLite;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace MoocDownloader.ViewModels;
 
@@ -14,6 +18,15 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
 {
     [ObservableProperty]
     private Credential? _credential;
+
+    [ObservableProperty]
+    private string _cookieData = string.Empty;
+
+    [ObservableProperty]
+    private string _username = string.Empty;
+
+    [ObservableProperty]
+    private string _password = string.Empty;
 
     /// <inheritdoc />
     public AuthenticationViewModel(IContainer container) : base(container)
@@ -24,6 +37,17 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     public override void OnDialogOpened(IDialogParameters parameters)
     {
         Credential = parameters.GetValue<Credential>(nameof(Credential));
+
+        switch (Credential.Type)
+        {
+            case CredentialType.Cookies:
+                CookieData = Credential.CookieData;
+                break;
+            case CredentialType.Password:
+                Username = Credential.Username;
+                Password = Credential.Password;
+                break;
+        }
     }
 
     private void ChangeCredentialStatus(CredentialStatus status)
@@ -38,14 +62,30 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         Credential.Type = type;
     }
 
+    private void SetCredentialUsername()
+    {
+        if (Credential is null) return;
+
+        Credential.Username = Username;
+        Credential.Password = Password;
+    }
+
+    private void SetCredentialCookieData()
+    {
+        if (Credential is null) return;
+
+        Credential.CookieData = CookieData;
+    }
+
     [RelayCommand]
     private void SavePassword()
     {
-        if (string.IsNullOrEmpty(Credential?.Username) || string.IsNullOrEmpty(Credential?.Password))
+        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
         {
             return;
         }
 
+        SetCredentialUsername();
         ChangeCredentialStatus(CredentialStatus.Unverified);
         ChangeCredentialType(CredentialType.Password);
 
@@ -55,6 +95,15 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     [RelayCommand]
     private void LaunchBrowser()
     {
+        var dialogParameters = new DialogParameters
+        {
+            { nameof(Credential), Credential }
+        };
+
+        DialogService.ShowDialog(
+            name: nameof(BrowserView),
+            parameters: dialogParameters,
+            callback: _ => { });
     }
 
     [RelayCommand]
@@ -66,21 +115,25 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         try
         {
             var domains = Credential.Domains.ToArray();
+            var cookies = new List<BrowserCookie>();
             switch (browser)
             {
                 case "Edge": // Import cookies from Edge browser.
-                    var edgeCookies = BrowserHelper.ImportCookiesFromEdge(domains);
+                    cookies = BrowserHelper.ImportCookiesFromEdge(domains);
                     break;
                 case "Chrome": // Import cookies from Chrome browser.
-                    var chromeCookies = BrowserHelper.ImportCookiesFromChrome(domains);
+                    cookies = BrowserHelper.ImportCookiesFromChrome(domains);
                     break;
             }
-        }
-        catch (SQLiteException)
-        {
-        }
-        catch (FileNotFoundException)
-        {
+
+            if (cookies.Any())
+            {
+                CookieData = JsonSerializer.Serialize(cookies, new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    WriteIndented = true,
+                });
+            }
         }
         catch (Exception)
         {
@@ -91,11 +144,12 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     [RelayCommand]
     private void SaveCookies()
     {
-        if (string.IsNullOrEmpty(Credential?.CookieData))
+        if (string.IsNullOrEmpty(CookieData))
         {
             return;
         }
 
+        SetCredentialCookieData();
         ChangeCredentialStatus(CredentialStatus.Unverified);
         ChangeCredentialType(CredentialType.Cookies);
 

@@ -21,6 +21,7 @@ public partial class App
         containerRegistry.RegisterDialog<AboutView, AboutViewModel>();
         containerRegistry.RegisterDialog<PreferenceView, PreferenceViewModel>();
         containerRegistry.RegisterDialog<AuthenticationView, AuthenticationViewModel>();
+        containerRegistry.RegisterDialog<BrowserView, BrowserViewModel>();
     }
 
     /// <inheritdoc />

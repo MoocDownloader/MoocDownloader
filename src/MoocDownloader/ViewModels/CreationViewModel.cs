@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Creations;
+using MoocDownloader.Models.Credentials;
 using MoocResolver.Contracts;
 using Prism.Services.Dialogs;
 using System;
@@ -39,6 +40,10 @@ public partial class CreationViewModel : SharedDialogViewModel
         {
             return;
         }
+
+        var matchedCredential = MatchCredential(Url);
+
+        // TODO: Check the matched credential.
 
         using var resolver = new ResolverBuilder().MatchLink(Url).Build(new ResolverOption
         {
@@ -81,5 +86,14 @@ public partial class CreationViewModel : SharedDialogViewModel
         {
             Path = folderBrowserDialog.SelectedPath;
         }
+    }
+    /// <summary>
+    /// Match credential by inputted URL.
+    /// </summary>
+    /// <param name="url">Inputted URL.</param>
+    /// <returns>Matched credential.</returns>
+    private Credential MatchCredential(string url)
+    {
+        return new Credential();
     }
 }

@@ -1,37 +1,40 @@
-﻿using SQLite;
+﻿using System.Text.Json.Serialization;
+using SQLite;
 
 namespace MoocDownloader.Models.Credentials;
 
 [Table("cookies")]
 public class BrowserCookie
 {
-    [Column("creation_utc")]
-    public int Creation { get; set; }
-
+    [JsonPropertyName("domain")]
     [Column("host_key")]
     public string? Host { get; set; }
 
+    [JsonPropertyName("name")]
     [Column("name")]
     public string? Name { get; set; }
 
+    [JsonPropertyName("value")]
     [Column("value")]
     public string? Value { get; set; }
 
+    [JsonIgnore]
     [Column("encrypted_value")]
     public byte[]? EncryptedValue { get; set; }
 
+    [JsonPropertyName("path")]
     [Column("path")]
     public string? Path { get; set; }
 
+    [JsonPropertyName("expirationDate")]
     [Column("expires_utc")]
-    public int Expires { get; set; }
+    public long Expires { get; set; }
 
+    [JsonPropertyName("secure")]
     [Column("is_secure")]
-    public int IsSecure { get; set; }
+    public bool IsSecure { get; set; }
 
+    [JsonPropertyName("httpOnly")]
     [Column("is_httponly")]
-    public int IsHttpOnly { get; set; }
-
-    [Column("has_expires")]
-    public int HasExpires { get; set; }
+    public bool IsHttpOnly { get; set; }
 }

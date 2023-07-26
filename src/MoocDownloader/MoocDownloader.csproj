@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="cef.redist.x64" Version="114.2.12" />
+    <PackageReference Include="cef.redist.x86" Version="114.2.12" />
+    <PackageReference Include="CefSharp.Common.NETCore" Version="114.2.120" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="114.2.120" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />

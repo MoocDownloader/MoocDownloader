@@ -21,9 +21,9 @@ public class BrowserHelper
     private const string EdgePath = @"AppData\Local\Microsoft\Edge";
     private const string ChromePath = @"AppData\Local\Google\Chrome";
 
-    public static string UserProfilePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private static string UserProfilePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-    public static byte[] GetDecryptedKey(string localState)
+    private static byte[] GetDecryptedKey(string localState)
     {
         var localStateData = File.ReadAllText(localState);
         var localStateValue = JsonNode.Parse(localStateData);
@@ -39,7 +39,7 @@ public class BrowserHelper
         return ProtectedData.Unprotect(encryptedValue, null, DataProtectionScope.CurrentUser);
     }
 
-    public static string DecryptCookieValue(byte[] encryptedValue, byte[] decryptedKey)
+    private static string DecryptCookieValue(byte[] encryptedValue, byte[] decryptedKey)
     {
         // 03 - 15 -> nonce
         // 15 - .. -> cipher
@@ -59,17 +59,18 @@ public class BrowserHelper
         return Encoding.UTF8.GetString(plainValue);
     }
 
-    public static void DecryptCookies(List<BrowserCookie> cookies, byte[] decryptedKey)
+    private static void DecryptCookies(List<BrowserCookie> cookies, byte[] decryptedKey)
     {
         foreach (var cookie in cookies)
         {
             if (cookie.EncryptedValue == null) continue;
 
             cookie.Value = DecryptCookieValue(cookie.EncryptedValue, decryptedKey);
+            cookie.Expires = CookieTimeStampToUnixTime(cookie.Expires);
         }
     }
 
-    public static List<BrowserCookie> ReadBrowserCookies(string cookiesPath, string[] domains)
+    private static List<BrowserCookie> ReadBrowserCookies(string cookiesPath, string[] domains)
     {
         using var connection = new SQLiteConnection(cookiesPath, SQLiteOpenFlags.ReadOnly);
 
@@ -83,6 +84,20 @@ public class BrowserHelper
         }
 
         return browserCookies;
+    }
+
+    /// <summary>
+    /// Chrome's cookies time stamp's epoch starts 1601-01-01T00:00:00Z (WHY???)
+    /// So, it's 11644473600 seconds before the UNIX epoch
+    /// </summary>
+    /// <param name="cookieTimeStamp">Chrome's cookies time stamp.</param>
+    /// <returns>UNIX time stamp.</returns>
+    private static long CookieTimeStampToUnixTime(long cookieTimeStamp)
+    {
+        if (cookieTimeStamp <= 0)
+            return 0;
+
+        return (cookieTimeStamp / 1000000) - 11644473600;
     }
 
     public static List<BrowserCookie> ImportCookiesFromEdge(string[] domains)
