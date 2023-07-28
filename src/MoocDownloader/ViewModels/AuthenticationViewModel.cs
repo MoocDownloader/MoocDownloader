@@ -114,7 +114,7 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         // Support to import cookies from Edge & Chrome browser.
         try
         {
-            var domains = Credential.Domains.ToArray();
+            var domains = Credential.CookieDomains.ToArray();
             var cookies = new List<BrowserCookie>();
             switch (browser)
             {

@@ -104,7 +104,11 @@
                              FontSize="10"
                              GotKeyboardFocus="OnAddressTextBoxGotKeyboardFocus"
                              GotMouseCapture="OnAddressTextBoxGotMouseCapture"
-                             Text="{Binding InputAddress}" />
+                             Text="{Binding InputAddress}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding GoCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </Border>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">

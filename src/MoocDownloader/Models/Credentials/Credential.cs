@@ -50,5 +50,8 @@ public partial class Credential : ObservableObject
     private bool _supportCookie;
 
     [ObservableProperty]
-    private List<string> _domains = new();
+    private List<string> _cookieDomains = new();
+
+    [ObservableProperty]
+    private List<string> _cookieNames = new();
 }
