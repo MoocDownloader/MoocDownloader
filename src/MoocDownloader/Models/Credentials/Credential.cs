@@ -41,7 +41,7 @@ public partial class Credential : ObservableObject
     private string _nickname = string.Empty;
 
     [ObservableProperty]
-    private DateTime _creationTime = DateTime.Now;
+    private DateTime _lastModificationTime = DateTime.Now;
 
     [ObservableProperty]
     private bool _supportPassword;

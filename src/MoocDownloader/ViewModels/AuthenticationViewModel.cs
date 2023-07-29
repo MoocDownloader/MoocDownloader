@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Helpers;
 using MoocDownloader.Models.Credentials;
+using MoocDownloader.Models.Messages;
 using MoocDownloader.Views;
 using Prism.Services.Dialogs;
 using System;
@@ -77,6 +78,15 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         Credential.CookieData = CookieData;
     }
 
+    private string SerializeCookies(List<BrowserCookie> cookies)
+    {
+        return JsonSerializer.Serialize(cookies, new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true,
+        });
+    }
+
     [RelayCommand]
     private void SavePassword()
     {
@@ -103,7 +113,21 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         DialogService.ShowDialog(
             name: nameof(BrowserView),
             parameters: dialogParameters,
-            callback: _ => { });
+            callback: result =>
+            {
+                if (result.Result != ButtonResult.OK) return;
+
+                var browserCookies = result.Parameters.GetValue<List<BrowserCookie>>(nameof(BrowserCookie));
+
+                CookieData = SerializeCookies(browserCookies);
+
+                // Save cookies.
+                SetCredentialCookieData();
+                ChangeCredentialStatus(CredentialStatus.Valid);
+                ChangeCredentialType(CredentialType.Cookies);
+
+                Close(new DialogResult(result: ButtonResult.OK));
+            });
     }
 
     [RelayCommand]
@@ -114,30 +138,42 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         // Support to import cookies from Edge & Chrome browser.
         try
         {
-            var domains = Credential.CookieDomains.ToArray();
-            var cookies = new List<BrowserCookie>();
+            var cookieDomains = Credential.CookieDomains.ToArray();
+            var browserCookies = new List<BrowserCookie>();
             switch (browser)
             {
                 case "Edge": // Import cookies from Edge browser.
-                    cookies = BrowserHelper.ImportCookiesFromEdge(domains);
+                    browserCookies = BrowserHelper.ImportCookiesFromEdge(cookieDomains);
                     break;
                 case "Chrome": // Import cookies from Chrome browser.
-                    cookies = BrowserHelper.ImportCookiesFromChrome(domains);
+                    browserCookies = BrowserHelper.ImportCookiesFromChrome(cookieDomains);
                     break;
             }
 
-            if (cookies.Any())
+            if (browserCookies.Any())
             {
-                CookieData = JsonSerializer.Serialize(cookies, new JsonSerializerOptions
-                {
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                    WriteIndented = true,
-                });
+                CookieData = SerializeCookies(browserCookies);
             }
         }
         catch (Exception)
         {
-            // ignored
+            var messageOption = new MessageOption
+            {
+                Title = "Cookie 读取失败",
+                Message = $"无法从浏览器 {browser} 中读取 Cookie 信息。从浏览器中读取 Cookie 信息之前应关闭浏览器，或正确安装支持的浏览器。",
+                CancelText = string.Empty,
+                ConfirmText = "确定",
+                MessageType = MessageType.Error
+            };
+            var messageDialogParameters = new DialogParameters
+            {
+                { nameof(MessageOption), messageOption }
+            };
+
+            DialogService.ShowDialog(
+                name: nameof(MessageView),
+                parameters: messageDialogParameters,
+                callback: _ => { });
         }
     }
 

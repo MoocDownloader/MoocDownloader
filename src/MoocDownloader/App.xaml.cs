@@ -1,4 +1,6 @@
 ﻿using MoocDownloader.Controls;
+using MoocDownloader.Services;
+using MoocDownloader.Services.Contracts;
 using MoocDownloader.ViewModels;
 using MoocDownloader.Views;
 using Prism.Ioc;
@@ -15,6 +17,9 @@ public partial class App
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterSingleton<ResourceDictionary>(() => Resources);
+        containerRegistry.RegisterSingleton<ILanguageService, LanguageService>();
+        containerRegistry.RegisterSingleton<IResourceService, ResourceService>();
+
         containerRegistry.RegisterDialogWindow<BorderlessWindow>();
         containerRegistry.RegisterDialog<CreationView, CreationViewModel>();
         containerRegistry.RegisterDialog<CredentialView, CredentialViewModel>();

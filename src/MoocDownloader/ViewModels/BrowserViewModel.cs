@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 
 namespace MoocDownloader.ViewModels;
 
@@ -37,7 +38,25 @@ public partial class BrowserViewModel : SharedDialogViewModel
     /// <inheritdoc />
     public BrowserViewModel(IContainer container) : base(container)
     {
-        // CheckTimer.Elapsed += CheckCookies;
+        CheckTimer.Elapsed += CheckTimerOnElapsed;
+    }
+
+    private void CheckTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        var currentCookies = GetCurrentCookiesAsync().Result;
+
+        if (!CheckCookies(currentCookies)) return;
+
+        var browserCookies = ConvertCookies(currentCookies);
+        var cookieDialogParameters = new DialogParameters
+        {
+            { nameof(BrowserCookie), browserCookies }
+        };
+
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            Close(new DialogResult(ButtonResult.OK, cookieDialogParameters));
+        });
     }
 
     /// <inheritdoc />
@@ -86,12 +105,28 @@ public partial class BrowserViewModel : SharedDialogViewModel
 
     private bool CheckCookies(IReadOnlyCollection<Cookie> cookies)
     {
-        if (Credential is null) return false;
+        // The credential must include names for identifying cookie.
+        if (Credential is not { CookieNames.Count: > 0 }) return false;
 
         return Credential.CookieNames.TrueForAll(
             name => cookies.Any(
                 cookie => string.Equals(
                     cookie.Name, name, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private List<BrowserCookie> ConvertCookies(IEnumerable<Cookie> cookies)
+    {
+        return cookies.Select(cookie => new BrowserCookie
+            {
+                Host = cookie.Domain,
+                Name = cookie.Name,
+                Value = cookie.Value,
+                Path = cookie.Path,
+                Expires = ((DateTimeOffset)(cookie.Expires ?? DateTime.Now)).ToUnixTimeSeconds(),
+                IsSecure = cookie.Secure,
+                IsHttpOnly = cookie.HttpOnly,
+            })
+            .ToList();
     }
 
     [RelayCommand]
@@ -138,16 +173,7 @@ public partial class BrowserViewModel : SharedDialogViewModel
             return;
         }
 
-        var browserCookies = currentCookies.Select(cookie => new BrowserCookie
-        {
-            Host = cookie.Domain,
-            Name = cookie.Name,
-            Value = cookie.Value,
-            Path = cookie.Path,
-            Expires = ((DateTimeOffset)(cookie.Expires ?? DateTime.Now)).ToUnixTimeSeconds(),
-            IsSecure = cookie.Secure,
-            IsHttpOnly = cookie.HttpOnly,
-        });
+        var browserCookies = ConvertCookies(currentCookies);
         var cookieDialogParameters = new DialogParameters
         {
             { nameof(BrowserCookie), browserCookies }

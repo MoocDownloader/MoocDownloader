@@ -15,6 +15,7 @@
     <mvvm:Dialog.WindowStyle>
         <Style TargetType="Window">
             <Setter Property="Width" Value="400" />
+            <Setter Property="ResizeMode" Value="NoResize" />
             <Setter Property="SizeToContent" Value="Height" />
             <Setter Property="Title" Value="认证" />
         </Style>
