@@ -1,0 +1,209 @@
+﻿<UserControl x:Class="MoocDownloader.Views.Downloads.DetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MoocDownloader.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:downloads="clr-namespace:MoocDownloader.ViewModels.Downloads"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance downloads:DetailViewModel}"
+             d:DesignWidth="500"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d">
+    <Grid>
+        <TabControl>
+            <!--  Info  -->
+            <TabItem Header="{DynamicResource Text.Detail.Info}" Tag="FolderInfo">
+                <ScrollViewer Margin="10"
+                              Padding="10"
+                              CanContentScroll="False"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <GroupBox Grid.Row="0" Style="{StaticResource DetailSectionStyle}">
+                            <GroupBox.Header>
+                                <TextBlock HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockSubTitle}"
+                                           Text="简介" />
+                            </GroupBox.Header>
+                            <TextBox Padding="0"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     IsReadOnly="True"
+                                     Text="{Binding Playlist.Introduction}"
+                                     TextWrapping="Wrap" />
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="1"
+                                  Margin="0,20,0,0"
+                                  Style="{StaticResource DetailSectionStyle}">
+                            <GroupBox.Header>
+                                <TextBlock HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockSubTitle}"
+                                           Text="作者" />
+                            </GroupBox.Header>
+                            <GroupBox.Resources>
+                                <Style BasedOn="{StaticResource ShieldBaseStyle}" TargetType="hc:Shield">
+                                    <Setter Property="Margin" Value="5,2" />
+                                </Style>
+                            </GroupBox.Resources>
+                            <ItemsControl Background="Transparent"
+                                          BorderThickness="0"
+                                          ItemsSource="{Binding Playlist.Authors}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <hc:Shield Status="{Binding Name}" Subject="{Binding Title}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <WrapPanel>
+                                            <ItemsPresenter />
+                                        </WrapPanel>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                            </ItemsControl>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="2"
+                                  Margin="0,20,0,0"
+                                  Style="{StaticResource DetailSectionStyle}">
+                            <GroupBox.Header>
+                                <TextBlock HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockSubTitle}"
+                                           Text="下载" />
+                            </GroupBox.Header>
+                            <Grid Grid.Row="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="25" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
+                                           Text="下载链接" />
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
+                                           Text="保存目录" />
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
+                                           Text="创建时间" />
+                                <TextBlock Grid.Row="3"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
+                                           Text="完成时间" />
+                                <TextBlock Grid.Row="4"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Style="{StaticResource TextBlockDefault}"
+                                           Text="下载历时" />
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.Url}" />
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.Path}" />
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.CreationTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <TextBlock Grid.Row="3"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.CompletionTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                <TextBlock Grid.Row="4"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultSecLight}"
+                                           Text="{Binding Playlist.ElapsedTime}" />
+
+                                <controls:IconButton Grid.Row="0"
+                                                     Grid.Column="4"
+                                                     Background="Transparent"
+                                                     FontSize="11"
+                                                     Foreground="{DynamicResource SecondaryTextBrush}"
+                                                     Icon="Copy"
+                                                     ToolTip="复制下载链接" />
+                                <controls:IconButton Grid.Row="1"
+                                                     Grid.Column="4"
+                                                     Background="Transparent"
+                                                     FontSize="11"
+                                                     Foreground="{DynamicResource SecondaryTextBrush}"
+                                                     Icon="FolderOpen"
+                                                     ToolTip="打开文件夹" />
+                            </Grid>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="3"
+                                  Margin="0,20,0,0"
+                                  Style="{StaticResource DetailSectionStyle}">
+                            <GroupBox.Header>
+                                <TextBlock HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockSubTitle}"
+                                           Text="目录" />
+                            </GroupBox.Header>
+
+                            <ItemsControl Background="Transparent"
+                                          BorderThickness="0"
+                                          ItemsSource="{Binding Playlist.Indices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:IndexItem Index="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.Template>
+                                    <ControlTemplate TargetType="ItemsControl">
+                                        <StackPanel>
+                                            <ItemsPresenter />
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                            </ItemsControl>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!--  Media List  -->
+            <TabItem Header="{DynamicResource Text.Detail.Media}" Tag="Books">
+                <ListBox ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
+                         ItemTemplate="{StaticResource MediaDataTemplate}"
+                         ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
+                         ItemsSource="{Binding Playlist.Medias}"
+                         Template="{StaticResource CleanListBoxTemplate}" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

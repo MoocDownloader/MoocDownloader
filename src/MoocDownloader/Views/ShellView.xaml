@@ -4,11 +4,11 @@
         xmlns:assistants="clr-namespace:MoocDownloader.Assistants"
         xmlns:controls="clr-namespace:MoocDownloader.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:downloads="clr-namespace:MoocDownloader.Views.Downloads"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mvvm="http://prismlibrary.com/"
-        xmlns:v="clr-namespace:MoocDownloader.Views"
         xmlns:viewModels="clr-namespace:MoocDownloader.ViewModels"
         Title="{DynamicResource Text.Title}"
         Width="900"
@@ -109,13 +109,13 @@
                     <TabItem Header="{DynamicResource Text.List.Queue}"
                              IsSelected="True"
                              Tag="ArrowToBottom">
-                        <v:QueueView />
+                        <downloads:QueueView />
                     </TabItem>
                     <TabItem Header="{DynamicResource Text.List.Ready}" Tag="Check">
-                        <v:ReadyView />
+                        <downloads:ReadyView />
                     </TabItem>
                     <TabItem Header="{DynamicResource Text.List.Trash}" Tag="Trash">
-                        <v:TrashView />
+                        <downloads:TrashView />
                     </TabItem>
                 </TabControl>
             </Grid>
@@ -128,7 +128,7 @@
             <Grid Grid.Column="2">
                 <controls:SwitchPanel>
                     <controls:SwitchPanel.CheckedContent>
-                        <v:DetailView />
+                        <downloads:DetailView />
                     </controls:SwitchPanel.CheckedContent>
                     <controls:SwitchPanel.UncheckedContent>
                         <controls:Empty />

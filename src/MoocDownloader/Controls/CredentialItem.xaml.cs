@@ -1,4 +1,4 @@
-﻿using MoocDownloader.Models.Credentials;
+﻿using MoocDownloader.Models.Accounts;
 using System.Windows;
 
 namespace MoocDownloader.Controls;

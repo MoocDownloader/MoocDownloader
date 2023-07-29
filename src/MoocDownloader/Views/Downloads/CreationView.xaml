@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="MoocDownloader.Views.Downloads.CreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MoocDownloader.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:downloads="clr-namespace:MoocDownloader.ViewModels.Downloads"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance downloads:CreationViewModel}"
+             d:DesignHeight="500"
+             d:DesignWidth="450"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource ThirdlyRegionBrush}"
+             FontFamily="Microsoft YaHei"
+             mc:Ignorable="d">
+    <mvvm:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Width" Value="450" />
+            <Setter Property="Height" Value="500" />
+            <Setter Property="MinWidth" Value="350" />
+            <Setter Property="MinHeight" Value="400" />
+            <Setter Property="Title" Value="新建下载" />
+        </Style>
+    </mvvm:Dialog.WindowStyle>
+
+    <Grid>
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="添加链接" />
+            <Grid Grid.Row="1" Margin="0,10,0,20">
+                <TextBox Padding="5,0,35,0"
+                         Background="Transparent"
+                         FontSize="11"
+                         Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+                <controls:IconButton Margin="0,0,3,0"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Background="Transparent"
+                                     Command="{Binding ResolveCommand}"
+                                     Foreground="{DynamicResource SecondaryTextBrush}"
+                                     Icon="Message" />
+            </Grid>
+            <TextBlock Grid.Row="2"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="文件列表" />
+            <Border Grid.Row="3"
+                    Margin="0,10,0,20"
+                    Padding="5"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                <Grid>
+                    <ListBox Background="Transparent"
+                             ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
+                             ItemTemplate="{StaticResource CreationDataTemplate}"
+                             ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
+                             ItemsSource="{Binding MediaPreviews}"
+                             Template="{StaticResource CleanListBoxTemplate}" />
+
+                    <hc:LoadingCircle Visibility="{Binding IsResolving, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+            </Border>
+            <TextBlock Grid.Row="4"
+                       HorizontalAlignment="Left"
+                       FontSize="15"
+                       Style="{StaticResource TextBlockSubTitle}"
+                       Text="保存位置" />
+            <Grid Grid.Row="5" Margin="0,10,0,20">
+                <TextBox Background="Transparent"
+                         FontSize="11"
+                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" />
+                <controls:IconButton Margin="0,0,3,0"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Background="Transparent"
+                                     Command="{Binding BrowseCommand}"
+                                     Foreground="{DynamicResource SecondaryTextBrush}"
+                                     Icon="FolderOpen" />
+            </Grid>
+            <Button Grid.Row="6"
+                    Height="35"
+                    Padding="0,5"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding DownloadCommand}"
+                    Style="{StaticResource ButtonPrimary}">
+                <StackPanel Orientation="Horizontal">
+                    <icon:PackIconUnicons Width="12"
+                                          Height="12"
+                                          Margin="0,0,5,0"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Kind="CloudDownload" />
+                    <TextBlock Text="立即下载" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <StackPanel Height="45"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
+            </StackPanel.Resources>
+            <Button>
+                <icon:PackIconUnicons Kind="Bug" />
+            </Button>
+            <Button Command="{Binding CloseCommand}" Tag="Danger">
+                <icon:PackIconUnicons Kind="Multiply" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

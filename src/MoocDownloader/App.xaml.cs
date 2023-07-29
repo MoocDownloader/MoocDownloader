@@ -1,8 +1,15 @@
 ﻿using MoocDownloader.Controls;
 using MoocDownloader.Services;
 using MoocDownloader.Services.Contracts;
-using MoocDownloader.ViewModels;
+using MoocDownloader.ViewModels.Accounts;
+using MoocDownloader.ViewModels.Dialogs;
+using MoocDownloader.ViewModels.Downloads;
+using MoocDownloader.ViewModels.Preferences;
 using MoocDownloader.Views;
+using MoocDownloader.Views.Accounts;
+using MoocDownloader.Views.Dialogs;
+using MoocDownloader.Views.Downloads;
+using MoocDownloader.Views.Preferences;
 using Prism.Ioc;
 using System.Windows;
 

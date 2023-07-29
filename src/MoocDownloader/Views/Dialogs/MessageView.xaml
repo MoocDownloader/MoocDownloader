@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="MoocDownloader.Views.Dialogs.MessageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dialogs="clr-namespace:MoocDownloader.ViewModels.Dialogs"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance dialogs:MessageViewModel}"
+             d:DesignWidth="400"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource ThirdlyRegionBrush}"
+             FontFamily="Microsoft YaHei"
+             mc:Ignorable="d">
+    <mvvm:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="Width" Value="400" />
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="SizeToContent" Value="Height" />
+            <Setter Property="Title" Value="{Binding MessageOption.Title}" />
+        </Style>
+    </mvvm:Dialog.WindowStyle>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="{DynamicResource SecondaryRegionBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <icon:PackIconUnicons Margin="15,0">
+                    <icon:PackIconUnicons.Style>
+                        <Style TargetType="icon:PackIconUnicons">
+                            <Setter Property="Width" Value="15" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+                            <Setter Property="Kind" Value="CheckCircle" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MessageOption.MessageType}" Value="Info">
+                                    <Setter Property="Foreground" Value="{DynamicResource InfoBrush}" />
+                                    <Setter Property="Kind" Value="InfoCircle" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MessageOption.MessageType}" Value="Success">
+                                    <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+                                    <Setter Property="Kind" Value="CheckCircle" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MessageOption.MessageType}" Value="Warning">
+                                    <Setter Property="Foreground" Value="{DynamicResource WarningBrush}" />
+                                    <Setter Property="Kind" Value="ExclamationTriangle" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MessageOption.MessageType}" Value="Error">
+                                    <Setter Property="Foreground" Value="{DynamicResource DangerBrush}" />
+                                    <Setter Property="Kind" Value="TimesCircle" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </icon:PackIconUnicons.Style>
+                </icon:PackIconUnicons>
+                <TextBlock FontSize="15"
+                           Foreground="{DynamicResource PrimaryTextBrush}"
+                           Text="{Binding MessageOption.Title}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style BasedOn="{StaticResource ControlButtonStyle}" TargetType="Button" />
+                </StackPanel.Resources>
+                <Button Command="{Binding CloseCommand}" Tag="Danger">
+                    <icon:PackIconUnicons Kind="Multiply" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Padding="25">
+            <TextBlock VerticalAlignment="Top"
+                       FontSize="13"
+                       Foreground="{DynamicResource PrimaryTextBrush}"
+                       Text="{Binding MessageOption.Message}"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1"
+                        Margin="0,0,25,20"
+                        Orientation="Horizontal">
+                <Button Command="{Binding CloseCommand}"
+                        Content="{Binding MessageOption.CancelText}"
+                        Style="{StaticResource ButtonDefault}"
+                        Visibility="{Binding MessageOption.CancelText.Length, Converter={StaticResource NumberToVisibilityConverter}}" />
+                <Button Margin="10,0,0,0"
+                        Command="{Binding ConfirmCommand}"
+                        Content="{Binding MessageOption.ConfirmText}"
+                        Style="{StaticResource ButtonPrimary}"
+                        Visibility="{Binding MessageOption.ConfirmText.Length, Converter={StaticResource NumberToVisibilityConverter}}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using DryIoc;
-using MoocDownloader.Views;
+using MoocDownloader.ViewModels.Shared;
+using MoocDownloader.Views.Accounts;
+using MoocDownloader.Views.Preferences;
 using Prism.Services.Dialogs;
 
 namespace MoocDownloader.ViewModels;

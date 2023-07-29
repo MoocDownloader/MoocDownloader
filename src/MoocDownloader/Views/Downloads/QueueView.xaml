@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="MoocDownloader.Views.Downloads.QueueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MoocDownloader.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:downloads="clr-namespace:MoocDownloader.ViewModels.Downloads"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://prismlibrary.com/"
+             d:DataContext="{d:DesignInstance downloads:QueueViewModel}"
+             d:DesignHeight="450"
+             d:DesignWidth="300"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Padding="4"
+                BorderBrush="{DynamicResource SecondaryBorderBrush}"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="controls:IconButton">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+                        <Setter Property="Margin" Value="4,0" />
+                    </Style>
+                </Grid.Resources>
+
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <controls:IconTextButton Command="{Binding CreateCommand}"
+                                             Icon="Plus"
+                                             Text="{DynamicResource Text.Queue.Create}"
+                                             ToolTip="{DynamicResource Text.Queue.Create.Tip}" />
+                    <controls:IconButton Icon="Play" ToolTip="{DynamicResource Text.Queue.Start.Tip}" />
+                    <controls:IconButton Icon="Pause" ToolTip="{DynamicResource Text.Queue.Pause.Tip}" />
+                    <controls:IconButton Icon="TrashAlt" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
+                    <controls:IconButton Icon="FolderOpen" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
+                    <controls:IconButton Icon="Link" ToolTip="{DynamicResource Text.Queue.Delete.Tip}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <controls:IconButton Margin="0" Icon="EllipsisV" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <controls:SwitchPanel Grid.Row="1" IsChecked="{Binding Playlists.Count}">
+            <controls:SwitchPanel.CheckedContent>
+                <ListBox Name="QueueListBox"
+                         ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
+                         ItemTemplate="{StaticResource QueueDataTemplate}"
+                         ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
+                         ItemsSource="{Binding Playlists}"
+                         Template="{StaticResource CleanListBoxTemplate}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <ContextMenu.Resources>
+                                <Style BasedOn="{StaticResource MenuItemIconStyle}" TargetType="icon:PackIconUnicons" />
+                            </ContextMenu.Resources>
+                            <MenuItem Header="{DynamicResource Text.Queue.Menu.Start}">
+                                <MenuItem.Icon>
+                                    <icon:PackIconUnicons Kind="ArrowDown" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource Text.Queue.Menu.Open}">
+                                <MenuItem.Icon>
+                                    <icon:PackIconUnicons Kind="FolderOpen" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource Text.Queue.Menu.Remove}">
+                                <MenuItem.Icon>
+                                    <icon:PackIconUnicons Kind="TrashAlt" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource Text.Queue.Menu.Delete}">
+                                <MenuItem.Icon>
+                                    <icon:PackIconUnicons Kind="TimesCircle" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource Text.Queue.Menu.Link}">
+                                <MenuItem.Icon>
+                                    <icon:PackIconUnicons Kind="Link" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding ToggleCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ListBox>
+            </controls:SwitchPanel.CheckedContent>
+            <controls:SwitchPanel.UncheckedContent>
+                <controls:Empty ImageOpacity="0.8"
+                                ImageSource="../Assets/Images/kanna.heart.png"
+                                Tip="没有正在下载的任务" />
+            </controls:SwitchPanel.UncheckedContent>
+        </controls:SwitchPanel>
+    </Grid>
+</UserControl>

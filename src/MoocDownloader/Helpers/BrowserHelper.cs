@@ -1,4 +1,4 @@
-﻿using MoocDownloader.Models.Credentials;
+﻿using MoocDownloader.Models.Accounts;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
