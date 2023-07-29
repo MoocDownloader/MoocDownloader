@@ -26,7 +26,7 @@
             <Image Width="80"
                    Height="80"
                    Margin="0,0,0,20"
-                   Source="../Assets/Images/kanna.png" />
+                   Source="../../Assets/Images/kanna.png" />
             <TextBlock Margin="0,0,0,20"
                        FontSize="20"
                        Style="{StaticResource TextBlockTitle}"

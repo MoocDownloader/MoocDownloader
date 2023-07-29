@@ -114,7 +114,7 @@
             </local:SwitchPanel.CheckedContent>
             <local:SwitchPanel.UncheckedContent>
                 <local:Empty ImageOpacity="0.8"
-                             ImageSource="../Assets/Images/kanna.heart.png"
+                             ImageSource="../../Assets/Images/kanna.heart.png"
                              Tip="没有回收站任务" />
             </local:SwitchPanel.UncheckedContent>
         </local:SwitchPanel>

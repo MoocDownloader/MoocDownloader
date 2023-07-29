@@ -71,7 +71,7 @@
                                 <Image.Source>
                                     <Binding Path="Credential.Avatar">
                                         <Binding.FallbackValue>
-                                            <ImageSource>../Assets/Images/kanna.png</ImageSource>
+                                            <ImageSource>../../Assets/Images/kanna.png</ImageSource>
                                         </Binding.FallbackValue>
                                     </Binding>
                                 </Image.Source>
@@ -145,7 +145,7 @@
                                     ToolTip="读取 Edge 浏览器中的 Cookies">
                                 <Image Width="13"
                                        Height="13"
-                                       Source="../Assets/Images/edge.png" />
+                                       Source="../../Assets/Images/edge.png" />
                             </Button>
                             <Button Margin="0,0,5,0"
                                     Command="{Binding ImportCookiesCommand}"
@@ -155,7 +155,7 @@
                                     ToolTip="读取 Chrome 浏览器中的 Cookies">
                                 <Image Width="13"
                                        Height="13"
-                                       Source="../Assets/Images/chrome.png" />
+                                       Source="../../Assets/Images/chrome.png" />
                             </Button>
                             <Button Margin="0,0,5,0"
                                     Style="{StaticResource ButtonDefault}"

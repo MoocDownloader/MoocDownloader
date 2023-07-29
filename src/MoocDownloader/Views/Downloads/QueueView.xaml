@@ -109,7 +109,7 @@
             </controls:SwitchPanel.CheckedContent>
             <controls:SwitchPanel.UncheckedContent>
                 <controls:Empty ImageOpacity="0.8"
-                                ImageSource="../Assets/Images/kanna.heart.png"
+                                ImageSource="../../Assets/Images/kanna.heart.png"
                                 Tip="没有正在下载的任务" />
             </controls:SwitchPanel.UncheckedContent>
         </controls:SwitchPanel>
