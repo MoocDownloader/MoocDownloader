@@ -75,8 +75,8 @@
 
                 <Rectangle Style="{StaticResource SeparatorStyle}" />
 
-                <Button Command="{Binding ManageCredentialCommand}" ToolTip="凭证管理">
-                    <icon:PackIconUnicons Kind="KeySkeletonAlt" />
+                <Button Command="{Binding ManageCredentialCommand}" ToolTip="账号管理">
+                    <icon:PackIconUnicons Kind="User" />
                 </Button>
                 <Button Command="{Binding ChangePreferenceCommand}" ToolTip="偏好设定">
                     <icon:PackIconUnicons Kind="Setting" />

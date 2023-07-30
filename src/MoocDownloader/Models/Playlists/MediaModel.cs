@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MoocDownloader.Models.Playlists;
 
-public partial class Media : ObservableObject
+public partial class MediaModel : ObservableObject
 {
     [ObservableProperty]
     private int _index;

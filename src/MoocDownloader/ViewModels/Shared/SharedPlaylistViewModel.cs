@@ -13,10 +13,10 @@ namespace MoocDownloader.ViewModels.Shared;
 public abstract partial class SharedPlaylistViewModel : SharedViewModel
 {
     [ObservableProperty]
-    private ObservableCollection<Playlist> _playlists = new();
+    private ObservableCollection<PlaylistModel> _playlists = new();
 
     [ObservableProperty]
-    private Playlist? _selectedPlaylist;
+    private PlaylistModel? _selectedPlaylist;
 
     /// <inheritdoc />
     protected SharedPlaylistViewModel(IContainer container) : base(container)
@@ -33,18 +33,18 @@ public abstract partial class SharedPlaylistViewModel : SharedViewModel
     }
 
     [RelayCommand]
-    private void Select(Playlist playlist)
+    private void Select(PlaylistModel playlist)
     {
         _selectedPlaylist = playlist;
     }
 
     [RelayCommand]
-    private void Open(Playlist playlist)
+    private void Open(PlaylistModel playlist)
     {
     }
 
     [RelayCommand]
-    private void CopyUrl(Playlist playlist)
+    private void CopyUrl(PlaylistModel playlist)
     {
     }
 }

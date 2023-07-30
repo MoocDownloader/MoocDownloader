@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace MoocDownloader.Models.Messages;
+namespace MoocDownloader.Models.Dialogs.Messages;
 
 public partial class MessageOption : ObservableObject
 {

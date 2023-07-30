@@ -1,24 +1,24 @@
 ﻿namespace MoocDownloader.Models.Accounts;
 
-public enum CredentialStatus
+public enum AccountStatus
 {
     /// <summary>
-    /// No credential.
+    /// No account.
     /// </summary>
     None,
 
     /// <summary>
-    /// Credential is unverified.
+    /// Account is unverified.
     /// </summary>
     Unverified,
 
     /// <summary>
-    /// Credential is valid.
+    /// Account is valid.
     /// </summary>
     Valid,
 
     /// <summary>
-    /// Credential is invalid.
+    /// Account is invalid.
     /// </summary>
     Invalid,
 }

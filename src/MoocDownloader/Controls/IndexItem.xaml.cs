@@ -8,14 +8,14 @@ namespace MoocDownloader.Controls;
 /// </summary>
 public partial class IndexItem
 {
-    public Index Index
+    public IndexModel Index
     {
-        get => (Index)GetValue(IndexProperty);
+        get => (IndexModel)GetValue(IndexProperty);
         set => SetValue(IndexProperty, value);
     }
 
     public static readonly DependencyProperty IndexProperty =
-        DependencyProperty.Register(nameof(Index), typeof(Index), typeof(IndexItem));
+        DependencyProperty.Register(nameof(Index), typeof(IndexModel), typeof(IndexItem));
 
     public IndexItem()
     {

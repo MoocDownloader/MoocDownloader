@@ -1,7 +1,12 @@
 ﻿namespace MoocDownloader.Models.Accounts;
 
-public enum CredentialType
+public enum AccountType
 {
+    /// <summary>
+    /// No authenticated.
+    /// </summary>
+    None,
+
     /// <summary>
     /// Authenticated by cookies.
     /// </summary>

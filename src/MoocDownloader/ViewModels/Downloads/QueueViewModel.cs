@@ -15,7 +15,7 @@ public partial class QueueViewModel : SharedPlaylistViewModel
     }
 
     [RelayCommand]
-    private void Toggle(Playlist playlist)
+    private void Toggle(PlaylistModel playlist)
     {
     }
 }

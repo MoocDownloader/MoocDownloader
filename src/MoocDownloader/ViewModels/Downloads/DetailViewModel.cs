@@ -11,7 +11,7 @@ namespace MoocDownloader.ViewModels.Downloads;
 public partial class DetailViewModel : SharedViewModel
 {
     [ObservableProperty]
-    private Playlist _playlist = new();
+    private PlaylistModel _playlist = new();
 
     /// <inheritdoc />
     public DetailViewModel(IContainer container) : base(container)

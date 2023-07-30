@@ -29,10 +29,10 @@ public partial class App
 
         containerRegistry.RegisterDialogWindow<BorderlessWindow>();
         containerRegistry.RegisterDialog<CreationView, CreationViewModel>();
-        containerRegistry.RegisterDialog<CredentialView, CredentialViewModel>();
+        containerRegistry.RegisterDialog<WebsiteView, WebsiteViewModel>();
         containerRegistry.RegisterDialog<AboutView, AboutViewModel>();
         containerRegistry.RegisterDialog<PreferenceView, PreferenceViewModel>();
-        containerRegistry.RegisterDialog<AuthenticationView, AuthenticationViewModel>();
+        containerRegistry.RegisterDialog<AccountView, AccountViewModel>();
         containerRegistry.RegisterDialog<BrowserView, BrowserViewModel>();
         containerRegistry.RegisterDialog<MessageView, MessageViewModel>();
     }

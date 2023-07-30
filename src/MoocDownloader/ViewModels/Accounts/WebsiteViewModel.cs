@@ -12,86 +12,86 @@ using System.Linq;
 
 namespace MoocDownloader.ViewModels.Accounts;
 
-public partial class CredentialViewModel : SharedDialogViewModel
+public partial class WebsiteViewModel : SharedDialogViewModel
 {
     [ObservableProperty]
-    private ObservableCollection<Credential> _credentials = new();
+    private ObservableCollection<WebsiteModel> _websites = new();
 
     [ObservableProperty]
-    private Credential? _selectedCredential;
+    private WebsiteModel? _selectedWebsite;
 
     [ObservableProperty]
     private string _keyword = string.Empty;
 
     /// <inheritdoc />
-    public CredentialViewModel(IContainer container) : base(container)
+    public WebsiteViewModel(IContainer container) : base(container)
     {
     }
 
     /// <inheritdoc />
     public override void OnDialogOpened(IDialogParameters parameters)
     {
-        LoadCredentials();
+        LoadWebsites();
     }
 
-    private void LoadCredentials()
+    private void LoadWebsites()
     {
-        if (Resources["CredentialList"] is not Credential[] credentials)
+        if (Resources["WebsiteList"] is not WebsiteModel[] websites)
         {
-            throw new ArgumentNullException(nameof(credentials), "No credentials available.");
+            throw new ArgumentNullException(nameof(websites), "No websites available.");
         }
 
         if (!string.IsNullOrEmpty(Keyword))
         {
-            credentials = credentials.Where(credential => credential.Url.Contains(Keyword)).ToArray();
+            websites = websites.Where(credential => credential.Url.Contains(Keyword)).ToArray();
         }
 
-        Credentials.Clear();
-        Credentials.AddRange(credentials);
+        Websites.Clear();
+        Websites.AddRange(websites);
     }
 
     [RelayCommand]
-    private void Select(Credential? credential)
+    private void Select(WebsiteModel? website)
     {
-        SelectedCredential = credential;
+        SelectedWebsite = website;
     }
 
     [RelayCommand]
     private void Clear()
     {
         Keyword = string.Empty;
-        LoadCredentials();
+        LoadWebsites();
     }
 
     [RelayCommand]
-    private void Login(Credential? credential)
+    private void Login(WebsiteModel? website)
     {
-        if (credential is null) return;
+        if (website is null) return;
 
         var dialogParameters = new DialogParameters
         {
-            { nameof(Credential), credential }
+            { nameof(WebsiteModel), website }
         };
 
         DialogService.ShowDialog(
-            name: nameof(AuthenticationView),
+            name: nameof(AccountView),
             parameters: dialogParameters,
             callback: _ => { });
     }
 
     [RelayCommand]
-    private void Check(Credential? credential)
+    private void Check(WebsiteModel? website)
     {
     }
 
     [RelayCommand]
-    private void Visit(Credential? credential)
+    private void Visit(WebsiteModel? website)
     {
-        if (credential is null) return;
+        if (website is null) return;
 
         Process.Start(new ProcessStartInfo
         {
-            FileName = credential.Url,
+            FileName = website.Url,
             UseShellExecute = true,
         });
     }

@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:accounts="clr-namespace:MoocDownloader.Models.Accounts"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <x:Array x:Key="WebsiteList" Type="accounts:WebsiteModel">
+        <!--  哔哩哔哩  -->
+        <accounts:WebsiteModel Name="哔哩哔哩 (゜-゜)つロ 干杯~"
+                               Avatar="../Assets/Others/bilibili.png"
+                               LoginUrl="https://passport.bilibili.com/pc/passport/login"
+                               SupportCookie="True"
+                               SupportPassword="False"
+                               Url="https://www.bilibili.com/">
+            <accounts:WebsiteModel.CookieDomains>
+                <system:String>bilibili.com</system:String>
+            </accounts:WebsiteModel.CookieDomains>
+        </accounts:WebsiteModel>
+
+        <!--  中国大学MOOC  -->
+        <accounts:WebsiteModel Name="中国大学MOOC(慕课)"
+                               Avatar="../Assets/Others/icourse163.png"
+                               LoginUrl="https://www.icourse163.org/"
+                               SupportCookie="True"
+                               SupportPassword="True"
+                               Url="https://www.icourse163.org/">
+            <accounts:WebsiteModel.CookieDomains>
+                <system:String>icourse163.org</system:String>
+                <system:String>study.163.com</system:String>
+                <system:String>icourse163.com</system:String>
+                <system:String>youdao.com</system:String>
+            </accounts:WebsiteModel.CookieDomains>
+            <accounts:WebsiteModel.CookieNames>
+                <system:String>STUDY_PERSIST</system:String>
+                <system:String>EDUWEBDEVICE</system:String>
+                <system:String>STUDY_INFO</system:String>
+            </accounts:WebsiteModel.CookieNames>
+        </accounts:WebsiteModel>
+
+        <!--  爱课程  -->
+        <accounts:WebsiteModel Name="爱课程"
+                               Avatar="../Assets/Others/icourses.png"
+                               LoginUrl="https://www.icourses.cn/home/"
+                               SupportCookie="True"
+                               SupportPassword="False"
+                               Url="https://www.icourses.cn/home/">
+            <accounts:WebsiteModel.CookieDomains>
+                <system:String>icourses.cn</system:String>
+            </accounts:WebsiteModel.CookieDomains>
+        </accounts:WebsiteModel>
+
+        <!--  学堂在线  -->
+        <accounts:WebsiteModel Name="学堂在线"
+                               Avatar="../Assets/Others/xuetangx.png"
+                               LoginUrl="https://next.xuetangx.com/"
+                               SupportCookie="True"
+                               SupportPassword="False"
+                               Url="https://next.xuetangx.com/">
+            <accounts:WebsiteModel.CookieDomains>
+                <system:String>xuetangx.com</system:String>
+            </accounts:WebsiteModel.CookieDomains>
+        </accounts:WebsiteModel>
+    </x:Array>
+</ResourceDictionary>

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Helpers;
 using MoocDownloader.Models.Accounts;
-using MoocDownloader.Models.Messages;
+using MoocDownloader.Models.Dialogs.Messages;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Accounts;
 using MoocDownloader.Views.Dialogs;
@@ -17,10 +17,10 @@ using System.Text.Unicode;
 
 namespace MoocDownloader.ViewModels.Accounts;
 
-public partial class AuthenticationViewModel : SharedDialogViewModel
+public partial class AccountViewModel : SharedDialogViewModel
 {
     [ObservableProperty]
-    private Credential? _credential;
+    private WebsiteModel? _website;
 
     [ObservableProperty]
     private string _cookieData = string.Empty;
@@ -32,52 +32,52 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     private string _password = string.Empty;
 
     /// <inheritdoc />
-    public AuthenticationViewModel(IContainer container) : base(container)
+    public AccountViewModel(IContainer container) : base(container)
     {
     }
 
     /// <inheritdoc />
     public override void OnDialogOpened(IDialogParameters parameters)
     {
-        Credential = parameters.GetValue<Credential>(nameof(Credential));
+        Website = parameters.GetValue<WebsiteModel>(nameof(WebsiteModel));
 
-        switch (Credential.Type)
+        switch (Website.Account.Type)
         {
-            case CredentialType.Cookies:
-                CookieData = Credential.CookieData;
+            case AccountType.Cookies:
+                CookieData = Website.Account.CookieData;
                 break;
-            case CredentialType.Password:
-                Username = Credential.Username;
-                Password = Credential.Password;
+            case AccountType.Password:
+                Username = Website.Account.Username;
+                Password = Website.Account.Password;
                 break;
         }
     }
 
-    private void ChangeCredentialStatus(CredentialStatus status)
+    private void ChangeCredentialStatus(AccountStatus status)
     {
-        if (Credential is null) return;
-        Credential.Status = status;
+        if (Website is null) return;
+        Website.Account.Status = status;
     }
 
-    private void ChangeCredentialType(CredentialType type)
+    private void ChangeCredentialType(AccountType type)
     {
-        if (Credential is null) return;
-        Credential.Type = type;
+        if (Website is null) return;
+        Website.Account.Type = type;
     }
 
     private void SetCredentialUsername()
     {
-        if (Credential is null) return;
+        if (Website is null) return;
 
-        Credential.Username = Username;
-        Credential.Password = Password;
+        Website.Account.Username = Username;
+        Website.Account.Password = Password;
     }
 
     private void SetCredentialCookieData()
     {
-        if (Credential is null) return;
+        if (Website is null) return;
 
-        Credential.CookieData = CookieData;
+        Website.Account.CookieData = CookieData;
     }
 
     private string SerializeCookies(List<BrowserCookie> cookies)
@@ -98,8 +98,8 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         }
 
         SetCredentialUsername();
-        ChangeCredentialStatus(CredentialStatus.Unverified);
-        ChangeCredentialType(CredentialType.Password);
+        ChangeCredentialStatus(AccountStatus.Unverified);
+        ChangeCredentialType(AccountType.Password);
 
         Close(new DialogResult(result: ButtonResult.OK));
     }
@@ -109,7 +109,7 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     {
         var dialogParameters = new DialogParameters
         {
-            { nameof(Credential), Credential }
+            { nameof(WebsiteModel), Website }
         };
 
         DialogService.ShowDialog(
@@ -125,8 +125,8 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
 
                 // Save cookies.
                 SetCredentialCookieData();
-                ChangeCredentialStatus(CredentialStatus.Valid);
-                ChangeCredentialType(CredentialType.Cookies);
+                ChangeCredentialStatus(AccountStatus.Valid);
+                ChangeCredentialType(AccountType.Cookies);
 
                 Close(new DialogResult(result: ButtonResult.OK));
             });
@@ -135,12 +135,12 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
     [RelayCommand]
     private void ImportCookies(string browser)
     {
-        if (Credential is null) return;
+        if (Website is null) return;
 
         // Support to import cookies from Edge & Chrome browser.
         try
         {
-            var cookieDomains = Credential.CookieDomains.ToArray();
+            var cookieDomains = Website.CookieDomains.ToArray();
             var browserCookies = new List<BrowserCookie>();
             switch (browser)
             {
@@ -188,8 +188,8 @@ public partial class AuthenticationViewModel : SharedDialogViewModel
         }
 
         SetCredentialCookieData();
-        ChangeCredentialStatus(CredentialStatus.Unverified);
-        ChangeCredentialType(CredentialType.Cookies);
+        ChangeCredentialStatus(AccountStatus.Unverified);
+        ChangeCredentialType(AccountType.Cookies);
 
         Close(new DialogResult(result: ButtonResult.OK));
     }

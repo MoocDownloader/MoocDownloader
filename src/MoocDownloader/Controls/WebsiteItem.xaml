@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MoocDownloader.Controls.CredentialItem"
+﻿<UserControl x:Class="MoocDownloader.Controls.WebsiteItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,7 +22,7 @@
             <Border.Background>
                 <ImageBrush>
                     <ImageBrush.ImageSource>
-                        <Binding Path="Credential.Avatar" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}">
+                        <Binding Path="Website.Avatar" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}">
                             <Binding.FallbackValue>
                                 <ImageSource>../Assets/Images/kanna.png</ImageSource>
                             </Binding.FallbackValue>
@@ -41,15 +41,15 @@
                         <Setter Property="Width" Value="13" />
                         <Setter Property="Height" Value="13" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=Credential.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}}" Value="Unverified">
+                            <DataTrigger Binding="{Binding Path=Website.Account.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}}" Value="Unverified">
                                 <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
                                 <Setter Property="Kind" Value="ShieldQuestion" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=Credential.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}}" Value="Valid">
+                            <DataTrigger Binding="{Binding Path=Website.Account.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}}" Value="Valid">
                                 <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
                                 <Setter Property="Kind" Value="ShieldCheck" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=Credential.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}}" Value="Invalid">
+                            <DataTrigger Binding="{Binding Path=Website.Account.Status, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}}" Value="Invalid">
                                 <Setter Property="Foreground" Value="{DynamicResource DangerBrush}" />
                                 <Setter Property="Kind" Value="ShieldExclamation" />
                             </DataTrigger>
@@ -63,12 +63,12 @@
             <TextBlock HorizontalAlignment="Left"
                        FontSize="12"
                        Style="{StaticResource TextBlockTitle}"
-                       Text="{Binding Path=Credential.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}}" />
+                       Text="{Binding Path=Website.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}}" />
             <TextBlock Margin="0,5,0,0"
                        HorizontalAlignment="Left"
                        FontSize="10"
                        Style="{StaticResource TextBlockDefaultSecLight}"
-                       Text="{Binding Path=Credential.Url, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}}" />
+                       Text="{Binding Path=Website.Url, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}}" />
         </StackPanel>
 
         <StackPanel Grid.Column="3"
@@ -85,11 +85,11 @@
             </StackPanel.Resources>
             <icon:PackIconUnicons Kind="Unlock"
                                   ToolTip="支持账号和密码"
-                                  Visibility="{Binding Path=Credential.SupportPassword, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                  Visibility="{Binding Path=Website.SupportPassword, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <icon:PackIconUnicons Kind="Palette"
                                   ToolTip="支持 Cookies"
-                                  Visibility="{Binding Path=Credential.SupportCookie, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CredentialItem}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                  Visibility="{Binding Path=Website.SupportCookie, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WebsiteItem}, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
     </Grid>
 </UserControl>

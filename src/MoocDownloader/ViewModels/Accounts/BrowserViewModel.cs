@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Accounts;
-using MoocDownloader.Models.Messages;
+using MoocDownloader.Models.Dialogs.Messages;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Dialogs;
 using Prism.Services.Dialogs;
@@ -20,7 +20,7 @@ namespace MoocDownloader.ViewModels.Accounts;
 public partial class BrowserViewModel : SharedDialogViewModel
 {
     [ObservableProperty]
-    private Credential? _credential;
+    private WebsiteModel? _website;
 
     [ObservableProperty]
     private IWpfWebBrowser? _browser;
@@ -63,8 +63,8 @@ public partial class BrowserViewModel : SharedDialogViewModel
     /// <inheritdoc />
     public override void OnDialogOpened(IDialogParameters parameters)
     {
-        Credential = parameters.GetValue<Credential>(nameof(Credential));
-        InputAddress = Credential.LoginUrl;
+        Website = parameters.GetValue<WebsiteModel>(nameof(WebsiteModel));
+        InputAddress = Website.LoginUrl;
 
         CheckTimer.Start();
     }
@@ -86,7 +86,7 @@ public partial class BrowserViewModel : SharedDialogViewModel
             // The URL will be loaded by the browser only when the instance of
             // Chromium browser is bound to the `Browser` property.
             case nameof(Browser):
-                Browser?.LoadUrl(Credential?.LoginUrl ?? string.Empty);
+                Browser?.LoadUrl(Website?.LoginUrl ?? string.Empty);
                 break;
             case nameof(CurrentAddress):
                 InputAddress = CurrentAddress ?? string.Empty;
@@ -107,9 +107,9 @@ public partial class BrowserViewModel : SharedDialogViewModel
     private bool CheckCookies(IReadOnlyCollection<Cookie> cookies)
     {
         // The credential must include names for identifying cookie.
-        if (Credential is not { CookieNames.Count: > 0 }) return false;
+        if (Website is not { CookieNames.Count: > 0 }) return false;
 
-        return Credential.CookieNames.TrueForAll(
+        return Website.CookieNames.TrueForAll(
             name => cookies.Any(
                 cookie => string.Equals(
                     cookie.Name, name, StringComparison.OrdinalIgnoreCase)));
@@ -133,15 +133,15 @@ public partial class BrowserViewModel : SharedDialogViewModel
     [RelayCommand]
     private async Task HomeAsync()
     {
-        if (Credential is null || Browser is null) return;
+        if (Website is null || Browser is null) return;
 
-        await Browser.LoadUrlAsync(Credential.Url);
+        await Browser.LoadUrlAsync(Website.Url);
     }
 
     [RelayCommand]
     private async Task GoAsync()
     {
-        if (Credential is null || Browser is null) return;
+        if (Website is null || Browser is null) return;
 
         await Browser.LoadUrlAsync(InputAddress);
     }

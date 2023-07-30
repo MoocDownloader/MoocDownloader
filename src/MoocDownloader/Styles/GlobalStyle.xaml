@@ -230,7 +230,7 @@
     </ControlTemplate>
 
     <!--  Queue List  -->
-    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type playlists:Playlist}">
+    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
         <controls:QueueItem x:Name="QueueItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
@@ -249,7 +249,7 @@
     </DataTemplate>
 
     <!--  Ready List  -->
-    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type playlists:Playlist}">
+    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
         <controls:ReadyItem x:Name="ReadyItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
@@ -268,7 +268,7 @@
     </DataTemplate>
 
     <!--  Trash List  -->
-    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type playlists:Playlist}">
+    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
         <controls:TrashItem x:Name="TrashItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
@@ -324,21 +324,21 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <!--  Credential List  -->
-    <DataTemplate x:Key="CredentialDataTemplate">
-        <controls:CredentialItem x:Name="CredentialItem" Credential="{Binding}" />
+    <!--  Website List  -->
+    <DataTemplate x:Key="WebsiteDataTemplate">
+        <controls:WebsiteItem x:Name="WebsiteItem" Website="{Binding}" />
 
         <DataTemplate.Resources>
-            <Style TargetType="controls:CredentialItem">
+            <Style TargetType="controls:WebsiteItem">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
         </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
-                <Setter TargetName="CredentialItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+                <Setter TargetName="WebsiteItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="CredentialItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+                <Setter TargetName="WebsiteItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>

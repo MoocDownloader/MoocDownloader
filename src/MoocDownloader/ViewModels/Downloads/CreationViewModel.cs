@@ -24,7 +24,7 @@ public partial class CreationViewModel : SharedDialogViewModel
     private string _path = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<MediaPreview> _mediaPreviews = new();
+    private ObservableCollection<MediaPreviewModel> _mediaPreviews = new();
 
     [ObservableProperty]
     private bool _isResolving;
@@ -93,8 +93,8 @@ public partial class CreationViewModel : SharedDialogViewModel
     /// </summary>
     /// <param name="url">Inputted URL.</param>
     /// <returns>Matched credential.</returns>
-    private Credential MatchCredential(string url)
+    private WebsiteModel MatchCredential(string url)
     {
-        return new Credential();
+        return new WebsiteModel();
     }
 }

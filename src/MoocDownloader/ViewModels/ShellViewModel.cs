@@ -33,7 +33,7 @@ public partial class ShellViewModel : SharedViewModel
     [RelayCommand]
     private void ManageCredential()
     {
-        DialogService.ShowDialog(name: nameof(CredentialView), callback: _ => { });
+        DialogService.ShowDialog(name: nameof(WebsiteView), callback: _ => { });
     }
 
     [RelayCommand]

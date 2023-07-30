@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MoocDownloader.Models.Messages;
+using MoocDownloader.Models.Dialogs.Messages;
 using Prism.Services.Dialogs;
 using System;
 

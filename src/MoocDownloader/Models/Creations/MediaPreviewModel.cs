@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace MoocDownloader.Models.Creations;
 
-public partial class MediaPreview : ObservableObject
+public partial class MediaPreviewModel : ObservableObject
 {
     [ObservableProperty]
     private ImageSource? _image;

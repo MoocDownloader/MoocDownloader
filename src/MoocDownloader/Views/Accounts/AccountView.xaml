@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MoocDownloader.Views.Accounts.AuthenticationView"
+﻿<UserControl x:Class="MoocDownloader.Views.Accounts.AccountView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:accounts="clr-namespace:MoocDownloader.ViewModels.Accounts"
@@ -6,7 +6,7 @@
              xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mvvm="http://prismlibrary.com/"
-             d:DataContext="{d:DesignInstance accounts:AuthenticationViewModel}"
+             d:DataContext="{d:DesignInstance accounts:AccountViewModel}"
              d:DesignWidth="350"
              mvvm:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource ThirdlyRegionBrush}"
@@ -58,7 +58,7 @@
                     Margin="10"
                     BorderThickness="0"
                     Style="{StaticResource TabControlSliding}">
-            <TabItem Header="网页登录" IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportCookie}">
+            <TabItem Header="网页登录" IsEnabled="{Binding FallbackValue=False, Path=Website.SupportCookie}">
                 <StackPanel>
                     <Grid Height="50">
                         <Grid.ColumnDefinitions>
@@ -69,7 +69,7 @@
                         <Border Grid.Column="0" Padding="5">
                             <Image>
                                 <Image.Source>
-                                    <Binding Path="Credential.Avatar">
+                                    <Binding Path="Website.Avatar">
                                         <Binding.FallbackValue>
                                             <ImageSource>../../Assets/Images/kanna.png</ImageSource>
                                         </Binding.FallbackValue>
@@ -84,7 +84,7 @@
                                        FontSize="13"
                                        Style="{StaticResource TextBlockSubTitle}">
                                 <TextBlock.Text>
-                                    <Binding FallbackValue="" Path="Credential.Name" />
+                                    <Binding FallbackValue="" Path="Website.Name" />
                                 </TextBlock.Text>
                             </TextBlock>
                             <TextBlock Margin="0,5,0,0"
@@ -93,7 +93,7 @@
                                        Foreground="{DynamicResource SecondaryTextBrush}"
                                        Style="{StaticResource TextBlockDefault}">
                                 <TextBlock.Text>
-                                    <Binding FallbackValue="" Path="Credential.Url" />
+                                    <Binding FallbackValue="" Path="Website.Url" />
                                 </TextBlock.Text>
                             </TextBlock>
                         </StackPanel>
@@ -112,7 +112,7 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Cookies" IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportCookie}">
+            <TabItem Header="Cookies" IsEnabled="{Binding FallbackValue=False, Path=Website.SupportCookie}">
                 <StackPanel>
                     <TextBox Height="130"
                              Padding="5"
@@ -181,7 +181,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="账号密码"
-                     IsEnabled="{Binding FallbackValue=False, Path=Credential.SupportPassword}"
+                     IsEnabled="{Binding FallbackValue=False, Path=Website.SupportPassword}"
                      Style="{StaticResource TabItemSliding}">
                 <Grid>
                     <Grid.ColumnDefinitions>

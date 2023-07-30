@@ -1,4 +1,4 @@
-﻿namespace MoocDownloader.Models.Messages;
+﻿namespace MoocDownloader.Models.Dialogs.Messages;
 
 public enum MessageType
 {

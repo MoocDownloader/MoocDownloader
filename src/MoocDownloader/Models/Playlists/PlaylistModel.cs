@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace MoocDownloader.Models.Playlists;
 
-public partial class Playlist : ObservableObject
+public partial class PlaylistModel : ObservableObject
 {
     [ObservableProperty]
     private string? _name;
@@ -27,19 +27,19 @@ public partial class Playlist : ObservableObject
     private string? _path;
 
     [ObservableProperty]
-    private ObservableCollection<Category> _categories = new();
+    private ObservableCollection<CategoryModel> _categories = new();
 
     [ObservableProperty]
-    private ObservableCollection<Author> _authors = new();
+    private ObservableCollection<AuthorModel> _authors = new();
 
     [ObservableProperty]
-    private ObservableCollection<Index> _indices = new();
+    private ObservableCollection<IndexModel> _indices = new();
 
     [NotifyPropertyChangedFor(nameof(TotalCount))]
     [NotifyPropertyChangedFor(nameof(TotalSize))]
     [NotifyPropertyChangedFor(nameof(Progress))]
     [ObservableProperty]
-    private ObservableCollection<Media> _medias = new();
+    private ObservableCollection<MediaModel> _medias = new();
 
     [ObservableProperty]
     private DateTime _creationTime = DateTime.Now;

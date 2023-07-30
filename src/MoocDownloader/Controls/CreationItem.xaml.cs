@@ -8,14 +8,14 @@ namespace MoocDownloader.Controls;
 /// </summary>
 public partial class CreationItem
 {
-    public MediaPreview MediaPreview
+    public MediaPreviewModel MediaPreview
     {
-        get => (MediaPreview)GetValue(MediaPreviewProperty);
+        get => (MediaPreviewModel)GetValue(MediaPreviewProperty);
         set => SetValue(MediaPreviewProperty, value);
     }
 
     public static readonly DependencyProperty MediaPreviewProperty =
-        DependencyProperty.Register(nameof(MediaPreview), typeof(MediaPreview), typeof(CreationItem));
+        DependencyProperty.Register(nameof(MediaPreview), typeof(MediaPreviewModel), typeof(CreationItem));
 
     public CreationItem()
     {

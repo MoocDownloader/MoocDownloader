@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MoocDownloader.Models.Playlists;
 
-public partial class Author : ObservableObject
+public partial class AuthorModel : ObservableObject
 {
     [ObservableProperty]
     private string _name = string.Empty;

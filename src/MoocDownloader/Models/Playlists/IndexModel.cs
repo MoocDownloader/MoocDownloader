@@ -2,11 +2,11 @@
 
 namespace MoocDownloader.Models.Playlists;
 
-public partial class Category : ObservableObject
+public partial class IndexModel : ObservableObject
 {
     [ObservableProperty]
-    private int _index;
+    private bool _isGroup;
 
     [ObservableProperty]
-    private string _name = string.Empty;
+    private string? _title;
 }
