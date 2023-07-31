@@ -18,10 +18,10 @@ public class BrowserHelper
     private const string CookiesPath = @"User Data\Default\Network\Cookies";
     private const string LocalStatePath = @"User Data\Local State";
 
-    private const string EdgePath = @"AppData\Local\Microsoft\Edge";
-    private const string ChromePath = @"AppData\Local\Google\Chrome";
+    private const string EdgePath = @"Microsoft\Edge";
+    private const string ChromePath = @"Google\Chrome";
 
-    private static string UserProfilePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
     private static byte[] GetDecryptedKey(string localState)
     {
@@ -103,8 +103,8 @@ public class BrowserHelper
     public static List<BrowserCookie> ImportCookiesFromEdge(string[] domains)
     {
         // Path of Edge browser.
-        var edgeCookiesPath = Path.Combine(UserProfilePath, EdgePath, CookiesPath);
-        var edgeLocalStatePath = Path.Combine(UserProfilePath, EdgePath, LocalStatePath);
+        var edgeCookiesPath = Path.Combine(LocalDataPath, EdgePath, CookiesPath);
+        var edgeLocalStatePath = Path.Combine(LocalDataPath, EdgePath, LocalStatePath);
 
         if (!File.Exists(edgeCookiesPath) || !File.Exists(edgeLocalStatePath))
         {
@@ -122,8 +122,8 @@ public class BrowserHelper
     public static List<BrowserCookie> ImportCookiesFromChrome(string[] domains)
     {
         // Path of Chrome browser.
-        var chromeCookiesPath = Path.Combine(UserProfilePath, ChromePath, CookiesPath);
-        var chromeLocalStatePath = Path.Combine(UserProfilePath, ChromePath, LocalStatePath);
+        var chromeCookiesPath = Path.Combine(LocalDataPath, ChromePath, CookiesPath);
+        var chromeLocalStatePath = Path.Combine(LocalDataPath, ChromePath, LocalStatePath);
 
         if (!File.Exists(chromeCookiesPath) || !File.Exists(chromeLocalStatePath))
         {

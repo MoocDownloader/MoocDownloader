@@ -1,4 +1,5 @@
 ﻿using MoocDownloader.Controls;
+using MoocDownloader.Domain.Accounts;
 using MoocDownloader.Services;
 using MoocDownloader.Services.Contracts;
 using MoocDownloader.ViewModels.Accounts;
@@ -24,6 +25,7 @@ public partial class App
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterSingleton<ResourceDictionary>(() => Resources);
+        containerRegistry.RegisterSingleton<AccountManager>();
         containerRegistry.RegisterSingleton<ILanguageService, LanguageService>();
         containerRegistry.RegisterSingleton<IResourceService, ResourceService>();
 

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
+using MoocDownloader.Domain.Accounts;
 using MoocDownloader.Models.Accounts;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Accounts;
@@ -14,6 +15,8 @@ namespace MoocDownloader.ViewModels.Accounts;
 
 public partial class WebsiteViewModel : SharedDialogViewModel
 {
+    private readonly AccountManager _accountManager;
+
     [ObservableProperty]
     private ObservableCollection<WebsiteModel> _websites = new();
 
@@ -26,6 +29,7 @@ public partial class WebsiteViewModel : SharedDialogViewModel
     /// <inheritdoc />
     public WebsiteViewModel(IContainer container) : base(container)
     {
+        _accountManager = container.Resolve<AccountManager>();
     }
 
     /// <inheritdoc />
@@ -76,7 +80,21 @@ public partial class WebsiteViewModel : SharedDialogViewModel
         DialogService.ShowDialog(
             name: nameof(AccountView),
             parameters: dialogParameters,
-            callback: _ => { });
+            callback: result =>
+            {
+                if (result is not { Result: ButtonResult.OK }) return;
+
+                var account = _accountManager.GetAccountByWebSiteName(website.Name);
+
+                if (account is null)
+                {
+                    _accountManager.Insert(website.Name, website.Account);
+                }
+                else
+                {
+                    _accountManager.Update(website.Name, website.Account);
+                }
+            });
     }
 
     [RelayCommand]

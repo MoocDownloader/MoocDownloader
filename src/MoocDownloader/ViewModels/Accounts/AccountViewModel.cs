@@ -53,19 +53,19 @@ public partial class AccountViewModel : SharedDialogViewModel
         }
     }
 
-    private void ChangeCredentialStatus(AccountStatus status)
+    private void ChangeStatus(AccountStatus status)
     {
         if (Website is null) return;
         Website.Account.Status = status;
     }
 
-    private void ChangeCredentialType(AccountType type)
+    private void ChangeType(AccountType type)
     {
         if (Website is null) return;
         Website.Account.Type = type;
     }
 
-    private void SetCredentialUsername()
+    private void UpdateUsername()
     {
         if (Website is null) return;
 
@@ -73,7 +73,7 @@ public partial class AccountViewModel : SharedDialogViewModel
         Website.Account.Password = Password;
     }
 
-    private void SetCredentialCookieData()
+    private void UpdateCookieData()
     {
         if (Website is null) return;
 
@@ -97,9 +97,9 @@ public partial class AccountViewModel : SharedDialogViewModel
             return;
         }
 
-        SetCredentialUsername();
-        ChangeCredentialStatus(AccountStatus.Unverified);
-        ChangeCredentialType(AccountType.Password);
+        UpdateUsername();
+        ChangeStatus(AccountStatus.Unverified);
+        ChangeType(AccountType.Password);
 
         Close(new DialogResult(result: ButtonResult.OK));
     }
@@ -124,9 +124,9 @@ public partial class AccountViewModel : SharedDialogViewModel
                 CookieData = SerializeCookies(browserCookies);
 
                 // Save cookies.
-                SetCredentialCookieData();
-                ChangeCredentialStatus(AccountStatus.Valid);
-                ChangeCredentialType(AccountType.Cookies);
+                UpdateCookieData();
+                ChangeStatus(AccountStatus.Valid);
+                ChangeType(AccountType.Cookies);
 
                 Close(new DialogResult(result: ButtonResult.OK));
             });
@@ -187,9 +187,9 @@ public partial class AccountViewModel : SharedDialogViewModel
             return;
         }
 
-        SetCredentialCookieData();
-        ChangeCredentialStatus(AccountStatus.Unverified);
-        ChangeCredentialType(AccountType.Cookies);
+        UpdateCookieData();
+        ChangeStatus(AccountStatus.Unverified);
+        ChangeType(AccountType.Cookies);
 
         Close(new DialogResult(result: ButtonResult.OK));
     }

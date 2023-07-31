@@ -6,6 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:downloads="clr-namespace:MoocDownloader.Views.Downloads"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mvvm="http://prismlibrary.com/"
@@ -28,6 +29,11 @@
                       NonClientFrameEdges="None"
                       UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <i:InvokeCommandAction Command="{Binding InitializeCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -75,10 +81,10 @@
 
                 <Rectangle Style="{StaticResource SeparatorStyle}" />
 
-                <Button Command="{Binding ManageCredentialCommand}" ToolTip="账号管理">
+                <Button Command="{Binding ManageAccountCommand}" ToolTip="账号管理">
                     <icon:PackIconUnicons Kind="User" />
                 </Button>
-                <Button Command="{Binding ChangePreferenceCommand}" ToolTip="偏好设定">
+                <Button Command="{Binding ManagePreferenceCommand}" ToolTip="偏好设定">
                     <icon:PackIconUnicons Kind="Setting" />
                 </Button>
 
