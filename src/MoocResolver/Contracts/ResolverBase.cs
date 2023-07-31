@@ -26,7 +26,7 @@ public abstract class ResolverBase : IResolver
     }
 
     /// <inheritdoc />
-    public abstract Task<Playlist> ResolveAsync();
+    public abstract Task<Library> ResolveAsync();
 
     protected virtual HttpClientHandler GetHttpClientHandler(bool useCookies, bool autoRedirect = false)
     {
@@ -155,11 +155,11 @@ public abstract class ResolverBase : IResolver
             ? DateTimeOffset.Now.ToUnixTimeMilliseconds()
             : DateTimeOffset.Now.ToUnixTimeSeconds();
 
-    protected virtual ResolverCredential Credential => Option.Credential;
+    protected virtual Account Account => Option.Account;
 
-    protected virtual CookieContainer Cookies => Credential.Cookies;
+    protected virtual CookieContainer Cookies => Account.Cookies;
 
-    protected virtual ResolverNetworkProxy NetworkProxy => Option.NetworkProxy;
+    protected virtual NetworkProxy NetworkProxy => Option.NetworkProxy;
 
     /// <inheritdoc />
     public virtual void Dispose()

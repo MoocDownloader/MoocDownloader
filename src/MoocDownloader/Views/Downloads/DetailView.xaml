@@ -38,7 +38,7 @@
                                      Background="Transparent"
                                      BorderThickness="0"
                                      IsReadOnly="True"
-                                     Text="{Binding Playlist.Introduction}"
+                                     Text="{Binding Library.Introduction}"
                                      TextWrapping="Wrap" />
                         </GroupBox>
 
@@ -57,7 +57,7 @@
                             </GroupBox.Resources>
                             <ItemsControl Background="Transparent"
                                           BorderThickness="0"
-                                          ItemsSource="{Binding Playlist.Authors}">
+                                          ItemsSource="{Binding Library.Authors}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <hc:Shield Status="{Binding Name}" Subject="{Binding Title}" />
@@ -127,27 +127,27 @@
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="{Binding Playlist.Url}" />
+                                           Text="{Binding Library.Url}" />
                                 <TextBlock Grid.Row="1"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="{Binding Playlist.Path}" />
+                                           Text="{Binding Library.Path}" />
                                 <TextBlock Grid.Row="2"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="{Binding Playlist.CreationTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                           Text="{Binding Library.CreationTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                                 <TextBlock Grid.Row="3"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="{Binding Playlist.CompletionTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                                           Text="{Binding Library.CompletionTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
                                 <TextBlock Grid.Row="4"
                                            Grid.Column="2"
                                            HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockDefaultSecLight}"
-                                           Text="{Binding Playlist.ElapsedTime}" />
+                                           Text="{Binding Library.ElapsedTime}" />
 
                                 <controls:IconButton Grid.Row="0"
                                                      Grid.Column="4"
@@ -177,7 +177,7 @@
 
                             <ItemsControl Background="Transparent"
                                           BorderThickness="0"
-                                          ItemsSource="{Binding Playlist.Indices}">
+                                          ItemsSource="{Binding Library.Indices}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <controls:IndexItem Index="{Binding}" />
@@ -201,7 +201,7 @@
                 <ListBox ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
                          ItemTemplate="{StaticResource MediaDataTemplate}"
                          ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
-                         ItemsSource="{Binding Playlist.Medias}"
+                         ItemsSource="{Binding Library.Medias}"
                          Template="{StaticResource CleanListBoxTemplate}" />
             </TabItem>
         </TabControl>

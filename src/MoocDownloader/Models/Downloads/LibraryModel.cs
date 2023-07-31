@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
 
-namespace MoocDownloader.Models.Playlists;
+namespace MoocDownloader.Models.Downloads;
 
-public partial class PlaylistModel : ObservableObject
+public partial class LibraryModel : ObservableObject
 {
     [ObservableProperty]
     private string? _name;

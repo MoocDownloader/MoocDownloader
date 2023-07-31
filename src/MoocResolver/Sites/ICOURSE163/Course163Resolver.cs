@@ -21,7 +21,7 @@ public class Course163Resolver : ResolverBase
     public const string Pattern = @"^(https:\/\/)?www.icourse163.org\/(course|learn)";
     private const string SessionKey = "NTESSTUDYSI";
 
-    private readonly Playlist _playlist = new();
+    private readonly Library _playlist = new();
     private readonly List<CourseCategory> _courseCategories = new();
     private readonly List<CourseLector> _courseLectors = new();
 
@@ -38,7 +38,7 @@ public class Course163Resolver : ResolverBase
     }
 
     /// <inheritdoc />
-    public override async Task<Playlist> ResolveAsync()
+    public override async Task<Library> ResolveAsync()
     {
         // 1. Parse course id from the `Link`.
         ParseCourseId();
@@ -119,11 +119,11 @@ public class Course163Resolver : ResolverBase
             Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
             {
                 new("returnUrl", Encode(returnUrl)),
-                new("failUrl", Encode(failUrl + Encode(Credential.Username))),
+                new("failUrl", Encode(failUrl + Encode(Account.Username))),
                 new("saveLogin", "true"),
                 new("oauthType", ""),
-                new("username", Credential.Username),
-                new("passwd", Credential.Password),
+                new("username", Account.Username),
+                new("passwd", Account.Password),
             })
         };
         AddHttpHeaders(loginRequest, Array.Empty<NameValueHeaderValue>());

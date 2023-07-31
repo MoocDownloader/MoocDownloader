@@ -1,6 +1,6 @@
 ﻿namespace MoocResolver.Contracts;
 
-public class Playlist
+public class Library
 {
     public string? Name { get; set; } = string.Empty;
 

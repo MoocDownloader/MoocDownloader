@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Media;
 
-namespace MoocDownloader.Models.Creations;
+namespace MoocDownloader.Models.Downloads;
 
 public partial class MediaPreviewModel : ObservableObject
 {

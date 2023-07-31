@@ -6,12 +6,12 @@ public class ResolverOption
 {
     public required string Url { get; set; }
 
-    public ResolverCredential Credential { get; set; } = new();
+    public Account Account { get; set; } = new();
 
-    public ResolverNetworkProxy NetworkProxy { get; set; } = new();
+    public NetworkProxy NetworkProxy { get; set; } = new();
 }
 
-public class ResolverCredential
+public class Account
 {
     public string Username { get; set; } = string.Empty;
 
@@ -20,7 +20,7 @@ public class ResolverCredential
     public CookieContainer Cookies { get; set; } = new();
 }
 
-public class ResolverNetworkProxy
+public class NetworkProxy
 {
     public bool? UseProxy { get; set; }
 

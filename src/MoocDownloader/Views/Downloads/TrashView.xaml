@@ -57,13 +57,13 @@
             </Grid>
         </Border>
 
-        <local:SwitchPanel Grid.Row="1" IsChecked="{Binding Playlists.Count}">
+        <local:SwitchPanel Grid.Row="1" IsChecked="{Binding Libraries.Count}">
             <local:SwitchPanel.CheckedContent>
                 <ListBox Name="TrashListBox"
                          ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
                          ItemTemplate="{StaticResource TrashDataTemplate}"
                          ItemsPanel="{StaticResource CleanItemsPanelTemplate}"
-                         ItemsSource="{Binding Playlists}"
+                         ItemsSource="{Binding Libraries}"
                          Template="{StaticResource CleanListBoxTemplate}">
                     <ListBox.ContextMenu>
                         <ContextMenu>

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace MoocDownloader.Models.Playlists;
+namespace MoocDownloader.Models.Downloads;
 
 public partial class AuthorModel : ObservableObject
 {

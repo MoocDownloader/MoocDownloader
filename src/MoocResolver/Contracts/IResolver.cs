@@ -2,5 +2,5 @@
 
 public interface IResolver : IDisposable
 {
-    Task<Playlist> ResolveAsync();
+    Task<Library> ResolveAsync();
 }

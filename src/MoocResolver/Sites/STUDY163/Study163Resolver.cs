@@ -16,7 +16,7 @@ public class Study163Resolver : ResolverBase
     }
 
     /// <inheritdoc />
-    public override Task<Playlist> ResolveAsync()
+    public override Task<Library> ResolveAsync()
     {
         throw new NotImplementedException();
     }

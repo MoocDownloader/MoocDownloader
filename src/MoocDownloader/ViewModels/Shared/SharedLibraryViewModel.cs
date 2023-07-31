@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
-using MoocDownloader.Models.Playlists;
+using MoocDownloader.Models.Downloads;
 using MoocDownloader.Views.Downloads;
 using Prism.Services.Dialogs;
 using System.Collections.ObjectModel;
@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace MoocDownloader.ViewModels.Shared;
 
-public abstract partial class SharedPlaylistViewModel : SharedViewModel
+public abstract partial class SharedLibraryViewModel : SharedViewModel
 {
     [ObservableProperty]
-    private ObservableCollection<PlaylistModel> _playlists = new();
+    private ObservableCollection<LibraryModel> _libraries = new();
 
     [ObservableProperty]
-    private PlaylistModel? _selectedPlaylist;
+    private LibraryModel? _selectedLibrary;
 
     /// <inheritdoc />
-    protected SharedPlaylistViewModel(IContainer container) : base(container)
+    protected SharedLibraryViewModel(IContainer container) : base(container)
     {
     }
 
@@ -33,18 +33,18 @@ public abstract partial class SharedPlaylistViewModel : SharedViewModel
     }
 
     [RelayCommand]
-    private void Select(PlaylistModel playlist)
+    private void Select(LibraryModel library)
     {
-        _selectedPlaylist = playlist;
+        SelectedLibrary = library;
     }
 
     [RelayCommand]
-    private void Open(PlaylistModel playlist)
+    private void Open(LibraryModel library)
     {
     }
 
     [RelayCommand]
-    private void CopyUrl(PlaylistModel playlist)
+    private void CopyUrl(LibraryModel library)
     {
     }
 }

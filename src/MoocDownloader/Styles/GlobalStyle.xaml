@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:MoocDownloader.Controls"
-                    xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                    xmlns:playlists="clr-namespace:MoocDownloader.Models.Playlists">
+                    xmlns:downloads="clr-namespace:MoocDownloader.Models.Downloads"
+                    xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <!--  Common  -->
     <Style TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -230,7 +230,7 @@
     </ControlTemplate>
 
     <!--  Queue List  -->
-    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
+    <DataTemplate x:Key="QueueDataTemplate" DataType="{x:Type downloads:LibraryModel}">
         <controls:QueueItem x:Name="QueueItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
@@ -249,7 +249,7 @@
     </DataTemplate>
 
     <!--  Ready List  -->
-    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
+    <DataTemplate x:Key="ReadyDataTemplate" DataType="{x:Type downloads:LibraryModel}">
         <controls:ReadyItem x:Name="ReadyItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>
@@ -268,7 +268,7 @@
     </DataTemplate>
 
     <!--  Trash List  -->
-    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type playlists:PlaylistModel}">
+    <DataTemplate x:Key="TrashDataTemplate" DataType="{x:Type downloads:LibraryModel}">
         <controls:TrashItem x:Name="TrashItem" Playlist="{Binding}" />
 
         <DataTemplate.Resources>

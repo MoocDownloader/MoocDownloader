@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Accounts;
-using MoocDownloader.Models.Creations;
+using MoocDownloader.Models.Downloads;
 using MoocDownloader.ViewModels.Shared;
 using MoocResolver.Contracts;
 using Prism.Services.Dialogs;
@@ -49,7 +49,7 @@ public partial class CreationViewModel : SharedDialogViewModel
         using var resolver = new ResolverBuilder().MatchLink(Url).Build(new ResolverOption
         {
             Url = Url,
-            Credential = new ResolverCredential
+            Account = new Account
             {
                 Username = "", // TODO
                 Password = "", // TODO

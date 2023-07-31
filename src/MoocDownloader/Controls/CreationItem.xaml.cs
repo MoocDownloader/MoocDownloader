@@ -1,4 +1,4 @@
-﻿using MoocDownloader.Models.Creations;
+﻿using MoocDownloader.Models.Downloads;
 using System.Windows;
 
 namespace MoocDownloader.Controls;

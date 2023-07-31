@@ -1,4 +1,4 @@
-﻿namespace MoocDownloader.Models.Playlists;
+﻿namespace MoocDownloader.Models.Downloads;
 
 public enum MediaStatus
 {

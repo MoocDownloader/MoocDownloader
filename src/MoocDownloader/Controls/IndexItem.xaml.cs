@@ -1,4 +1,4 @@
-﻿using MoocDownloader.Models.Playlists;
+﻿using MoocDownloader.Models.Downloads;
 using System.Windows;
 
 namespace MoocDownloader.Controls;

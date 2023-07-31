@@ -1,4 +1,4 @@
-﻿using MoocDownloader.Models.Playlists;
+﻿using MoocDownloader.Models.Downloads;
 using System.Windows;
 
 namespace MoocDownloader.Controls;
@@ -8,14 +8,14 @@ namespace MoocDownloader.Controls;
 /// </summary>
 public partial class TrashItem
 {
-    public PlaylistModel Playlist
+    public LibraryModel Playlist
     {
-        get => (PlaylistModel)GetValue(PlaylistProperty);
+        get => (LibraryModel)GetValue(PlaylistProperty);
         set => SetValue(PlaylistProperty, value);
     }
 
     public static readonly DependencyProperty PlaylistProperty =
-        DependencyProperty.Register(nameof(Playlist), typeof(PlaylistModel), typeof(TrashItem));
+        DependencyProperty.Register(nameof(Playlist), typeof(LibraryModel), typeof(TrashItem));
 
     public TrashItem()
     {
