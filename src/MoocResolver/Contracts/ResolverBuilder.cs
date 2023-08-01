@@ -35,17 +35,17 @@ public class ResolverBuilder
     public IResolver Build(ResolverOption option)
     {
         // Architecture:
-        //                                 +-> Using Proxy
-        //                                 |
-        //            +-> Network Proxy  +-|-> PWD + Username <-+
-        //            |                    |                    |
-        //            |                    +-> Host + Port      |
-        //            |                                         |
-        //            |                    +-> Username + PWD   |-+ ResolverOption
-        // Resolver +-|-> Credentials    +-|                    |
-        //            |                    +-> Cookies          |
-        //            |                                         |
-        //            |-> Original Link    <-+                <-+
+        //                                   +-> Using Proxy
+        //                                   |
+        //            +-> Network Proxy    +-|-> PWD + Username <-+
+        //            |                      |                    |
+        //            |                      +-> Host + Port      |
+        //            |                                           |
+        //            |                      +-> Username + PWD   |-+ ResolverOption
+        // Resolver +-|-> Account          +-|                    |
+        //            |                      +-> Cookies          |
+        //            |                                           |
+        //            |-> Original Link    <-+                  <-+
         //            |                      |-+ Dispatcher
         //            +-> Matching Pattern <-+
         //
