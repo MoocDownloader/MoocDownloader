@@ -47,6 +47,7 @@
     <Resource Include="Assets\Others\bilibili.png" />
     <Resource Include="Assets\Others\icourse163.png" />
     <Resource Include="Assets\Others\icourses.png" />
+    <Resource Include="Assets\Others\study163.png" />
     <Resource Include="Assets\Others\xuetangx.png" />
   </ItemGroup>
 

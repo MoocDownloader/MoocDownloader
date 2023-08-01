@@ -7,6 +7,7 @@
         <accounts:WebsiteModel Name="哔哩哔哩 (゜-゜)つロ 干杯~"
                                Avatar="../Assets/Others/bilibili.png"
                                LoginUrl="https://passport.bilibili.com/pc/passport/login"
+                               MatchPattern="^(https:\/\/)?www.bilibili.com\/"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://www.bilibili.com/">
@@ -19,6 +20,7 @@
         <accounts:WebsiteModel Name="中国大学MOOC(慕课)"
                                Avatar="../Assets/Others/icourse163.png"
                                LoginUrl="https://www.icourse163.org/"
+                               MatchPattern="^(https:\/\/)?www.icourse163.org\/(course|learn)"
                                SupportCookie="True"
                                SupportPassword="True"
                                Url="https://www.icourse163.org/">
@@ -39,9 +41,23 @@
         <accounts:WebsiteModel Name="爱课程"
                                Avatar="../Assets/Others/icourses.png"
                                LoginUrl="https://www.icourses.cn/home/"
+                               MatchPattern="^(https:\/\/)?www.icourses.cn\/"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://www.icourses.cn/home/">
+            <accounts:WebsiteModel.CookieDomains>
+                <system:String>icourses.cn</system:String>
+            </accounts:WebsiteModel.CookieDomains>
+        </accounts:WebsiteModel>
+
+        <!--  网易云课堂  -->
+        <accounts:WebsiteModel Name="网易云课堂 - 悄悄变强大"
+                               Avatar="../Assets/Others/study163.png"
+                               LoginUrl="https://study.163.com/"
+                               MatchPattern="^(https:\/\/)?study.163.com.cn\/"
+                               SupportCookie="True"
+                               SupportPassword="False"
+                               Url="https://study.163.com/">
             <accounts:WebsiteModel.CookieDomains>
                 <system:String>icourses.cn</system:String>
             </accounts:WebsiteModel.CookieDomains>
@@ -51,6 +67,7 @@
         <accounts:WebsiteModel Name="学堂在线"
                                Avatar="../Assets/Others/xuetangx.png"
                                LoginUrl="https://next.xuetangx.com/"
+                               MatchPattern="^(https:\/\/)?next.xuetangx.com\/"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://next.xuetangx.com/">

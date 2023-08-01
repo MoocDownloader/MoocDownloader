@@ -19,6 +19,9 @@ public partial class WebsiteModel : ObservableObject
     private string _url = string.Empty;
 
     [ObservableProperty]
+    private string _matchPattern = string.Empty;
+
+    [ObservableProperty]
     private bool _supportCookie;
 
     [ObservableProperty]
