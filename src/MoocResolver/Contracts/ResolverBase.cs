@@ -10,7 +10,7 @@ namespace MoocResolver.Contracts;
 
 public abstract class ResolverBase : IResolver
 {
-    public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0";
+    public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0";
     public const string StartPage = "chrome://version";
 
     protected HttpClient? HttpClient { get; set; }
@@ -26,7 +26,16 @@ public abstract class ResolverBase : IResolver
     }
 
     /// <inheritdoc />
+    public abstract bool AuthenticationRequired { get; set; }
+
+    /// <inheritdoc />
     public abstract Task<Library> ResolveAsync();
+
+    /// <inheritdoc />
+    public abstract Task<CookieCollection> LoginAsync();
+
+    /// <inheritdoc />
+    public abstract Task<bool> CheckAsync();
 
     protected virtual HttpClientHandler GetHttpClientHandler(bool useCookies, bool autoRedirect = false)
     {

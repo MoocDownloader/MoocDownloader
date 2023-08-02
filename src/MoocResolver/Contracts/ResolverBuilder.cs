@@ -1,9 +1,5 @@
 ﻿using MoocResolver.Exceptions;
-using MoocResolver.Sites.BILIBILI;
-using MoocResolver.Sites.ICOURSE163;
-using MoocResolver.Sites.ICOURSES;
-using MoocResolver.Sites.STUDY163;
-using MoocResolver.Sites.XUETANGX;
+using MoocResolver.Resolvers;
 using System.Text.RegularExpressions;
 
 namespace MoocResolver.Contracts;

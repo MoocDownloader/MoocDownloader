@@ -307,19 +307,19 @@
 
     <!--  Creation List  -->
     <DataTemplate x:Key="CreationDataTemplate">
-        <controls:CreationItem x:Name="CreationItem" />
+        <controls:MediaPreviewItem x:Name="MediaPreviewItem" />
 
         <DataTemplate.Resources>
-            <Style TargetType="controls:CreationItem">
+            <Style TargetType="controls:MediaPreviewItem">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
         </DataTemplate.Resources>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="True">
-                <Setter TargetName="CreationItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+                <Setter TargetName="MediaPreviewItem" Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="CreationItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
+                <Setter TargetName="MediaPreviewItem" Property="Background" Value="{DynamicResource ItemMouseOverBrush}" />
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
