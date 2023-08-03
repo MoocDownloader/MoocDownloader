@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
+using MoocDownloader.Domain.Accounts;
 using MoocDownloader.Models.Accounts;
 using MoocDownloader.Models.Downloads;
 using MoocDownloader.ViewModels.Shared;
@@ -9,16 +10,21 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace MoocDownloader.ViewModels.Downloads;
 
 public partial class CreationViewModel : SharedDialogViewModel
 {
+    private readonly AccountManager _accountManager;
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
     private string _url = string.Empty;
@@ -36,6 +42,7 @@ public partial class CreationViewModel : SharedDialogViewModel
     /// <inheritdoc />
     public CreationViewModel(IContainer container) : base(container)
     {
+        _accountManager = container.Resolve<AccountManager>();
     }
 
     /// <summary>
@@ -54,13 +61,36 @@ public partial class CreationViewModel : SharedDialogViewModel
     }
 
     /// <summary>
+    /// Execute logging to get Cookies.
+    /// </summary>
+    /// <param name="resolver"></param>
+    /// <param name="resolverOption"></param>
+    /// <param name="matchedWebsite"></param>
+    /// <returns></returns>
+    private async Task LoginAsync(
+        IWebsiteResolver resolver,
+        WebsiteResolverOption resolverOption,
+        WebsiteModel matchedWebsite)
+    {
+        var cookies = await resolver.LoginAsync();
+
+        // Update cookies.
+        resolverOption.Account.Cookies = new CookieContainer();
+        resolverOption.Account.Cookies.Add(cookies);
+
+        // Save cookies.
+        matchedWebsite.Account.CookieData = SerializeCookies(cookies);
+        _accountManager.Update(matchedWebsite.Name, matchedWebsite.Account);
+    }
+
+    /// <summary>
     /// Parse cookie text into <see cref="CookieContainer"/>
     ///
     /// Text cookie text has two formats: JSON and Netscape.
     /// </summary>
     /// <param name="cookieData">The cookie text.</param>
     /// <returns><see cref="CookieContainer"/> parsed from cookie text.</returns>
-    private CookieContainer ParseCookies(string cookieData)
+    private static CookieContainer ParseCookies(string cookieData)
     {
         if (string.IsNullOrEmpty(cookieData))
         {
@@ -70,7 +100,8 @@ public partial class CreationViewModel : SharedDialogViewModel
         // Detect the format of cookie text:
         //
         //     The cookie text is detected to be Netscape schema
-        //     if **EACH LINE** of text matches Netscape pattern.
+        //     if each line of text except those starting with #
+        //     matches Netscape pattern.
         //
         // File format:
         //
@@ -109,21 +140,27 @@ public partial class CreationViewModel : SharedDialogViewModel
         const string netsacpePattern = @"^\S+\s{1}(TRUE|FALSE){1}\s{1}\S+\s{1}(TRUE|FALSE){1}\s{1}\d+\s{1}\S+\s{1}\S+";
 
         var cookieContainer = new CookieContainer();
+        var cookieLines = cookieData.Split(Environment.NewLine).Where(line => !line.StartsWith("#")).ToList();
 
-        if (cookieData.Split(Environment.NewLine).All(line => Regex.IsMatch(line, netsacpePattern)))
+        if (cookieLines.All(line => Regex.IsMatch(line, netsacpePattern)))
         {
             // Netscape Format.
-            var cookieLines = cookieData.Split(Environment.NewLine);
-
-            foreach (var cookieLine in cookieLines)
+            foreach (var array in cookieLines.Select(cookieLine => cookieLine.Split('\t')))
             {
-                var array = cookieLine.Split('\t');
+                if (array.Length != 7) throw new ArgumentException();
 
-                cookieContainer.Add(new Cookie(
-                    name: array[5],
-                    value: array[6],
-                    path: array[2],
-                    domain: array[0]));
+                try
+                {
+                    cookieContainer.Add(new Cookie(
+                        name: array[5],
+                        value: array[6],
+                        path: array[2],
+                        domain: array[0]));
+                }
+                catch (Exception)
+                {
+                    //
+                }
             }
         }
         else
@@ -138,15 +175,46 @@ public partial class CreationViewModel : SharedDialogViewModel
 
             foreach (var cookie in cookies)
             {
-                cookieContainer.Add(new Cookie(
-                    name: cookie.Name ?? string.Empty,
-                    value: cookie.Value,
-                    path: cookie.Path,
-                    domain: cookie.Host));
+                try
+                {
+                    cookieContainer.Add(new Cookie(
+                        name: cookie.Name ?? string.Empty,
+                        value: cookie.Value,
+                        path: cookie.Path,
+                        domain: cookie.Domain));
+                }
+                catch (Exception)
+                {
+                    //
+                }
             }
         }
 
         return cookieContainer;
+    }
+
+    /// <summary>
+    /// Serialize CookieCollection to JSON.
+    /// </summary>
+    /// <param name="cookies">The cookies logged by username and password.</param>
+    /// <returns>JSON format cookies text.</returns>
+    private static string SerializeCookies(CookieCollection cookies)
+    {
+        var data = cookies.Select(cookie => new BrowserCookie
+        {
+            Domain = cookie.Domain,
+            Name = cookie.Name,
+            Value = cookie.Value,
+            Path = cookie.Path,
+            Expires = ((DateTimeOffset)cookie.Expires).ToUnixTimeSeconds(),
+            IsSecure = cookie.Secure,
+            IsHttpOnly = cookie.HttpOnly,
+        }).ToList();
+        return JsonSerializer.Serialize(data, new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true,
+        });
     }
 
     [RelayCommand]
@@ -158,21 +226,67 @@ public partial class CreationViewModel : SharedDialogViewModel
         }
 
         var matchedWebsite = MatchWebsite(Url);
-        var parsedCookie = ParseCookies(matchedWebsite.Account.CookieData);
+        var getResolverFunc = Container.Resolve<Func<WebsiteResolverOption, IWebsiteResolver>>(matchedWebsite.Resolver);
 
-        // TODO: Check the matched credential.
-
-        using var resolver = new ResolverBuilder().MatchLink(Url).Build(new ResolverOption
+        //                              +-> Using Proxy
+        //                              |
+        //          +-> Network Proxy +-|-> PWD + Username
+        //          |                   |
+        //          |                   +-> Host + Port
+        //          |
+        //          |                   +-> Username + PWD
+        // Option +-|-> Account       +-|
+        //          |                   +-> Cookies
+        //          |
+        //          +-> URL
+        var resolverOption = new WebsiteResolverOption
         {
             Url = Url,
-            Account = new Account
+            NetworkProxy = new NetworkProxy(),
+            Account = new MoocResolver.Contracts.Account
             {
+                Cookies = ParseCookies(matchedWebsite.Account.CookieData),
                 Username = matchedWebsite.Account.Username,
                 Password = matchedWebsite.Account.Password,
-                Cookies = parsedCookie,
             }
-        });
-        var _ = await resolver.ResolveAsync();
+        };
+        var resolver = getResolverFunc(resolverOption);
+
+        if (resolver.AuthenticationRequired)
+        {
+            switch (matchedWebsite.Account.Type)
+            {
+                case AccountType.None:
+                    throw new ArgumentException(nameof(matchedWebsite.Account));
+                case AccountType.Cookies:
+                    if (!await resolver.CheckAsync())
+                    {
+                        throw new ArgumentException();
+                    }
+
+                    break;
+                case AccountType.Password:
+                    if (string.IsNullOrEmpty(matchedWebsite.Account.CookieData))
+                    {
+                        await LoginAsync(resolver, resolverOption, matchedWebsite);
+                    }
+                    else
+                    {
+                        if (!await resolver.CheckAsync())
+                        {
+                            await LoginAsync(resolver, resolverOption, matchedWebsite);
+                        }
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        var library = await resolver.ResolveAsync();
+
+        Debug.WriteLine(library.Name);
     }
 
     [RelayCommand(CanExecute = nameof(CanDownload))]

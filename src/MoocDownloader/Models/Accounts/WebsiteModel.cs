@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
@@ -35,4 +36,7 @@ public partial class WebsiteModel : ObservableObject
 
     [ObservableProperty]
     private AccountModel _account = new();
+
+    [ObservableProperty]
+    private Type? _resolver;
 }

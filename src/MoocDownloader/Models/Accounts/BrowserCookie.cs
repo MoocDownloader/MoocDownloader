@@ -8,7 +8,7 @@ public class BrowserCookie
 {
     [JsonPropertyName("domain")]
     [Column("host_key")]
-    public string? Host { get; set; }
+    public string? Domain { get; set; }
 
     [JsonPropertyName("name")]
     [Column("name")]

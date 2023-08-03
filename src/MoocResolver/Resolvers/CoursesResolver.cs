@@ -7,12 +7,12 @@ namespace MoocResolver.Resolvers;
 /// Website name: 爱课程
 /// Website address: https://www.icourses.cn/home/
 /// </summary>
-public class CoursesResolver : ResolverBase
+public class CoursesResolver : WebsiteResolverBase
 {
     public const string Pattern = @"^(https:\/\/)?www.icourses.cn\/";
 
     /// <inheritdoc />
-    public CoursesResolver(ResolverOption option) : base(option)
+    public CoursesResolver(WebsiteResolverOption option) : base(option)
     {
     }
 

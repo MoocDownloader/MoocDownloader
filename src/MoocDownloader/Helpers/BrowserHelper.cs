@@ -79,7 +79,7 @@ public class BrowserHelper
 
         foreach (var domain in domains)
         {
-            var list = cookieQuery.Where(cookie => cookie.Host != null && cookie.Host.Contains(domain)).ToList();
+            var list = cookieQuery.Where(cookie => cookie.Domain != null && cookie.Domain.Contains(domain)).ToList();
             browserCookies.AddRange(list);
         }
 

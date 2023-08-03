@@ -11,6 +11,8 @@ using MoocDownloader.Views.Accounts;
 using MoocDownloader.Views.Dialogs;
 using MoocDownloader.Views.Downloads;
 using MoocDownloader.Views.Preferences;
+using MoocResolver.Contracts;
+using MoocResolver.Resolvers;
 using Prism.Ioc;
 using System.Windows;
 
@@ -28,6 +30,12 @@ public partial class App
         containerRegistry.RegisterSingleton<AccountManager>();
         containerRegistry.RegisterSingleton<ILanguageService, LanguageService>();
         containerRegistry.RegisterSingleton<IResourceService, ResourceService>();
+
+        containerRegistry.Register<IWebsiteResolver, BilibiliResolver>();
+        containerRegistry.Register<IWebsiteResolver, Course163Resolver>();
+        containerRegistry.Register<IWebsiteResolver, CoursesResolver>();
+        containerRegistry.Register<IWebsiteResolver, Study163Resolver>();
+        containerRegistry.Register<IWebsiteResolver, XuetangxResolver>();
 
         containerRegistry.RegisterDialogWindow<BorderlessWindow>();
         containerRegistry.RegisterDialog<CreationView, CreationViewModel>();

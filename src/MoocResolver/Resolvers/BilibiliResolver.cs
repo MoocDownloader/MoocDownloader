@@ -7,12 +7,12 @@ namespace MoocResolver.Resolvers;
 /// Website name: 哔哩哔哩 (゜-゜)つロ 干杯~-bilibili
 /// Website address: https://www.bilibili.com/
 /// </summary>
-public class BilibiliResolver : ResolverBase
+public class BilibiliResolver : WebsiteResolverBase
 {
     public const string Pattern = @"^(https:\/\/)?www.bilibili.com\/";
 
     /// <inheritdoc />
-    public BilibiliResolver(ResolverOption option) : base(option)
+    public BilibiliResolver(WebsiteResolverOption option) : base(option)
     {
     }
 

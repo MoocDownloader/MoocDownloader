@@ -2,7 +2,7 @@
 
 namespace MoocResolver.Contracts;
 
-public class ResolverOption
+public class WebsiteResolverOption
 {
     public required string Url { get; set; }
 

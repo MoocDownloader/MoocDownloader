@@ -119,7 +119,7 @@ public partial class BrowserViewModel : SharedDialogViewModel
     {
         return cookies.Select(cookie => new BrowserCookie
             {
-                Host = cookie.Domain,
+                Domain = cookie.Domain,
                 Name = cookie.Name,
                 Value = cookie.Value,
                 Path = cookie.Path,

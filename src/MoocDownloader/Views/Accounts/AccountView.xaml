@@ -118,6 +118,7 @@
                              Padding="5"
                              VerticalContentAlignment="Top"
                              AcceptsReturn="True"
+                             AcceptsTab="True"
                              Background="Transparent"
                              FontSize="10"
                              HorizontalScrollBarVisibility="Auto"
@@ -138,6 +139,7 @@
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal">
                             <Button Margin="0,0,5,0"
+                                    BorderThickness="0"
                                     Command="{Binding ImportCookiesCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"
                                     Style="{StaticResource ButtonDefault}"
@@ -148,6 +150,7 @@
                                        Source="../../Assets/Images/edge.png" />
                             </Button>
                             <Button Margin="0,0,5,0"
+                                    BorderThickness="0"
                                     Command="{Binding ImportCookiesCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"
                                     Style="{StaticResource ButtonDefault}"
@@ -158,12 +161,19 @@
                                        Source="../../Assets/Images/chrome.png" />
                             </Button>
                             <Button Margin="0,0,5,0"
+                                    BorderThickness="0"
                                     Style="{StaticResource ButtonDefault}"
                                     ToolTip="粘贴 Cookies 文本">
                                 <icon:PackIconUnicons Foreground="{DynamicResource PrimaryTextBrush}" Kind="Copy" />
                             </Button>
-                            <Button Style="{StaticResource ButtonDefault}" ToolTip="从文本中导入 Cookies">
+                            <Button Margin="0,0,5,0"
+                                    BorderThickness="0"
+                                    Style="{StaticResource ButtonDefault}"
+                                    ToolTip="从文本中导入 Cookies">
                                 <icon:PackIconUnicons Foreground="{DynamicResource PrimaryTextBrush}" Kind="FolderOpen" />
+                            </Button>
+                            <Button Style="{StaticResource ButtonDanger}" ToolTip="清空 Cookie 文本">
+                                <icon:PackIconUnicons Kind="TrashAlt" />
                             </Button>
                         </StackPanel>
                         <StackPanel Grid.Column="1"

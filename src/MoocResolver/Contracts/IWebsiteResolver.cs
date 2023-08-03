@@ -2,7 +2,7 @@
 
 namespace MoocResolver.Contracts;
 
-public interface IResolver : IDisposable
+public interface IWebsiteResolver : IDisposable
 {
     bool AuthenticationRequired { get; set; }
 

@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 
 namespace MoocResolver.Contracts;
 
-public abstract class ResolverBase : IResolver
+public abstract class WebsiteResolverBase : IWebsiteResolver
 {
     public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0";
     public const string StartPage = "chrome://version";
@@ -17,12 +17,12 @@ public abstract class ResolverBase : IResolver
     protected ChromiumWebBrowser? Browser { get; set; }
 
     protected readonly ILogger Logger;
-    protected readonly ResolverOption Option;
+    protected readonly WebsiteResolverOption Option;
 
-    protected ResolverBase(ResolverOption option)
+    protected WebsiteResolverBase(WebsiteResolverOption option)
     {
         Option = option;
-        Logger = Log.ForContext(typeof(ResolverBase));
+        Logger = Log.ForContext(typeof(WebsiteResolverBase));
     }
 
     /// <inheritdoc />

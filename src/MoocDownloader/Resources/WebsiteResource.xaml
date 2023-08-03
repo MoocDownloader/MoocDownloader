@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:accounts="clr-namespace:MoocDownloader.Models.Accounts"
+                    xmlns:resolvers="clr-namespace:MoocResolver.Resolvers;assembly=MoocResolver"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <x:Array x:Key="WebsiteList" Type="accounts:WebsiteModel">
         <!--  哔哩哔哩  -->
@@ -8,6 +9,7 @@
                                Avatar="../Assets/Others/bilibili.png"
                                LoginUrl="https://passport.bilibili.com/pc/passport/login"
                                MatchPattern="^(https:\/\/)?www.bilibili.com\/"
+                               Resolver="resolvers:BilibiliResolver"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://www.bilibili.com/">
@@ -21,6 +23,7 @@
                                Avatar="../Assets/Others/icourse163.png"
                                LoginUrl="https://www.icourse163.org/"
                                MatchPattern="^(https:\/\/)?www.icourse163.org\/(course|learn)"
+                               Resolver="resolvers:Course163Resolver"
                                SupportCookie="True"
                                SupportPassword="True"
                                Url="https://www.icourse163.org/">
@@ -42,6 +45,7 @@
                                Avatar="../Assets/Others/icourses.png"
                                LoginUrl="https://www.icourses.cn/home/"
                                MatchPattern="^(https:\/\/)?www.icourses.cn\/"
+                               Resolver="resolvers:CoursesResolver"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://www.icourses.cn/home/">
@@ -55,6 +59,7 @@
                                Avatar="../Assets/Others/study163.png"
                                LoginUrl="https://study.163.com/"
                                MatchPattern="^(https:\/\/)?study.163.com.cn\/"
+                               Resolver="resolvers:Study163Resolver"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://study.163.com/">
@@ -68,6 +73,7 @@
                                Avatar="../Assets/Others/xuetangx.png"
                                LoginUrl="https://next.xuetangx.com/"
                                MatchPattern="^(https:\/\/)?next.xuetangx.com\/"
+                               Resolver="resolvers:XuetangxResolver"
                                SupportCookie="True"
                                SupportPassword="False"
                                Url="https://next.xuetangx.com/">

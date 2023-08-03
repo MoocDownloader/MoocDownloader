@@ -7,12 +7,12 @@ namespace MoocResolver.Resolvers;
 /// Website name: 网易云课堂 - 悄悄变强大
 /// Website address: https://study.163.com/
 /// </summary>
-public class Study163Resolver : ResolverBase
+public class Study163Resolver : WebsiteResolverBase
 {
     public const string Pattern = @"^(https:\/\/)?study.163.com\/";
 
     /// <inheritdoc />
-    public Study163Resolver(ResolverOption option) : base(option)
+    public Study163Resolver(WebsiteResolverOption option) : base(option)
     {
     }
 
