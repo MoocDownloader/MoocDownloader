@@ -20,7 +20,15 @@
                 BorderThickness="1"
                 CornerRadius="4">
             <Border.Background>
-                <ImageBrush ImageSource="{Binding Path=Playlist.CoverImage, RelativeSource={RelativeSource FindAncestor, AncestorType=local:QueueItem}}" />
+                <ImageBrush Stretch="Uniform">
+                    <ImageBrush.ImageSource>
+                        <Binding Path="Playlist.CoverImage" RelativeSource="{RelativeSource FindAncestor, AncestorType=local:QueueItem}">
+                            <Binding.FallbackValue>
+                                <ImageSource>../Assets/Images/kanna.png</ImageSource>
+                            </Binding.FallbackValue>
+                        </Binding>
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
             </Border.Background>
         </Border>
 

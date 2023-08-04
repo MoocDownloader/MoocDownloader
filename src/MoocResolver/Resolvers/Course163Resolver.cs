@@ -100,7 +100,12 @@ public class Course163Resolver : WebsiteResolverBase
         const string returnUrl = homeUrl + "/member/login.htm#/webLoginIndex";
         const string failUrl = homeUrl + "/member/login.htm?emailEncoded=";
 
+        InitializeHttpClient();
+
         using var homeRequest = new HttpRequestMessage(HttpMethod.Get, homeUrl);
+
+        AddHttpHeaders(homeRequest);
+
         using var homeResponse = await HttpClient!.SendAsync(homeRequest);
 
         if (!homeResponse.IsSuccessStatusCode)
@@ -120,7 +125,9 @@ public class Course163Resolver : WebsiteResolverBase
                 new("passwd", Account.Password),
             })
         };
-        AddHttpHeaders(loginRequest, Array.Empty<NameValueHeaderValue>());
+
+        AddHttpHeaders(loginRequest);
+        
         using var loginResponse = await HttpClient!.SendAsync(loginRequest);
 
         // 2. Checking result logged.

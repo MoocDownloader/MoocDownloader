@@ -132,7 +132,7 @@
                           Background="{DynamicResource SecondaryBorderBrush}" />
 
             <Grid Grid.Column="2">
-                <controls:SwitchPanel>
+                <controls:SwitchPanel IsChecked="{Binding SelectedLibrary, Converter={StaticResource ObjectToBooleanConverter}}">
                     <controls:SwitchPanel.CheckedContent>
                         <downloads:DetailView />
                     </controls:SwitchPanel.CheckedContent>

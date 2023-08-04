@@ -1,7 +1,11 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DryIoc;
 using MoocDownloader.Domain.Accounts;
+using MoocDownloader.Messages;
 using MoocDownloader.Models.Accounts;
+using MoocDownloader.Models.Downloads;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Accounts;
 using MoocDownloader.Views.Preferences;
@@ -10,14 +14,24 @@ using System.Linq;
 
 namespace MoocDownloader.ViewModels;
 
-public partial class ShellViewModel : SharedViewModel
+public partial class ShellViewModel : SharedViewModel, IRecipient<LibrarySelectedMessage>
 {
     private readonly AccountManager _accountManager;
+
+    [ObservableProperty]
+    private LibraryModel? _selectedLibrary;
 
     /// <inheritdoc />
     public ShellViewModel(IContainer container) : base(container)
     {
         _accountManager = container.Resolve<AccountManager>();
+        IsActive = true;
+    }
+
+    /// <inheritdoc />
+    public void Receive(LibrarySelectedMessage message)
+    {
+        SelectedLibrary = message.Value;
     }
 
     private void LoadAccounts()

@@ -39,6 +39,6 @@
                    HorizontalAlignment="Stretch"
                    FontSize="10"
                    Style="{StaticResource TextBlockDefault}"
-                   Text="{Binding MediaPreview.FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:MediaPreviewItem}}" />
+                   Text="{Binding MediaPreview.FileSize, RelativeSource={RelativeSource FindAncestor, AncestorType=local:MediaPreviewItem}, Converter={StaticResource HumanizeBytesConverter}}" />
     </Grid>
 </UserControl>

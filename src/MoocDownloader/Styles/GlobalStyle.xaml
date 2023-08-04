@@ -307,7 +307,7 @@
 
     <!--  Creation List  -->
     <DataTemplate x:Key="CreationDataTemplate">
-        <controls:MediaPreviewItem x:Name="MediaPreviewItem" />
+        <controls:MediaPreviewItem x:Name="MediaPreviewItem" MediaPreview="{Binding}" />
 
         <DataTemplate.Resources>
             <Style TargetType="controls:MediaPreviewItem">

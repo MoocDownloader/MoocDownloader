@@ -2,6 +2,7 @@
 
 public enum MediaStatus
 {
+    Waiting,
     Paused,
     Downloading,
     Finished,

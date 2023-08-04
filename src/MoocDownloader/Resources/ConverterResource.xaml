@@ -4,4 +4,6 @@
     <converters:HumanizeBytesConverter x:Key="HumanizeBytesConverter" />
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:NumberToVisibilityConverter x:Key="NumberToVisibilityConverter" />
+    <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+    <converters:ObjectToBooleanConverter x:Key="ObjectToBooleanConverter" />
 </ResourceDictionary>

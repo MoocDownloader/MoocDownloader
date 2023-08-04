@@ -50,15 +50,25 @@ public abstract class WebsiteResolverBase : IWebsiteResolver
 
     protected virtual void InitializeHttpClient(
         bool useCookies = true,
-        bool autoRedirect = false,
+        bool autoRedirect = true,
         TimeSpan timeout = new())
     {
+        if (HttpClient is not null)
+        {
+            return;
+        }
+
         var httpClientHandler = GetHttpClientHandler(useCookies, autoRedirect);
 
         HttpClient = new HttpClient(httpClientHandler)
         {
             Timeout = timeout == TimeSpan.Zero ? TimeSpan.FromMilliseconds(int.MaxValue) : timeout,
         };
+    }
+
+    protected virtual void AddHttpHeaders(HttpRequestMessage request)
+    {
+        AddHttpHeaders(request, Array.Empty<NameValueHeaderValue>());
     }
 
     protected virtual void AddHttpHeaders(HttpRequestMessage request, NameValueHeaderValue[] headers)

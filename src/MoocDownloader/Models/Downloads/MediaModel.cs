@@ -21,5 +21,5 @@ public partial class MediaModel : ObservableObject
     private ImageSource? _image;
 
     [ObservableProperty]
-    private MediaStatus _status = MediaStatus.Paused;
+    private MediaStatus _status = MediaStatus.Waiting;
 }

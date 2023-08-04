@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DryIoc;
+using MoocDownloader.Messages;
 using MoocDownloader.Models.Downloads;
 using MoocDownloader.Views.Downloads;
 using Prism.Services.Dialogs;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MoocDownloader.ViewModels.Shared;
@@ -28,14 +29,22 @@ public abstract partial class SharedLibraryViewModel : SharedViewModel
     {
         DialogService.ShowDialog(
             name: nameof(CreationView),
-            callback: result => { Trace.TraceInformation(result.Result.ToString()); });
+            callback: result =>
+            {
+                if (result.Result != ButtonResult.OK) return;
+
+                var library = result.Parameters.GetValue<LibraryModel>(nameof(LibraryModel));
+
+                Libraries.Add(library);
+            });
         await Task.CompletedTask;
     }
 
     [RelayCommand]
-    private void Select(LibraryModel library)
+    private void Select(LibraryModel? library)
     {
         SelectedLibrary = library;
+        Messenger.Send(new LibrarySelectedMessage(SelectedLibrary));
     }
 
     [RelayCommand]

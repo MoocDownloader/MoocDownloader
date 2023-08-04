@@ -60,16 +60,21 @@
                                           ItemsSource="{Binding Library.Authors}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <hc:Shield Status="{Binding Name}" Subject="{Binding Title}" />
+                                        <hc:Shield HorizontalAlignment="Left"
+                                                   Status="{Binding Name}"
+                                                   Subject="{Binding Title}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 <ItemsControl.Template>
                                     <ControlTemplate TargetType="ItemsControl">
-                                        <WrapPanel>
-                                            <ItemsPresenter />
-                                        </WrapPanel>
+                                        <ItemsPresenter />
                                     </ControlTemplate>
                                 </ItemsControl.Template>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
                             </ItemsControl>
                         </GroupBox>
 
