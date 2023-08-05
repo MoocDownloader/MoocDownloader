@@ -9,11 +9,7 @@ namespace MoocDownloader.Domain.Contracts;
 public abstract class DomainService<TEntity>
     where TEntity : Entity, new()
 {
-    protected const string DatabaseFile = @"mooc_downloader.db";
-    protected const string DatabaseFolder = @"MoocDownloader";
-
-    protected static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-    protected static string DatabasePath => Path.Combine(LocalDataPath, DatabaseFolder, DatabaseFile);
+    protected static string DatabasePath => Path.Combine(Constants.UserDataPath, Constants.UserDataFile);
 
     protected DomainService()
     {

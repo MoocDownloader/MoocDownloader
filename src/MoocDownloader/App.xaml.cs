@@ -14,6 +14,7 @@ using MoocDownloader.Views.Preferences;
 using MoocResolver.Contracts;
 using MoocResolver.Resolvers;
 using Prism.Ioc;
+using System.IO;
 using System.Windows;
 
 namespace MoocDownloader;
@@ -23,6 +24,15 @@ namespace MoocDownloader;
 /// </summary>
 public partial class App
 {
+    static App()
+    {
+        // Check if the user data folder exists.
+        if (!Directory.Exists(Constants.UserDataPath))
+        {
+            Directory.CreateDirectory(Constants.UserDataPath);
+        }
+    }
+
     /// <inheritdoc />
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
