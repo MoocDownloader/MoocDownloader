@@ -9,8 +9,6 @@ namespace MoocResolver.Resolvers;
 /// </summary>
 public class CoursesResolver : WebsiteResolverBase
 {
-    public const string Pattern = @"^(https:\/\/)?www.icourses.cn\/";
-
     /// <inheritdoc />
     public CoursesResolver(WebsiteResolverOption option) : base(option)
     {

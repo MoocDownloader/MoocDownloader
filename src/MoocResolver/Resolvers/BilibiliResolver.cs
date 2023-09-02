@@ -9,8 +9,6 @@ namespace MoocResolver.Resolvers;
 /// </summary>
 public class BilibiliResolver : WebsiteResolverBase
 {
-    public const string Pattern = @"^(https:\/\/)?www.bilibili.com\/";
-
     /// <inheritdoc />
     public BilibiliResolver(WebsiteResolverOption option) : base(option)
     {

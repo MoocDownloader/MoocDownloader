@@ -9,8 +9,6 @@ namespace MoocResolver.Resolvers;
 /// </summary>
 public class XuetangxResolver : WebsiteResolverBase
 {
-    public const string Pattern = @"^(https:\/\/)?next.xuetangx.com\/";
-
     /// <inheritdoc />
     public XuetangxResolver(WebsiteResolverOption option) : base(option)
     {

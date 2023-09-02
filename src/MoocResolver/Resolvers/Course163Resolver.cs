@@ -18,7 +18,6 @@ namespace MoocResolver.Resolvers;
 /// </summary>
 public class Course163Resolver : WebsiteResolverBase
 {
-    public const string Pattern = @"^(https:\/\/)?www.icourse163.org\/(course|learn)";
     private const string SessionKey = "NTESSTUDYSI";
 
     private readonly Library _library = new();
@@ -113,18 +112,16 @@ public class Course163Resolver : WebsiteResolverBase
             throw new ResolveFailedException(ErrorCodes.Resolver.UnableToAccessPage);
         }
 
-        using var loginRequest = new HttpRequestMessage(HttpMethod.Post, loginUrl)
+        using var loginRequest = new HttpRequestMessage(HttpMethod.Post, loginUrl);
+        loginRequest.Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
-            Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
-            {
-                new("returnUrl", Encode(returnUrl)),
-                new("failUrl", Encode(failUrl + Encode(Account.Username))),
-                new("saveLogin", "true"),
-                new("oauthType", ""),
-                new("username", Account.Username),
-                new("passwd", Account.Password),
-            })
-        };
+            new("returnUrl", Encode(returnUrl)),
+            new("failUrl", Encode(failUrl + Encode(Account.Username))),
+            new("saveLogin", "true"),
+            new("oauthType", ""),
+            new("username", Account.Username),
+            new("passwd", Account.Password),
+        });
 
         AddHttpHeaders(loginRequest);
         
@@ -299,13 +296,11 @@ public class Course163Resolver : WebsiteResolverBase
 
         var httpSessionId = GetHttpSessionId();
         var requestUrl = coursewareUrl + $"?csrfKey={httpSessionId}";
-        using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl)
+        using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
+        request.Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
-            Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
-            {
-                new("termId", _courseTerm?.TermId ?? string.Empty)
-            })
-        };
+            new("termId", _courseTerm?.TermId ?? string.Empty)
+        });
 
         AddHttpHeaders(request, new NameValueHeaderValue[]
         {
@@ -473,15 +468,13 @@ public class Course163Resolver : WebsiteResolverBase
         const string tokenUrl = "https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc";
 
         var httpSessionId = GetHttpSessionId();
-        using var tokenRequest = new HttpRequestMessage(HttpMethod.Post, tokenUrl + $"?csrfKey={httpSessionId}")
+        using var tokenRequest = new HttpRequestMessage(HttpMethod.Post, tokenUrl + $"?csrfKey={httpSessionId}");
+        tokenRequest.Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
-            Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
-            {
-                new("bizId", coursewareUnit.UnitId.ToString()),
-                new("bizType", "1"),
-                new("contentType", "1")
-            })
-        };
+            new("bizId", coursewareUnit.UnitId.ToString()),
+            new("bizType", "1"),
+            new("contentType", "1")
+        });
         AddHttpHeaders(tokenRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
@@ -503,23 +496,21 @@ public class Course163Resolver : WebsiteResolverBase
 
         var httpSessionId = GetHttpSessionId();
 
-        using var documentRequest = new HttpRequestMessage(HttpMethod.Post, documentUrl)
+        using var documentRequest = new HttpRequestMessage(HttpMethod.Post, documentUrl);
+        documentRequest.Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
-            Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
-            {
-                new("callCount", "1"),
-                new("scriptSessionId", "${scriptSessionId}190"),
-                new("httpSessionId", httpSessionId),
-                new("c0-scriptName", "CourseBean"),
-                new("c0-methodName", "getLessonUnitLearnVo"),
-                new("c0-id", "0"),
-                new("c0-param0", $"number:{coursewareUnit.ContentId}"),
-                new("c0-param1", "number:3"),
-                new("c0-param2", "number:0"),
-                new("c0-param3", $"number:{coursewareUnit.UnitId}"),
-                new("batchId", $"{CurrentTimestamp()}"), // Timestamp of the current time.
-            })
-        };
+            new("callCount", "1"),
+            new("scriptSessionId", "${scriptSessionId}190"),
+            new("httpSessionId", httpSessionId),
+            new("c0-scriptName", "CourseBean"),
+            new("c0-methodName", "getLessonUnitLearnVo"),
+            new("c0-id", "0"),
+            new("c0-param0", $"number:{coursewareUnit.ContentId}"),
+            new("c0-param1", "number:3"),
+            new("c0-param2", "number:0"),
+            new("c0-param3", $"number:{coursewareUnit.UnitId}"),
+            new("batchId", $"{CurrentTimestamp()}"), // Timestamp of the current time.
+        });
         AddHttpHeaders(documentRequest, new NameValueHeaderValue[]
         {
             new("edu-script-token", httpSessionId),
