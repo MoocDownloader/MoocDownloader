@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cef.redist.x64" Version="114.2.12" />
-    <PackageReference Include="cef.redist.x86" Version="114.2.12" />
-    <PackageReference Include="CefSharp.Common.NETCore" Version="114.2.120" />
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="114.2.120" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
+    <PackageReference Include="cef.redist.x64" Version="119.4.3" />
+    <PackageReference Include="cef.redist.x86" Version="119.4.3" />
+    <PackageReference Include="CefSharp.Common.NETCore" Version="119.4.30" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="119.4.30" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.3" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="MahApps.Metro.IconPacks.Unicons" Version="4.11.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
@@ -49,6 +49,18 @@
     <Resource Include="Assets\Others\icourses.png" />
     <Resource Include="Assets\Others\study163.png" />
     <Resource Include="Assets\Others\xuetangx.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="119.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="119.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="119.4.3" />
   </ItemGroup>
 
 </Project>

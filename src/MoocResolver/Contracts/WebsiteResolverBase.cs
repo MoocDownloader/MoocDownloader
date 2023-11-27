@@ -94,13 +94,15 @@ public abstract class WebsiteResolverBase : IWebsiteResolver
     {
         var localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var cachePath = Path.Combine(localData, @"MoocDownloader\Cache");
-        var userDataPath = Path.Combine(localData, @"MoocDownloader\UserData");
+        var rootCachePath = Path.Combine(localData, @"MoocDownloader\UserData");
+        // Remove CefSettings.user_data_path.
+        // https://github.com/chromiumembedded/cef/commit/b5386249bd9075982db0874d3a981c44adc4c420
         var cefSettings = new CefSettings
         {
             CachePath = cachePath,
-            UserDataPath = userDataPath,
+            RootCachePath = rootCachePath,
             UserAgent = UserAgent,
-        };
+        }; 
         var success = await CefSharp.Cef.InitializeAsync(
             settings: cefSettings,
             performDependencyCheck: true,
