@@ -22,7 +22,7 @@
         <Style TargetType="Window">
             <Setter Property="Width" Value="1000" />
             <Setter Property="Height" Value="800" />
-            <Setter Property="Title" Value="登录 - 浏览器" />
+            <Setter Property="Title" Value="{DynamicResource Text.Account.Browser.Title}" />
         </Style>
     </mvvm:Dialog.WindowStyle>
     <Grid>
@@ -45,7 +45,7 @@
                                       Kind="Apps" />
                 <TextBlock FontSize="15"
                            Foreground="{DynamicResource PrimaryTextBrush}"
-                           Text="认证" />
+                           Text="{DynamicResource Text.Account.Browser.Title}" />
                 <TextBlock FontSize="15"
                            Foreground="{DynamicResource PrimaryTextBrush}"
                            Text=" - "

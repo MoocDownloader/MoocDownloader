@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
-using MoocDownloader.Domain.Accounts;
 using MoocDownloader.Models.Accounts;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Accounts;
@@ -13,10 +12,8 @@ using System.Linq;
 
 namespace MoocDownloader.ViewModels.Accounts;
 
-public partial class WebsiteViewModel : SharedDialogViewModel
+public partial class WebsiteListViewModel : SharedDialogViewModel
 {
-    private readonly AccountManager _accountManager;
-
     [ObservableProperty]
     private ObservableCollection<WebsiteModel> _websites = new();
 
@@ -27,9 +24,8 @@ public partial class WebsiteViewModel : SharedDialogViewModel
     private string _keyword = string.Empty;
 
     /// <inheritdoc />
-    public WebsiteViewModel(IContainer container) : base(container)
+    public WebsiteListViewModel(IContainer container) : base(container)
     {
-        _accountManager = container.Resolve<AccountManager>();
     }
 
     /// <inheritdoc />
@@ -78,22 +74,22 @@ public partial class WebsiteViewModel : SharedDialogViewModel
         };
 
         DialogService.ShowDialog(
-            name: nameof(AccountView),
+            name: nameof(AuthenticationView),
             parameters: dialogParameters,
             callback: result =>
             {
                 if (result is not { Result: ButtonResult.OK }) return;
 
-                var account = _accountManager.GetAccountByWebSiteName(website.Name);
+                //var account = _accountManager.GetAccountByWebSiteName(website.Name);
 
-                if (account is null)
-                {
-                    _accountManager.Insert(website.Name, website.Account);
-                }
-                else
-                {
-                    _accountManager.Update(website.Name, website.Account);
-                }
+                //if (account is null)
+                //{
+                //    _accountManager.Insert(website.Name, website.Authentication);
+                //}
+                //else
+                //{
+                //    _accountManager.Update(website.Name, website.Authentication);
+                //}
             });
     }
 

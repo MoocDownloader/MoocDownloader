@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using static MahApps.Metro.IconPacks.PackIconUniconsKind;
-using static MoocDownloader.Helpers.WindowHelper;
+using static MoocDownloader.Utilities.Windows.WindowUtility;
 
 namespace MoocDownloader.Views;
 

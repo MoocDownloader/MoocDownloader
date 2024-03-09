@@ -32,7 +32,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="简介" />
+                                           Text="{DynamicResource Text.Detail.Info.Introduction}" />
                             </GroupBox.Header>
                             <TextBox Padding="0"
                                      Background="Transparent"
@@ -48,7 +48,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="作者" />
+                                           Text="{DynamicResource Text.Detail.Info.Authors}" />
                             </GroupBox.Header>
                             <GroupBox.Resources>
                                 <Style BasedOn="{StaticResource ShieldBaseStyle}" TargetType="hc:Shield">
@@ -84,7 +84,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="下载" />
+                                           Text="{DynamicResource Text.Detail.Info.Summary}" />
                             </GroupBox.Header>
                             <Grid Grid.Row="5">
                                 <Grid.ColumnDefinitions>
@@ -106,27 +106,27 @@
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
-                                           Text="下载链接" />
+                                           Text="{DynamicResource Text.Detail.Info.Url}" />
                                 <TextBlock Grid.Row="1"
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
-                                           Text="保存目录" />
+                                           Text="{DynamicResource Text.Detail.Info.Path}" />
                                 <TextBlock Grid.Row="2"
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
-                                           Text="创建时间" />
+                                           Text="{DynamicResource Text.Detail.Info.Creation}" />
                                 <TextBlock Grid.Row="3"
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
-                                           Text="完成时间" />
+                                           Text="{DynamicResource Text.Detail.Info.Completion}" />
                                 <TextBlock Grid.Row="4"
                                            Grid.Column="0"
                                            HorizontalAlignment="Right"
                                            Style="{StaticResource TextBlockDefault}"
-                                           Text="下载历时" />
+                                           Text="{DynamicResource Text.Detail.Info.Timing}" />
 
                                 <TextBlock Grid.Row="0"
                                            Grid.Column="2"
@@ -177,7 +177,7 @@
                             <GroupBox.Header>
                                 <TextBlock HorizontalAlignment="Left"
                                            Style="{StaticResource TextBlockSubTitle}"
-                                           Text="目录" />
+                                           Text="{DynamicResource Text.Detail.Info.Index}" />
                             </GroupBox.Header>
 
                             <ItemsControl Background="Transparent"
@@ -202,7 +202,7 @@
             </TabItem>
 
             <!--  Media List  -->
-            <TabItem Header="{DynamicResource Text.Detail.Media}" Tag="Books">
+            <TabItem Header="{DynamicResource Text.Detail.Files}" Tag="Books">
                 <ListBox ItemContainerStyle="{StaticResource CleanItemContainerStyle}"
                          ItemTemplate="{StaticResource MediaDataTemplate}"
                          ItemsPanel="{StaticResource CleanItemsPanelTemplate}"

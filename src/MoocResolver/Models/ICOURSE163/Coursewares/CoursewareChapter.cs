@@ -5,22 +5,22 @@ namespace MoocResolver.Models.ICOURSE163.Coursewares;
 public class CoursewareChapter
 {
     [JsonPropertyName("id")]
-    public long ChapterId { get; set; }
+    public long? ChapterId { get; set; }
 
     [JsonPropertyName("termId")]
-    public long TermId { get; set; }
+    public long? TermId { get; set; }
 
     [JsonPropertyName("name")]
     public string ChapterName { get; set; } = string.Empty;
 
     [JsonPropertyName("gmtCreate")]
-    public long CreationTimestamp { get; set; }
+    public long? CreationTimestamp { get; set; }
 
     [JsonPropertyName("gmtModified")]
-    public long ModifiedTimestamp { get; set; }
+    public long? ModifiedTimestamp { get; set; }
 
     [JsonPropertyName("releaseTime")]
-    public long ReleaseTimestamp { get; set; }
+    public long? ReleaseTimestamp { get; set; }
 
     [JsonPropertyName("contentType")]
     public CoursewareContentType ContentType { get; set; } = CoursewareContentType.Other;

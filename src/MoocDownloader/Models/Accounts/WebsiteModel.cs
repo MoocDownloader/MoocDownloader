@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MoocResolver.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Windows.Media;
@@ -23,19 +24,13 @@ public partial class WebsiteModel : ObservableObject
     private string _matchPattern = string.Empty;
 
     [ObservableProperty]
-    private bool _supportCookie;
-
-    [ObservableProperty]
-    private bool _supportPassword;
-
-    [ObservableProperty]
     private List<string> _cookieDomains = new();
 
     [ObservableProperty]
     private List<string> _cookieNames = new();
 
     [ObservableProperty]
-    private AccountModel _account = new();
+    private List<AuthenticationType> _supportAuthenticationTypes = new();
 
     [ObservableProperty]
     private Type? _resolver;

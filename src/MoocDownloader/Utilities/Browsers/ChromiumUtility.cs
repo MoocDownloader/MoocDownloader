@@ -1,5 +1,4 @@
-﻿using MoocDownloader.Models.Accounts;
-using Org.BouncyCastle.Crypto.Engines;
+﻿using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 using SQLite;
@@ -11,15 +10,17 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
 
-namespace MoocDownloader.Helpers;
+namespace MoocDownloader.Utilities.Browsers;
 
-public class BrowserHelper
+public class ChromiumUtility
 {
-    private const string CookiesPath = @"User Data\Default\Network\Cookies";
+    private const string CookiesPath = @"User Data\{{PROFILE}}\Network\Cookies";
     private const string LocalStatePath = @"User Data\Local State";
 
     private const string EdgePath = @"Microsoft\Edge";
     private const string ChromePath = @"Google\Chrome";
+
+    private const string DefaultProfileName = "Default";
 
     private static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
@@ -59,7 +60,7 @@ public class BrowserHelper
         return Encoding.UTF8.GetString(plainValue);
     }
 
-    private static void DecryptCookies(List<BrowserCookie> cookies, byte[] decryptedKey)
+    private static void DecryptCookies(List<ChromiumCookie> cookies, byte[] decryptedKey)
     {
         foreach (var cookie in cookies)
         {
@@ -70,20 +71,20 @@ public class BrowserHelper
         }
     }
 
-    private static List<BrowserCookie> ReadBrowserCookies(string cookiesPath, string[] domains)
+    private static List<ChromiumCookie> GetCookies(string cookiesPath, string[] domains)
     {
         using var connection = new SQLiteConnection(cookiesPath, SQLiteOpenFlags.ReadOnly);
 
-        var browserCookies = new List<BrowserCookie>();
-        var cookieQuery = connection.Table<BrowserCookie>();
+        var chromeCookies = new List<ChromiumCookie>();
+        var cookieQuery = connection.Table<ChromiumCookie>();
 
         foreach (var domain in domains)
         {
             var list = cookieQuery.Where(cookie => cookie.Domain != null && cookie.Domain.Contains(domain)).ToList();
-            browserCookies.AddRange(list);
+            chromeCookies.AddRange(list);
         }
 
-        return browserCookies;
+        return chromeCookies;
     }
 
     /// <summary>
@@ -100,38 +101,73 @@ public class BrowserHelper
         return (cookieTimeStamp / 1000000) - 11644473600;
     }
 
-    public static List<BrowserCookie> ImportCookiesFromEdge(string[] domains)
+    /// <summary>
+    /// Get the profile list of user in the browser.
+    /// </summary>
+    /// <returns>The profile list.</returns>
+    private static List<string> GetProfilePathList()
+    {
+        var list = new List<string>
+        {
+            CookiesPath.Replace("{{PROFILE}}", DefaultProfileName)
+        };
+
+        for (var i = 1; i < 10; i++)
+        {
+            list.Add(CookiesPath.Replace("{{PROFILE}}", $"Profile {i}"));
+        }
+
+        return list;
+    }
+
+    public static List<ChromiumCookie> ImportCookiesFromEdge(string[] domains)
     {
         // Path of Edge browser.
-        var edgeCookiesPath = Path.Combine(LocalDataPath, EdgePath, CookiesPath);
+        var edgeCookiesPath = GetProfilePathList()
+            .Select(cookiesPath => Path.Combine(LocalDataPath, EdgePath, cookiesPath))
+            .FirstOrDefault(File.Exists);
+
+        if (string.IsNullOrEmpty(edgeCookiesPath))
+        {
+            throw new FileNotFoundException();
+        }
+
         var edgeLocalStatePath = Path.Combine(LocalDataPath, EdgePath, LocalStatePath);
 
-        if (!File.Exists(edgeCookiesPath) || !File.Exists(edgeLocalStatePath))
+        if (!File.Exists(edgeLocalStatePath))
         {
             throw new FileNotFoundException();
         }
 
         var decryptedKey = GetDecryptedKey(edgeLocalStatePath);
-        var browserCookies = ReadBrowserCookies(edgeCookiesPath, domains);
+        var browserCookies = GetCookies(edgeCookiesPath, domains);
 
         DecryptCookies(browserCookies, decryptedKey);
 
         return browserCookies;
     }
 
-    public static List<BrowserCookie> ImportCookiesFromChrome(string[] domains)
+    public static List<ChromiumCookie> ImportCookiesFromChrome(string[] domains)
     {
         // Path of Chrome browser.
-        var chromeCookiesPath = Path.Combine(LocalDataPath, ChromePath, CookiesPath);
+        var chromeCookiesPath = GetProfilePathList()
+            .Select(cookiesPath => Path.Combine(LocalDataPath, ChromePath, cookiesPath))
+            .FirstOrDefault(File.Exists);
+
+        if (string.IsNullOrEmpty(chromeCookiesPath))
+        {
+            throw new FileNotFoundException();
+        }
+
         var chromeLocalStatePath = Path.Combine(LocalDataPath, ChromePath, LocalStatePath);
 
-        if (!File.Exists(chromeCookiesPath) || !File.Exists(chromeLocalStatePath))
+        if (!File.Exists(chromeLocalStatePath))
         {
             throw new FileNotFoundException();
         }
 
         var decryptedKey = GetDecryptedKey(chromeLocalStatePath);
-        var browserCookies = ReadBrowserCookies(chromeCookiesPath, domains);
+        var browserCookies = GetCookies(chromeCookiesPath, domains);
 
         DecryptCookies(browserCookies, decryptedKey);
 

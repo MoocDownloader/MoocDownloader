@@ -1,9 +1,9 @@
 ﻿using CefSharp;
 using MoocResolver.Contracts;
 using MoocResolver.Exceptions;
-using MoocResolver.Helpers;
 using MoocResolver.Models.ICOURSE163.Courses;
 using MoocResolver.Models.ICOURSE163.Coursewares;
+using MoocResolver.Utilities.Crypto;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,7 +16,7 @@ namespace MoocResolver.Resolvers;
 /// Website name: 中国大学MOOC(慕课)_国家精品课程在线学习平台
 /// Website address: https://www.icourse163.org/
 /// </summary>
-public class Course163Resolver : WebsiteResolverBase
+public class Course163Resolver : ResolverBase
 {
     private const string SessionKey = "NTESSTUDYSI";
 
@@ -31,13 +31,9 @@ public class Course163Resolver : WebsiteResolverBase
     private CourseTerm? _courseTerm;
     private CoursewareTerm? _coursewareTerm;
 
-    /// <inheritdoc />
-    public Course163Resolver(WebsiteResolverOption option) : base(option)
+    public Course163Resolver(ResolverOption option) : base(option)
     {
     }
-
-    /// <inheritdoc />
-    public override bool AuthenticationRequired { get; set; } = true;
 
     /// <inheritdoc />
     public override async Task<Library> ResolveAsync()
@@ -91,7 +87,7 @@ public class Course163Resolver : WebsiteResolverBase
         return _library;
     }
 
-    public override async Task<CookieCollection> LoginAsync()
+    public async Task<CookieCollection> LoginAsync()
     {
         // 1. Authenticate the user if the user has not logged in.
         const string homeUrl = "https://www.icourse163.org/";
@@ -116,15 +112,15 @@ public class Course163Resolver : WebsiteResolverBase
         loginRequest.Content = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
         {
             new("returnUrl", Encode(returnUrl)),
-            new("failUrl", Encode(failUrl + Encode(Account.Username))),
+            new("failUrl", Encode(failUrl + Encode(Authentication.Username))),
             new("saveLogin", "true"),
             new("oauthType", ""),
-            new("username", Account.Username),
-            new("passwd", Account.Password),
+            new("username", Authentication.Username),
+            new("passwd", Authentication.Password),
         });
 
         AddHttpHeaders(loginRequest);
-        
+
         using var loginResponse = await HttpClient!.SendAsync(loginRequest);
 
         // 2. Checking result logged.
@@ -166,8 +162,7 @@ public class Course163Resolver : WebsiteResolverBase
         }
     }
 
-    /// <inheritdoc />
-    public override async Task<bool> CheckAsync()
+    public async Task<bool> CheckAsync()
     {
         if (Cookies.GetAllCookies().Any(cookie => cookie.Name == SessionKey))
         {
@@ -216,8 +211,7 @@ public class Course163Resolver : WebsiteResolverBase
     {
         const string getIntroJavaScriptCode = "document.getElementsByClassName('course-heading-intro')[0].innerText";
 
-        var pageUrl = $"https://www.icourse163.org/course/{_courseId}";
-        var response = await Browser!.LoadUrlAsync(pageUrl);
+        var response = await Browser!.LoadUrlAsync(Option.Url);
 
         if (!response.Success)
         {
@@ -591,5 +585,5 @@ public class Course163Resolver : WebsiteResolverBase
         return pathBuilder.ToString();
     }
 
-    private static string Encode(string plainText) => Base64Helper.Encode(plainText);
+    private static string Encode(string plainText) => Base64Utility.Encode(plainText);
 }

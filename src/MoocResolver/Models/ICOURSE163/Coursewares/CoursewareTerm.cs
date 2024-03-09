@@ -5,10 +5,10 @@ namespace MoocResolver.Models.ICOURSE163.Coursewares;
 public class CoursewareTerm
 {
     [JsonPropertyName("startTime")]
-    public long StartTimestamp { get; set; }
+    public long? StartTimestamp { get; set; }
 
     [JsonPropertyName("endTime")]
-    public long EndTimestamp { get; set; }
+    public long? EndTimestamp { get; set; }
 
     [JsonPropertyName("chapters")]
     public List<CoursewareChapter>? Chapters { get; set; } 
@@ -20,5 +20,5 @@ public class CoursewareTerm
     public string? CourseName { get; set; }
 
     [JsonPropertyName("schoolId")]
-    public long SchoolId { get; set; }
+    public long? SchoolId { get; set; }
 }

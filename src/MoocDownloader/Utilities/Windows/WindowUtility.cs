@@ -1,9 +1,11 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming
+
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace MoocDownloader.Helpers;
+namespace MoocDownloader.Utilities.Windows;
 
 public enum DWMWINDOWATTRIBUTE
 {
@@ -18,10 +20,7 @@ public enum DWM_WINDOW_CORNER_PREFERENCE
     DWMWCP_ROUNDSMALL = 3
 }
 
-/// <summary>
-/// Window helper.
-/// </summary>
-public static class WindowHelper
+public class WindowUtility
 {
     [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
     internal static extern void DwmSetWindowAttribute(

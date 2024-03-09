@@ -1,5 +1,4 @@
 ﻿using MoocResolver.Contracts;
-using System.Net;
 
 namespace MoocResolver.Resolvers;
 
@@ -7,30 +6,14 @@ namespace MoocResolver.Resolvers;
 /// Website name: 网易云课堂 - 悄悄变强大
 /// Website address: https://study.163.com/
 /// </summary>
-public class Study163Resolver : WebsiteResolverBase
+public class Study163Resolver : ResolverBase
 {
-    /// <inheritdoc />
-    public Study163Resolver(WebsiteResolverOption option) : base(option)
+    public Study163Resolver(ResolverOption option) : base(option)
     {
     }
-
-    /// <inheritdoc />
-    public override bool AuthenticationRequired { get; set; } = true;
 
     /// <inheritdoc />
     public override Task<Library> ResolveAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc />
-    public override Task<CookieCollection> LoginAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc />
-    public override Task<bool> CheckAsync()
     {
         throw new NotImplementedException();
     }

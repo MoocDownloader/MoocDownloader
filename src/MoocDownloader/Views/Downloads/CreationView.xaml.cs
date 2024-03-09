@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using static MoocDownloader.Helpers.WindowHelper;
+using static MoocDownloader.Utilities.Windows.WindowUtility;
 
 namespace MoocDownloader.Views.Downloads;
 

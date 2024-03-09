@@ -2,13 +2,14 @@
 using CefSharp.Core;
 using CefSharp.OffScreen;
 using MoocResolver.Exceptions;
+using MoocResolver.Utilities.Browsers;
 using Serilog;
 using System.Net;
 using System.Net.Http.Headers;
 
 namespace MoocResolver.Contracts;
 
-public abstract class WebsiteResolverBase : IWebsiteResolver
+public abstract class ResolverBase : IResolver
 {
     public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0";
     public const string StartPage = "chrome://version";
@@ -17,25 +18,16 @@ public abstract class WebsiteResolverBase : IWebsiteResolver
     protected ChromiumWebBrowser? Browser { get; set; }
 
     protected readonly ILogger Logger;
-    protected readonly WebsiteResolverOption Option;
+    protected readonly ResolverOption Option;
 
-    protected WebsiteResolverBase(WebsiteResolverOption option)
+    protected ResolverBase(ResolverOption option)
     {
+        Logger = Log.Logger;
         Option = option;
-        Logger = Log.ForContext(typeof(WebsiteResolverBase));
     }
 
     /// <inheritdoc />
-    public abstract bool AuthenticationRequired { get; set; }
-
-    /// <inheritdoc />
     public abstract Task<Library> ResolveAsync();
-
-    /// <inheritdoc />
-    public abstract Task<CookieCollection> LoginAsync();
-
-    /// <inheritdoc />
-    public abstract Task<bool> CheckAsync();
 
     protected virtual HttpClientHandler GetHttpClientHandler(bool useCookies, bool autoRedirect = false)
     {
@@ -102,7 +94,7 @@ public abstract class WebsiteResolverBase : IWebsiteResolver
             CachePath = cachePath,
             RootCachePath = rootCachePath,
             UserAgent = UserAgent,
-        }; 
+        };
         var success = await CefSharp.Cef.InitializeAsync(
             settings: cefSettings,
             performDependencyCheck: true,
@@ -176,9 +168,9 @@ public abstract class WebsiteResolverBase : IWebsiteResolver
             ? DateTimeOffset.Now.ToUnixTimeMilliseconds()
             : DateTimeOffset.Now.ToUnixTimeSeconds();
 
-    protected virtual Account Account => Option.Account;
+    protected virtual Authentication Authentication => Option.Authentication;
 
-    protected virtual CookieContainer Cookies => Account.Cookies;
+    protected virtual CookieContainer Cookies => CookieUtility.ParseCookies(Authentication.Cookies);
 
     protected virtual NetworkProxy NetworkProxy => Option.NetworkProxy;
 

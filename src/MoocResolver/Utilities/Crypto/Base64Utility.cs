@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace MoocResolver.Helpers;
+namespace MoocResolver.Utilities.Crypto;
 
-public class Base64Helper
+public class Base64Utility
 {
     public static string Encode(string plainText)
     {

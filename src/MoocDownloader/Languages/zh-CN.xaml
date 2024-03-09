@@ -45,5 +45,32 @@
     <sys:String x:Key="Text.Trash.Menu.Link">复制下载链接</sys:String>
 
     <sys:String x:Key="Text.Detail.Info">详情</sys:String>
-    <sys:String x:Key="Text.Detail.Media">文件列表</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Introduction">简介</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Authors">简介</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Summary">下载</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Url">下载链接</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Path">保存目录</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Creation">创建时间</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Completion">完成时间</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Timing">下载历时</sys:String>
+    <sys:String x:Key="Text.Detail.Info.Index">目录</sys:String>
+    <sys:String x:Key="Text.Detail.Files">文件列表</sys:String>
+
+    <sys:String x:Key="Text.Account.Website.Title">账号管理</sys:String>
+    <sys:String x:Key="Text.Account.Website.Menu.Login">登录</sys:String>
+    <sys:String x:Key="Text.Account.Website.Menu.Login.Tip">登录网站获取以获取新的凭据</sys:String>
+    <sys:String x:Key="Text.Account.Website.Menu.Check.Tip">测试凭据是否有效</sys:String>
+    <sys:String x:Key="Text.Account.Website.Menu.Visit.Tip">访问网站</sys:String>
+    <sys:String x:Key="Text.Account.Website.Search.Placeholder">按域名搜索网站</sys:String>
+    <sys:String x:Key="Text.Account.Website.Search.Clear.Tip">清空</sys:String>
+
+    <sys:String x:Key="Text.Account.Browser.Title">认证 - 浏览器</sys:String>
+
+    <sys:String x:Key="Text.Download.Creation.Label.AddUrl">添加链接</sys:String>
+    <sys:String x:Key="Text.Download.Creation.Label.FileList">文件列表</sys:String>
+    <sys:String x:Key="Text.Download.Creation.Label.StoragePath">保存位置</sys:String>
+    <sys:String x:Key="Text.Download.Creation.Download">立即下载</sys:String>
+
+    <sys:String x:Key="Text.About.Version">版本</sys:String>
+    <sys:String x:Key="Text.About.Contributors">贡献者</sys:String>
 </ResourceDictionary>

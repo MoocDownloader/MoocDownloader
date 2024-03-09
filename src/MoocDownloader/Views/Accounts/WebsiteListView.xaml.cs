@@ -1,11 +1,11 @@
 ﻿namespace MoocDownloader.Views.Accounts;
 
 /// <summary>
-/// Interaction logic for WebsiteView.xaml
+/// Interaction logic for WebsiteListView.xaml
 /// </summary>
-public partial class WebsiteView
+public partial class WebsiteListView
 {
-    public WebsiteView()
+    public WebsiteListView()
     {
         InitializeComponent();
     }

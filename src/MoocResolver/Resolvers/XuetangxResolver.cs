@@ -1,5 +1,4 @@
 ﻿using MoocResolver.Contracts;
-using System.Net;
 
 namespace MoocResolver.Resolvers;
 
@@ -7,30 +6,14 @@ namespace MoocResolver.Resolvers;
 /// Website name: 学堂在线 - 精品在线课程学习平台
 /// Website address: https://next.xuetangx.com/
 /// </summary>
-public class XuetangxResolver : WebsiteResolverBase
+public class XuetangxResolver : ResolverBase
 {
-    /// <inheritdoc />
-    public XuetangxResolver(WebsiteResolverOption option) : base(option)
+    public XuetangxResolver(ResolverOption option) : base(option)
     {
     }
-
-    /// <inheritdoc />
-    public override bool AuthenticationRequired { get; set; } = true;
 
     /// <inheritdoc />
     public override Task<Library> ResolveAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc />
-    public override Task<CookieCollection> LoginAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc />
-    public override Task<bool> CheckAsync()
     {
         throw new NotImplementedException();
     }

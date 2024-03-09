@@ -1,17 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Akavache;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DryIoc;
-using MoocDownloader.Domain.Accounts;
 using MoocDownloader.Models.Accounts;
+using MoocDownloader.Models.Dialogs.Messages;
 using MoocDownloader.Models.Downloads;
+using MoocDownloader.Utilities.Browsers;
 using MoocDownloader.ViewModels.Shared;
+using MoocDownloader.Views.Accounts;
+using MoocDownloader.Views.Dialogs;
 using MoocResolver.Contracts;
 using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Reactive.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -22,8 +26,6 @@ namespace MoocDownloader.ViewModels.Downloads;
 
 public partial class CreationViewModel : SharedDialogViewModel
 {
-    private readonly AccountManager _accountManager;
-
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
     private string _url = string.Empty;
@@ -44,7 +46,6 @@ public partial class CreationViewModel : SharedDialogViewModel
     /// <inheritdoc />
     public CreationViewModel(IContainer container) : base(container)
     {
-        _accountManager = container.Resolve<AccountManager>();
     }
 
     /// <summary>
@@ -52,148 +53,38 @@ public partial class CreationViewModel : SharedDialogViewModel
     /// </summary>
     /// <param name="url">Inputted URL.</param>
     /// <returns>Matched website.</returns>
-    private WebsiteModel MatchWebsite(string url)
+    private WebsiteModel? MatchWebsite(string url)
     {
         if (Resources["WebsiteList"] is not WebsiteModel[] websites)
         {
             throw new ArgumentNullException(nameof(websites), "No websites available.");
         }
 
-        return websites.First(website => Regex.IsMatch(url, website.MatchPattern));
+        return websites.FirstOrDefault(website => Regex.IsMatch(url, website.MatchPattern));
     }
 
-    /// <summary>
-    /// Execute logging to get Cookies.
-    /// </summary>
-    /// <param name="resolver"></param>
-    /// <param name="resolverOption"></param>
-    /// <param name="matchedWebsite"></param>
-    /// <returns></returns>
-    private async Task LoginAsync(
-        IWebsiteResolver resolver,
-        WebsiteResolverOption resolverOption,
-        WebsiteModel matchedWebsite)
-    {
-        var cookies = await resolver.LoginAsync();
+    ///// <summary>
+    ///// Execute logging to get Cookies.
+    ///// </summary>
+    ///// <param name="resolver"></param>
+    ///// <param name="resolverOption"></param>
+    ///// <param name="matchedWebsite"></param>
+    ///// <returns></returns>
+    //private async Task LoginAsync(
+    //    IWebsiteResolver resolver,
+    //    WebsiteResolverOption resolverOption,
+    //    WebsiteModel matchedWebsite)
+    //{
+    //    var cookies = await resolver.LoginAsync();
 
-        // Update cookies.
-        resolverOption.Account.Cookies = new CookieContainer();
-        resolverOption.Account.Cookies.Add(cookies);
+    //    // Update cookies.
+    //    resolverOption.Account.Cookies = new CookieContainer();
+    //    resolverOption.Account.Cookies.Add(cookies);
 
-        // Save cookies.
-        matchedWebsite.Account.CookieData = SerializeCookies(cookies);
-        _accountManager.Update(matchedWebsite.Name, matchedWebsite.Account);
-    }
-
-    /// <summary>
-    /// Parse cookie text into <see cref="CookieContainer"/>
-    ///
-    /// Text cookie text has two formats: JSON and Netscape.
-    /// </summary>
-    /// <param name="cookieData">The cookie text.</param>
-    /// <returns><see cref="CookieContainer"/> parsed from cookie text.</returns>
-    private static CookieContainer ParseCookies(string cookieData)
-    {
-        if (string.IsNullOrEmpty(cookieData))
-        {
-            throw new ArgumentNullException(nameof(cookieData));
-        }
-
-        // Detect the format of cookie text:
-        //
-        //     The cookie text is detected to be Netscape schema
-        //     if each line of text except those starting with #
-        //     matches Netscape pattern.
-        //
-        // File format:
-        //
-        // Officially, the first line of the file must be one of the following:
-        // 
-        //     # HTTP Cookie File
-        //     # Netscape HTTP Cookie File 
-        // 
-        // Fields are separated by tab characters (\t or \009 or 0x09).
-        // 
-        //     Lines are separated by the newline format in use by the running operating system.
-        //     That means CRLF (\r\n) for Windows and LF (\n) for Unix-like systems such as Linux, macOS, FreeBSD, etc. 
-        //
-        // The 7 fields are as follows:
-        //
-        //     +------------+----------------+---------------+-----------------------------------------------------+
-        //     | Field Name | Type           | Example Value | Notes                                               |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   0 | host       | string         | example.com   | Hostname that owns the cookie                       |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   1 | subdomains | boolean string | FALSE         | Include subdomains (old attempt at SameSite)        |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   2 | path       | string         | /             | Pathname that owns the cookie at the host           |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   3 | isSecure   | boolean string | TRUE          | Send/receive cookie over HTTPS only.                |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   4 | expiry     | number         | 1663611142    | Cookie expiration in standard Unix timestamp format |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   5 | name       | string         | cookiename    | Cookie name                                         |
-        //     +---------------------------------------------------------------------------------------------------+
-        //   6 | value      | string         | cookievalue   | Cookie value                                        |
-        //     +------------+----------------+---------------+-----------------------------------------------------+
-        //
-        // Source: http://fileformats.archiveteam.org/index.php?title=Netscape_cookies.txt
-
-        const string netsacpePattern = @"^\S+\s{1}(TRUE|FALSE){1}\s{1}\S+\s{1}(TRUE|FALSE){1}\s{1}\d+\s{1}\S+\s{1}\S+";
-
-        var cookieContainer = new CookieContainer();
-        var cookieLines = cookieData.Split(Environment.NewLine).Where(line => !line.StartsWith("#")).ToList();
-
-        if (cookieLines.All(line => Regex.IsMatch(line, netsacpePattern)))
-        {
-            // Netscape Format.
-            foreach (var array in cookieLines.Select(cookieLine => cookieLine.Split('\t')))
-            {
-                if (array.Length != 7) throw new ArgumentException();
-
-                try
-                {
-                    cookieContainer.Add(new Cookie(
-                        name: array[5],
-                        value: array[6],
-                        path: array[2],
-                        domain: array[0]));
-                }
-                catch (Exception)
-                {
-                    //
-                }
-            }
-        }
-        else
-        {
-            // JSON Format.
-            var cookies = JsonSerializer.Deserialize<List<BrowserCookie>>(cookieData);
-
-            if (cookies is null)
-            {
-                throw new ArgumentNullException(nameof(cookies));
-            }
-
-            foreach (var cookie in cookies)
-            {
-                try
-                {
-                    cookieContainer.Add(new Cookie(
-                        name: cookie.Name ?? string.Empty,
-                        value: cookie.Value,
-                        path: cookie.Path,
-                        domain: cookie.Domain));
-                }
-                catch (Exception)
-                {
-                    //
-                }
-            }
-        }
-
-        return cookieContainer;
-    }
+    //    // Save cookies.
+    //    //matchedWebsite.Authentication.CookieData = SerializeCookies(cookies);
+    //    //_accountManager.Update(matchedWebsite.Name, matchedWebsite.Authentication);
+    //}
 
     /// <summary>
     /// Serialize CookieCollection to JSON.
@@ -202,7 +93,7 @@ public partial class CreationViewModel : SharedDialogViewModel
     /// <returns>JSON format cookies text.</returns>
     private static string SerializeCookies(CookieCollection cookies)
     {
-        var data = cookies.Select(cookie => new BrowserCookie
+        var data = cookies.Select(cookie => new ChromiumCookie()
         {
             Domain = cookie.Domain,
             Name = cookie.Name,
@@ -227,64 +118,64 @@ public partial class CreationViewModel : SharedDialogViewModel
         }
 
         var matchedWebsite = MatchWebsite(Url);
-        var getResolverFunc = Container.Resolve<Func<WebsiteResolverOption, IWebsiteResolver>>(matchedWebsite.Resolver);
 
-        //                              +-> Using Proxy
-        //                              |
-        //          +-> Network Proxy +-|-> PWD + Username
-        //          |                   |
-        //          |                   +-> Host + Port
-        //          |
-        //          |                   +-> Username + PWD
-        // Option +-|-> Account       +-|
-        //          |                   +-> Cookies
-        //          |
-        //          +-> URL
-        var resolverOption = new WebsiteResolverOption
+        if (matchedWebsite is null)
         {
-            Url = Url,
-            NetworkProxy = new NetworkProxy(),
-            Account = new MoocResolver.Contracts.Account
+            var messageOption = new MessageOption
             {
-                Cookies = ParseCookies(matchedWebsite.Account.CookieData),
-                Username = matchedWebsite.Account.Username,
-                Password = matchedWebsite.Account.Password,
-            }
-        };
-        var resolver = getResolverFunc(resolverOption);
-
-        if (resolver.AuthenticationRequired)
-        {
-            switch (matchedWebsite.Account.Type)
+                Title = "提示",
+                Message = "不支持输入的网址。",
+                ConfirmText = "好的",
+                MessageType = MessageType.Warning
+            };
+            var dialogParameters = new DialogParameters
             {
-                case AccountType.None:
-                    throw new ArgumentException(nameof(matchedWebsite.Account));
-                case AccountType.Cookies:
-                    if (!await resolver.CheckAsync())
-                    {
-                        throw new ArgumentException();
-                    }
+                { nameof(MessageOption), messageOption }
+            };
 
-                    break;
-                case AccountType.Password:
-                    if (string.IsNullOrEmpty(matchedWebsite.Account.CookieData))
-                    {
-                        await LoginAsync(resolver, resolverOption, matchedWebsite);
-                    }
-                    else
-                    {
-                        if (!await resolver.CheckAsync())
-                        {
-                            await LoginAsync(resolver, resolverOption, matchedWebsite);
-                        }
-                    }
+            DialogService.ShowDialog(
+                name: nameof(MessageView),
+                parameters: dialogParameters,
+                callback: _ => { });
 
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return;
         }
 
+        // Get authentication from the local database.
+        var authentication = await BlobCache.LocalMachine
+            .GetObject<Authentication?>(matchedWebsite.Name)
+            .Catch(Observable.Return<Authentication?>(null));
+
+        // Open authentication view if there is no authentication in the local database.
+        if (authentication is null)
+        {
+            var dialogParameters = new DialogParameters
+            {
+                { nameof(WebsiteModel), matchedWebsite }
+            };
+            var dialogResult = new DialogResult();
+
+            DialogService.ShowDialog(
+                name: nameof(AuthenticationView),
+                parameters: dialogParameters,
+                callback: result => dialogResult = (DialogResult)result);
+
+            if (dialogResult is not { Result: ButtonResult.OK })
+            {
+                return;
+            }
+
+            authentication = dialogResult.Parameters.GetValue<Authentication>(nameof(Authentication));
+        }
+
+        var resolverFunc =
+            Container.Resolve<Func<ResolverOption, MoocResolver.Contracts.IResolver>>(matchedWebsite.Resolver);
+        var resolver = resolverFunc.Invoke(new ResolverOption
+        {
+            Url = Url,
+            Authentication = authentication,
+            NetworkProxy = new NetworkProxy()
+        });
         var library = await resolver.ResolveAsync();
 
         foreach (var media in library.Medias)

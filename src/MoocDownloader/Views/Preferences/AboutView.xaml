@@ -31,15 +31,16 @@
                        FontSize="20"
                        Style="{StaticResource TextBlockTitle}"
                        Text="MOOC Downloader" />
-            <TextBlock Margin="0,0,0,10"
-                       Style="{StaticResource TextBlockDefault}"
-                       Text="版本 1.0.0.1" />
+            <TextBlock Margin="0,0,0,10" Style="{StaticResource TextBlockDefault}">
+                <Run Text="{DynamicResource Text.About.Version}" />
+                <Run Text="1.0.0.1" />
+            </TextBlock>
             <TextBlock Margin="0,0,0,20"
                        Style="{StaticResource TextBlockDefaultPrimary}"
                        Text="www.mooc.download" />
             <TextBlock Margin="0,0,0,10"
                        Style="{StaticResource TextBlockDefaultSecLight}"
-                       Text="贡献者" />
+                       Text="{DynamicResource Text.About.Contributors}" />
             <WrapPanel Margin="0,0,0,20" HorizontalAlignment="Center">
                 <TextBlock Style="{StaticResource TextBlockDefault}" Text="@xixixixixiao" />
             </WrapPanel>

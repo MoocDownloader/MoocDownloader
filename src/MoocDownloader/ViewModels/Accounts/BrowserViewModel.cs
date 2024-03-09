@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DryIoc;
 using MoocDownloader.Models.Accounts;
 using MoocDownloader.Models.Dialogs.Messages;
+using MoocDownloader.Utilities.Browsers;
 using MoocDownloader.ViewModels.Shared;
 using MoocDownloader.Views.Dialogs;
 using Prism.Services.Dialogs;
@@ -51,7 +52,7 @@ public partial class BrowserViewModel : SharedDialogViewModel
         var browserCookies = ConvertCookies(currentCookies);
         var cookieDialogParameters = new DialogParameters
         {
-            { nameof(BrowserCookie), browserCookies }
+            { nameof(ChromiumCookie), browserCookies }
         };
 
         Application.Current.Dispatcher.Invoke(() =>
@@ -115,10 +116,10 @@ public partial class BrowserViewModel : SharedDialogViewModel
                     cookie.Name, name, StringComparison.OrdinalIgnoreCase)));
     }
 
-    private List<BrowserCookie> ConvertCookies(IEnumerable<Cookie> cookies)
+    private List<ChromiumCookie> ConvertCookies(IEnumerable<Cookie> cookies)
     {
-        return cookies.Select(cookie => new BrowserCookie
-            {
+        return cookies.Select(cookie => new ChromiumCookie
+        {
                 Domain = cookie.Domain,
                 Name = cookie.Name,
                 Value = cookie.Value,
@@ -177,7 +178,7 @@ public partial class BrowserViewModel : SharedDialogViewModel
         var browserCookies = ConvertCookies(currentCookies);
         var cookieDialogParameters = new DialogParameters
         {
-            { nameof(BrowserCookie), browserCookies }
+            { nameof(ChromiumCookie), browserCookies }
         };
 
         Close(new DialogResult(ButtonResult.OK, cookieDialogParameters));
